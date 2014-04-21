@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class ParticipantListController extends PaginationController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams'];
     public projectId : string;
     public participants = new model.ParticipantCollection();
 

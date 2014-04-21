@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class SemProjectController extends ControllerBase implements model.SemProjectData {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$timeout', '$filter', 'alertLifeSpan'];
     name : string;
     project : model.ProjectData;
     projectKey : string;

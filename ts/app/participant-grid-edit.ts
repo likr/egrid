@@ -11,6 +11,7 @@
 
 module egrid.app {
   export class ParticipantGridEditController extends ControllerBase {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan'];
     projectKey : string;
     participantKey : string;
     egm : EGM;

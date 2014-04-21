@@ -3,6 +3,7 @@
 
 module egrid.app {
   export class ProjectGridCreateController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state'];
     projectKey : string;
     data : model.ProjectGrid;
 

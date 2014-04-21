@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class ParticipantController extends ControllerBase implements model.ParticipantData {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan'];
     name : string;
     note : string;
     project : model.ProjectData;

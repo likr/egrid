@@ -3,6 +3,7 @@
 
 module egrid.app {
   export class SemProjectListController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state'];
     public projectId : string;
     public semProjects = new model.SemProjectCollection();
 

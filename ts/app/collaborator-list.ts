@@ -3,6 +3,7 @@
 
 module egrid.app {
   export class CollaboratorListController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal'];
     public projectId : string;
     public collaborators = new model.CollaboratorCollection();
 

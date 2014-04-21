@@ -3,6 +3,7 @@
 
 module egrid.app {
   export class ProjectController extends ControllerBase {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan'];
     public project: model.Project = new model.Project();
 
     constructor(private $window, private $q, $rootScope, $stateParams, private $state, $scope, private $modal, $timeout, $filter, alertLifeSpan) {

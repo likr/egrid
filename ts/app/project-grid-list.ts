@@ -3,6 +3,7 @@
 
 module egrid.app {
   export class ProjectGridListController extends ControllerBase {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$timeout', '$filter', 'alertLifeSpan'];
     projectKey : string;
     list: model.ProjectGrid[];
 

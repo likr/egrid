@@ -6,6 +6,7 @@
 
 module egrid.app {
   export class SemProjectQuestionnaireEditController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams'];
     public items;
     public projectKey : string;
     public semProjectKey : string;

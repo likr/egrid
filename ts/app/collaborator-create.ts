@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class CollaboratorCreateController extends ControllerBase {
+    private static $inject : string[] = ['$q', '$rootScope', '$stateParams', '$state', '$timeout', '$filter', 'alertLifeSpan'];
     public projectKey : string;
     public data : model.Collaborator;
 

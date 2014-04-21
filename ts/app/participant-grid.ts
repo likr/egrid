@@ -6,6 +6,7 @@
 
 module egrid.app {
   export class ParticipantGridController extends ControllerBase {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$timeout', '$filter', 'alertLifeSpan'];
     projectKey : string;
     participantKey : string;
     egm : EGM;

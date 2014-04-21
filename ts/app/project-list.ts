@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class ProjectListController extends PaginationController {
+    private static $inject : string[] = ['$window', '$q', '$rootScope'];
     public projects = new model.ProjectCollection();
 
     constructor($window, $q, $rootScope) {

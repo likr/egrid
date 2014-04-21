@@ -4,6 +4,7 @@
 
 module egrid.app {
   export class ProjectCreateController extends ControllerBase implements model.ProjectData {
+    private static $inject : string[] = ['$q', '$rootScope', '$state', '$timeout', '$filter', 'alertLifeSpan'];
     name : string;
     note : string;
 

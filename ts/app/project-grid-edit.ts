@@ -2,12 +2,14 @@
 /// <reference path="../core/egm.ts"/>
 /// <reference path="../core/egm-ui.ts"/>
 /// <reference path="../model/participant.ts"/>
+/// <reference path="../model/participant-collection.ts"/>
 /// <reference path="../model/project-grid.ts"/>
 /// <reference path="controller-base.ts"/>
 /// <reference path="url.ts"/>
 
 module egrid.app {
   export class ProjectGridEditController extends ControllerBase {
+    private static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan'];
     projectKey : string;
     projectGridKey : string;
     grid : model.ProjectGrid;
