@@ -1,5 +1,4 @@
-/// <reference path="../model/collaborator.ts"/>
-/// <reference path="../model/collaborator-collection.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 
 module egrid.app {
   export class CollaboratorListController {
