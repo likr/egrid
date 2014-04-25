@@ -1,5 +1,4 @@
-/// <reference path="../model/participant.ts"/>
-/// <reference path="../model/project.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 /// <reference path="controller-base.ts"/>
 
 module egrid.app {

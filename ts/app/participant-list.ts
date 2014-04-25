@@ -1,5 +1,4 @@
-/// <reference path="../model/participant.ts"/>
-/// <reference path="../model/participant-collection.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 /// <reference path="pagination.ts"/>
 
 module egrid.app {

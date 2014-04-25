@@ -1,9 +1,7 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 /// <reference path="../core/egm.ts"/>
 /// <reference path="../core/egm-ui.ts"/>
-/// <reference path="../model/participant.ts"/>
-/// <reference path="../model/participant-collection.ts"/>
-/// <reference path="../model/project-grid.ts"/>
 /// <reference path="controller-base.ts"/>
 /// <reference path="url.ts"/>
 
@@ -70,7 +68,7 @@ module egrid.app {
         .on("click", function() {
           __this.hideNodeController();
           __this.egm.exportSVG((svgText : string) => {
-            var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
+            var base64svgText = btoa(encodeURIComponent(svgText));
             d3.select(this).attr({
               href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
               download: project.name + '.svg',

@@ -1,5 +1,4 @@
-/// <reference path="../model/sem-project.ts"/>
-/// <reference path="../model/sem-project-collection.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 
 module egrid.app {
   export class SemProjectListController {

@@ -25,7 +25,7 @@ module.exports = function(grunt) {
           'bower_components/d3/d3.min.js',
           'locations/*.json',
           'partials/*.html',
-          'scripts/*.js',
+          'scripts/**/*.js',
           'styles/*.css',
         ],
       },

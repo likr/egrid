@@ -1,5 +1,4 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../utils/storage.ts"/>
 /// <reference path="modules/app.ts"/>
 /// <reference path="collaborator-create.ts"/>
 /// <reference path="collaborator-list.ts"/>

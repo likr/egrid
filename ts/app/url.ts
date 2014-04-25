@@ -1,7 +1,4 @@
-/// <reference path="../model/participant.ts"/>
-/// <reference path="../model/project.ts"/>
-/// <reference path="../model/project-grid.ts"/>
-/// <reference path="../model/sem-project.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 
 module egrid.app {
   export class Url {
