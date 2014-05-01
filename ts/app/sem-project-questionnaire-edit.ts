@@ -1,6 +1,6 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../lib/egrid-core.d.ts"/>
 /// <reference path="../lib/egrid-client.d.ts"/>
-/// <reference path="../core/egm.ts"/>
 
 module egrid.app {
   export class SemProjectQuestionnaireEditController {

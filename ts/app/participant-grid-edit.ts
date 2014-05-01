@@ -1,8 +1,7 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
 /// <reference path="../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
 /// <reference path="../lib/egrid-client.d.ts"/>
-/// <reference path="../core/egm.ts"/>
-/// <reference path="../core/egm-ui.ts"/>
+/// <reference path="../lib/egrid-core.d.ts"/>
 /// <reference path="controller-base.ts"/>
 /// <reference path="url.ts"/>
 

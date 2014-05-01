@@ -1,4 +1,4 @@
-/// <reference path="../core/sem.ts"/>
+/// <reference path="../lib/egrid-core.d.ts"/>
 
 module egrid.app {
   export class SemProjectAnalysisController {

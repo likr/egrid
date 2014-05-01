@@ -1,7 +1,7 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts"/>
 /// <reference path="../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../lib/egrid-core.d.ts"/>
 /// <reference path="../lib/egrid-client.d.ts"/>
-/// <reference path="../core/egm.ts"/>
 /// <reference path="controller-base.ts"/>
 
 module egrid.app {
