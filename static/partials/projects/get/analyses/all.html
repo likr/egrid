@@ -1,0 +1,16 @@
+<div>
+  <ul class="nav nav-tabs">
+    <li ui-sref-active="active">
+      <a ui-sref="egrid.projects.get.analyses.all.list">{{'ACTION.LIST' | translate}}</a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="egrid.projects.get.analyses.all.new">{{'ACTION.NEW' | translate}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active">
+      <div ui-view="sub-tab-content"></div>
+    </div>
+  </div>
+</div>

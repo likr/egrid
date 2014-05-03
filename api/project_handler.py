@@ -3,7 +3,6 @@ import webapp2
 from api.models import Collaborator
 from api.models import Participant
 from api.models import Project
-from api.models import ProjectGrid
 from api.models import User
 
 
@@ -51,48 +50,6 @@ class ProjectHandler(webapp2.RequestHandler):
     def delete(self, project_id):
         project = Project.get(project_id)
         project.remove()
-
-
-class ProjectGridHandler(webapp2.RequestHandler):
-    def get(self, project_id, project_grid_id=None):
-        if project_grid_id:
-            project_grid = ProjectGrid.get(project_grid_id)
-            self.response.write(json.dumps(project_grid.to_dict()))
-        else:
-            project = Project.get(project_id)
-            project_grids = ProjectGrid.all()\
-                .filter('project =', project)\
-                .order('created_at')
-            self.response.write(
-                json.dumps([g.to_dict() for g in project_grids]))
-
-    def post(self, project_id):
-        data = json.loads(self.request.body)
-        project = Project.get(project_id)
-        participants = Participant.all().filter('project =', project)
-        project_grid = ProjectGrid(
-            name=data.get('name'),
-            note=data.get('note'),
-            json=json.dumps(merge_grids(participants)),
-            project=project)
-        project_grid.put()
-        self.response.write(json.dumps(project_grid.to_dict()))
-
-    def put(self, project_id, project_grid_id):
-        data = json.loads(self.request.body)
-        project_grid = ProjectGrid.get(project_grid_id)
-        grid = json.loads(project_grid.json)
-        if 'name' in data:
-            project_grid.name = data['name']
-        if 'note' in data:
-            project_grid.note = data['note']
-        if 'nodes' in data:
-            grid['nodes'] = data['nodes']
-        if 'links' in data:
-            grid['links'] = data['links']
-        project_grid.json = json.dumps(grid)
-        project_grid.put()
-        self.response.write(json.dumps(project_grid.to_dict()))
 
 
 class ProjectGridCurrentHandler(webapp2.RequestHandler):

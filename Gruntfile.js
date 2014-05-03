@@ -40,42 +40,37 @@ module.exports = function(grunt) {
         src: 'partials/**/*.html'
       }
     },
-    ts: {
-      dev: {
-        out: 'static/scripts/collaboegm.js',
+    typescript: {
+      base: {
         src: ['ts/app/app.ts'],
+        dest: 'static/scripts/collaboegm.js',
         options: {
           sourceMap: false,
           target: 'es5',
-        },
-      },
-      prod: {
-        out: 'static/scripts/collaboegm.min.js',
-        src: ['ts/app/app.ts'],
-        options: {
-          removeComments: true,
-          sourceMap: false,
-          target: 'es5',
-        },
+        }
       }
     },
     watch: {
       scripts: {
         files: ['ts/**/*.ts'],
-        tasks: ['ts:dev', 'manifest'],
+        tasks: ['typescript', 'manifest'],
       },
       templates: {
         files: ['static/index.html', 'static/partials/**/*.html'],
         tasks: ['ngtemplates','manifest'],
       },
+      statics: {
+        files: ['static/scripts/**/*.js', 'styles/*.css'],
+        tasks: ['manifest']
+      }
     },
   });
 
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-manifest');
-  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-typescript');
 
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('compile', ['ngtemplates', 'ts:prod', 'manifest']);
+  grunt.registerTask('compile', ['ngtemplates', 'typescript', 'manifest']);
 };

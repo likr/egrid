@@ -21,6 +21,6 @@
     "angular-translate": "~2.0.0",
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "<1",
-    "angular-ui-router": "*"
+    "angular-ui-router": "~0.2.10"
   }
 }

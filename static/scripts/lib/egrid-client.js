@@ -1,212 +1,218 @@
 var egrid;
 (function (egrid) {
     (function (model) {
-        var ValueObject = (function () {
-            function ValueObject(v) {
-                this.value_ = v;
+        var Entity = (function () {
+            function Entity() {
             }
-            Object.defineProperty(ValueObject.prototype, "value", {
+            Object.defineProperty(Entity.prototype, "key", {
                 get: function () {
-                    return this.value_;
+                    return this.key_;
                 },
                 enumerable: true,
                 configurable: true
             });
 
-            ValueObject.prototype.toString = function () {
-                return this.value_.toString();
+            Object.defineProperty(Entity.prototype, "createdAt", {
+                get: function () {
+                    return this.createdAt_;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(Entity.prototype, "updatedAt", {
+                get: function () {
+                    return this.updatedAt_;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Entity.prototype.persisted = function () {
+                return !!this.key;
             };
-            return ValueObject;
+            return Entity;
         })();
-        model.ValueObject = ValueObject;
+        model.Entity = Entity;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));
 var egrid;
 (function (egrid) {
-    (function (utils) {
-        utils.API_URL_BASE = '';
+    (function (model) {
+        (function (storage) {
+            storage.API_URL_BASE = '';
 
-        var Uri = (function () {
-            function Uri() {
-            }
-            Uri.collaborators = function (projectId) {
-                return '/api/projects/:projectId/collaborators'.replace(':projectId', projectId);
-            };
-
-            Uri.collaborator = function (projectId, participantId) {
-                return '/api/projects/:projectId/collaborators/:collaboratorId'.replace(':projectId', projectId).replace(':collaboratorId', participantId);
-            };
-
-            Uri.participants = function (projectId) {
-                return '/api/projects/:projectId/participants'.replace(':projectId', projectId);
-            };
-
-            Uri.participant = function (projectId, participantId) {
-                return '/api/projects/:projectId/participants/:participantId'.replace(':projectId', projectId).replace(':participantId', participantId);
-            };
-
-            Uri.participantGrid = function (projectId, participantId) {
-                return '/api/projects/:projectId/participants/:participantId/grid'.replace(':projectId', projectId).replace(':participantId', participantId);
-            };
-
-            Uri.projects = function () {
-                return utils.API_URL_BASE + '/api/projects';
-            };
-
-            Uri.project = function (projectId) {
-                return utils.API_URL_BASE + '/api/projects/:projectId'.replace(':projectId', projectId);
-            };
-
-            Uri.projectGrids = function (projectId) {
-                return '/api/projects/:projectId/grid'.replace(':projectId', projectId);
-            };
-
-            Uri.projectGrid = function (projectId, projectGridId) {
-                return '/api/projects/:projectId/grid/:projectGridId'.replace(':projectId', projectId).replace(':projectGridId', projectGridId);
-            };
-
-            Uri.semProjects = function (projectId) {
-                return '/api/projects/:projectId/sem-projects'.replace(':projectId', projectId);
-            };
-
-            Uri.semProject = function (projectId, participantId) {
-                return '/api/projects/:projectId/sem-projects/:semProjectId'.replace(':projectId', projectId).replace(':semProjectId', participantId);
-            };
-            return Uri;
-        })();
-
-        var Api = (function () {
-            function Api() {
-            }
-            Api.get = function (name, projectId, participantId) {
-                var n = name.replace(/^[A-Z]/, function (m) {
-                    return m.toLowerCase();
-                });
-
-                return $.ajax({
-                    url: participantId ? Uri[n](projectId, participantId) : Uri[n](projectId),
-                    type: 'GET',
-                    contentType: 'application/json'
-                }).then(function (r) {
-                    return JSON.parse(r);
-                });
-            };
-
-            Api.post = function (data, name, projectId) {
-                var n = name.replace(/^[A-Z]/, function (m) {
-                    return m.toLowerCase();
-                }) + 's';
-
-                return $.ajax({
-                    url: projectId ? Uri[n](projectId) : Uri[n](),
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data)
-                }).then(function (r) {
-                    return JSON.parse(r);
-                });
-            };
-
-            Api.put = function (data, name, projectId, participantId) {
-                var n = name.replace(/^[A-Z]/, function (m) {
-                    return m.toLowerCase();
-                });
-
-                return $.ajax({
-                    url: participantId ? Uri[n](projectId, participantId) : Uri[n](projectId),
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data)
-                }).then(function (r) {
-                    return JSON.parse(r);
-                });
-            };
-
-            Api.remove = function (name, projectId, participantId) {
-                var n = name.replace(/^[A-Z]/, function (m) {
-                    return m.toLowerCase();
-                });
-
-                return $.ajax({
-                    url: participantId ? Uri[n](projectId, participantId) : Uri[n](projectId),
-                    type: 'DELETE'
-                }).then(function (response) {
-                    return response;
-                }, function () {
-                    var reasons = [];
-                    for (var _i = 0; _i < (arguments.length - 0); _i++) {
-                        reasons[_i] = arguments[_i + 0];
+            var Uri;
+            (function (Uri) {
+                function Analysis(projectKey, analysisKey) {
+                    var url = storage.API_URL_BASE + '/api/projects/' + projectKey + '/analyses';
+                    if (analysisKey !== undefined) {
+                        url += '/' + analysisKey;
                     }
-                    return reasons[0];
-                });
-            };
+                    return url;
+                }
+                Uri.Analysis = Analysis;
 
-            Api.retrieve = function (name, projectId) {
-                var n = name.replace(/^[A-Z]/, function (m) {
-                    return m.toLowerCase();
-                }) + 's';
-
-                return $.ajax({
-                    url: projectId ? Uri[n](projectId) : Uri[n](),
-                    type: 'GET',
-                    contentType: 'application/json'
-                }).then(function (r) {
-                    return JSON.parse(r);
-                }).then(function (values) {
-                    var o = {};
-
-                    for (var i = 0, l = values.length; i < l; i++) {
-                        o[values[i].key] = values[i];
+                function Collaborator(projectKey, collaboratorKey) {
+                    var url = storage.API_URL_BASE + '/api/projects/' + projectKey + '/collaborators';
+                    if (collaboratorKey !== undefined) {
+                        url += '/' + collaboratorKey;
                     }
+                    return url;
+                }
+                Uri.Collaborator = Collaborator;
 
-                    return o;
-                });
-            };
-            return Api;
-        })();
-        utils.Api = Api;
+                function Participant(projectKey, participantKey) {
+                    var url = storage.API_URL_BASE + '/api/projects/' + projectKey + '/participants';
+                    if (participantKey !== undefined) {
+                        url += '/' + participantKey;
+                    }
+                    return url;
+                }
+                Uri.Participant = Participant;
 
-        var Storage = (function () {
-            function Storage() {
-                this.store = {};
-                this.store = JSON.parse(localStorage.getItem(Storage.key)) || {};
+                function ParticipantGrid(projectKey, participantKey) {
+                    return storage.API_URL_BASE + '/api/projects/' + projectKey + '/participants/' + participantKey + '/grid';
+                }
+                Uri.ParticipantGrid = ParticipantGrid;
 
-                this.flush();
-            }
-            Storage.prototype.flush = function () {
-                var _this = this;
+                function Project(projectKey) {
+                    var url = storage.API_URL_BASE + '/api/projects';
+                    if (projectKey !== undefined) {
+                        url += '/' + projectKey;
+                    }
+                    return url;
+                }
+                Uri.Project = Project;
+
+                function ProjectGrid(projectKey, analysisKey) {
+                    return '/api/projects/' + projectKey + '/analyses/' + analysisKey + '/grid';
+                }
+                Uri.ProjectGrid = ProjectGrid;
+            })(Uri || (Uri = {}));
+
+            (function (Api) {
+                function get(name, projectKey, key) {
+                    return $.ajax({
+                        url: Uri[name](projectKey, key),
+                        type: 'GET',
+                        contentType: 'application/json'
+                    }).then(function (r) {
+                        return JSON.parse(r);
+                    });
+                }
+                Api.get = get;
+
+                function post(data, name, projectKey) {
+                    return $.ajax({
+                        url: Uri[name](projectKey),
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data)
+                    }).then(function (r) {
+                        return JSON.parse(r);
+                    });
+                }
+                Api.post = post;
+
+                function put(data, name, projectKey, key) {
+                    return $.ajax({
+                        url: Uri[name](projectKey, key),
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data)
+                    }).then(function (r) {
+                        return JSON.parse(r);
+                    });
+                }
+                Api.put = put;
+
+                function remove(name, projectKey, key) {
+                    return $.ajax({
+                        url: Uri[name](projectKey, key),
+                        type: 'DELETE'
+                    }).then(function (response) {
+                        return response;
+                    }, function () {
+                        var reasons = [];
+                        for (var _i = 0; _i < (arguments.length - 0); _i++) {
+                            reasons[_i] = arguments[_i + 0];
+                        }
+                        return reasons[0];
+                    });
+                }
+                Api.remove = remove;
+
+                function retrieve(name, projectKey) {
+                    return $.ajax({
+                        url: Uri[name](projectKey),
+                        type: 'GET',
+                        contentType: 'application/json'
+                    }).then(function (r) {
+                        return JSON.parse(r);
+                    }).then(function (values) {
+                        var o = {};
+
+                        for (var i = 0, l = values.length; i < l; i++) {
+                            o[values[i].key] = values[i];
+                        }
+
+                        return o;
+                    });
+                }
+                Api.retrieve = retrieve;
+            })(storage.Api || (storage.Api = {}));
+            var Api = storage.Api;
+        })(model.storage || (model.storage = {}));
+        var storage = model.storage;
+    })(egrid.model || (egrid.model = {}));
+    var model = egrid.model;
+})(egrid || (egrid = {}));
+var egrid;
+(function (egrid) {
+    (function (model) {
+        (function (storage) {
+            var KEY = 'lindo_de_remedio';
+            var OUT_OF_SERVICE = 'unsavedItems';
+            var STORE = JSON.parse(localStorage.getItem(KEY)) || {};
+            flush();
+
+            function flush() {
                 var $deferred = $.Deferred();
                 var $promises = [];
-                var n = Storage.outOfService;
+                var n = OUT_OF_SERVICE;
 
-                if (this.store[n])
-                    for (var type in this.store[n])
-                        if (this.store[n].hasOwnProperty(type)) {
-                            var v = this.store[n][type];
+                if (STORE[n]) {
+                    for (var type in STORE[n]) {
+                        if (STORE[n].hasOwnProperty(type)) {
+                            var v = STORE[n][type];
                             var w;
 
-                            for (var unsaved in v)
+                            for (var unsaved in v) {
                                 if (v.hasOwnProperty(unsaved)) {
                                     w = v[unsaved];
 
                                     if (w.key && w.createdAt) {
-                                        $promises.push(Api.put(w, type, w.key));
+                                        $promises.push(storage.Api.put(w, type, w.key));
                                     } else {
                                         if (w.projectKey) {
-                                            $promises.push(Api.post(w, type, w.projectKey));
+                                            $promises.push(storage.Api.post(w, type, w.projectKey));
                                         } else {
-                                            $promises.push(Api.post(w, type));
+                                            $promises.push(storage.Api.post(w, type));
                                         }
                                     }
                                 }
+                            }
                         }
+                    }
+                }
 
                 $.when.apply($, $promises).then(function (v) {
                     if (Array.isArray(v) && !v.length) {
                         $deferred.reject(false);
                     } else {
-                        delete _this.store[Storage.outOfService];
+                        delete STORE[OUT_OF_SERVICE];
 
                         $deferred.resolve(true);
                     }
@@ -215,40 +221,39 @@ var egrid;
                 });
 
                 return $deferred.promise();
-            };
+            }
 
-            Storage.prototype.add = function (value, name, projectId, participantId) {
-                var _this = this;
+            function add(value, name, projectId, participantId) {
                 var $deferred = $.Deferred();
                 var $promise;
                 var alreadyStored = !!value.key;
 
                 if (alreadyStored) {
-                    $promise = Api.put(value, name, projectId, participantId);
+                    $promise = storage.Api.put(value, name, projectId, participantId);
                 } else {
                     if (projectId) {
-                        $promise = Api.post(value, name, projectId);
+                        $promise = storage.Api.post(value, name, projectId);
                     } else {
-                        $promise = Api.post(value, name);
+                        $promise = storage.Api.post(value, name);
                     }
                 }
 
                 $promise.then(function (v) {
                     var r;
 
-                    if (!_this.store[name]) {
-                        _this.store[name] = {};
+                    if (!STORE[name]) {
+                        STORE[name] = {};
                     }
 
-                    r = Miscellaneousness.merge(_this.store[name][v.key], v);
+                    r = Miscellaneousness.merge(STORE[name][v.key], v);
 
                     if (participantId) {
-                        _this.store[name][projectId][v.key] = r;
+                        STORE[name][projectId][v.key] = r;
                     } else {
-                        _this.store[name][v.key] = r;
+                        STORE[name][v.key] = r;
                     }
 
-                    localStorage.setItem(Storage.key, JSON.stringify(_this.store));
+                    localStorage.setItem(KEY, JSON.stringify(STORE));
 
                     $deferred.resolve(v);
                 }, function () {
@@ -262,59 +267,59 @@ var egrid;
                         $deferred.reject(reasons[0]);
                     }
 
-                    _this.store = JSON.parse(localStorage.getItem(Storage.key)) || {};
+                    STORE = JSON.parse(localStorage.getItem(KEY)) || {};
 
-                    k = (value.key) ? value.key : Storage.outOfService + Object.keys(_this.store[name]).length.valueOf();
+                    k = (value.key) ? value.key : OUT_OF_SERVICE + Object.keys(STORE[name]).length.valueOf();
 
-                    if (!_this.store[Storage.outOfService]) {
-                        _this.store[Storage.outOfService] = Miscellaneousness.construct(name);
+                    if (!STORE[OUT_OF_SERVICE]) {
+                        STORE[OUT_OF_SERVICE] = Miscellaneousness.construct(name);
                     }
 
                     if (!value.key) {
                         value.key = k;
                     }
 
-                    _this.store[Storage.outOfService][name][k] = value;
+                    STORE[OUT_OF_SERVICE][name][k] = value;
 
-                    localStorage.setItem(Storage.key, JSON.stringify(_this.store));
+                    localStorage.setItem(KEY, JSON.stringify(STORE));
 
                     if (projectId && /^unsavedItems[0-9]+$/.test(projectId)) {
-                        _this.store[name][k] = value;
+                        STORE[name][k] = value;
                     } else if (participantId) {
-                        _this.store[name][projectId][k] = value;
+                        STORE[name][projectId][k] = value;
                     } else {
-                        _this.store[name][k] = value;
+                        STORE[name][k] = value;
                     }
 
                     $deferred.reject(reasons[0]);
                 });
 
                 return $deferred.promise();
-            };
+            }
+            storage.add = add;
 
-            Storage.prototype.get = function (name, projectId, participantId) {
-                var _this = this;
+            function get(name, projectId, participantId) {
                 var $deferred = $.Deferred();
-                var $promise = Api.get(name, projectId, participantId);
+                var $promise = storage.Api.get(name, projectId, participantId);
 
-                this.store = JSON.parse(localStorage.getItem(Storage.key)) || {};
+                STORE = JSON.parse(localStorage.getItem(KEY)) || {};
 
                 $promise.then(function (value) {
-                    if (!_this.store[name]) {
-                        _this.store[name] = {};
+                    if (!STORE[name]) {
+                        STORE[name] = {};
                     }
 
                     if (participantId) {
-                        _this.store[name][projectId] = Miscellaneousness.construct(participantId);
+                        STORE[name][projectId] = Miscellaneousness.construct(participantId);
 
-                        _this.store[name][projectId][participantId] = value;
+                        STORE[name][projectId][participantId] = value;
                     } else {
-                        _this.store[name][projectId] = value;
+                        STORE[name][projectId] = value;
                     }
 
-                    localStorage.setItem(Storage.key, JSON.stringify(_this.store));
+                    localStorage.setItem(KEY, JSON.stringify(STORE));
 
-                    $deferred.resolve(participantId ? _this.store[name][projectId][participantId] : _this.store[name][projectId]);
+                    $deferred.resolve(participantId ? STORE[name][projectId][participantId] : STORE[name][projectId]);
                 }, function () {
                     var reasons = [];
                     for (var _i = 0; _i < (arguments.length - 0); _i++) {
@@ -326,19 +331,19 @@ var egrid;
                         $deferred.reject(reasons[0]);
                     }
 
-                    if (!_this.store[name]) {
+                    if (!STORE[name]) {
                         $deferred.reject(new Error('Storage is empty'));
                     }
 
-                    if (_this.store[Storage.outOfService]) {
-                        r = _this.store[Storage.outOfService][name];
+                    if (STORE[OUT_OF_SERVICE]) {
+                        r = STORE[OUT_OF_SERVICE][name];
                     }
 
-                    if (_this.store[name]) {
+                    if (STORE[name]) {
                         if (participantId) {
-                            r = Miscellaneousness.merge(_this.store[name][projectId][participantId], r);
+                            r = Miscellaneousness.merge(STORE[name][projectId][participantId], r);
                         } else {
-                            r = Miscellaneousness.merge(_this.store[name][projectId], r);
+                            r = Miscellaneousness.merge(STORE[name][projectId], r);
                         }
                     }
 
@@ -346,31 +351,32 @@ var egrid;
                 });
 
                 return $deferred.promise();
-            };
+            }
+            storage.get = get;
 
-            Storage.prototype.remove = function (name, projectId, participantId) {
-                return Api.remove(name, projectId, participantId);
-            };
+            function remove(name, projectId, participantId) {
+                return storage.Api.remove(name, projectId, participantId);
+            }
+            storage.remove = remove;
 
-            Storage.prototype.retrieve = function (name, projectId) {
-                var _this = this;
+            function retrieve(name, projectId) {
                 var $deferred = $.Deferred();
-                var $promise = Api.retrieve(name, projectId);
+                var $promise = storage.Api.retrieve(name, projectId);
 
                 $promise.then(function (values) {
-                    if (!_this.store[name]) {
-                        _this.store[name] = {};
+                    if (!STORE[name]) {
+                        STORE[name] = {};
                     }
 
                     if (projectId) {
-                        _this.store[name][projectId] = values;
+                        STORE[name][projectId] = values;
                     } else {
-                        _this.store[name] = values;
+                        STORE[name] = values;
                     }
 
-                    localStorage.setItem(Storage.key, JSON.stringify(_this.store));
+                    localStorage.setItem(KEY, JSON.stringify(STORE));
 
-                    $deferred.resolve(projectId ? _this.store[name][projectId] : _this.store[name]);
+                    $deferred.resolve(projectId ? STORE[name][projectId] : STORE[name]);
                 }, function () {
                     var reasons = [];
                     for (var _i = 0; _i < (arguments.length - 0); _i++) {
@@ -382,19 +388,19 @@ var egrid;
                         $deferred.reject(reasons[0]);
                     }
 
-                    if (!_this.store[name]) {
+                    if (!STORE[name]) {
                         $deferred.reject(new Error('Storeage is empty'));
                     }
 
-                    if (_this.store[Storage.outOfService]) {
-                        r = _this.store[Storage.outOfService][name];
+                    if (STORE[OUT_OF_SERVICE]) {
+                        r = STORE[OUT_OF_SERVICE][name];
                     }
 
-                    if (_this.store[name]) {
+                    if (STORE[name]) {
                         if (projectId) {
-                            r = Miscellaneousness.merge(_this.store[name][projectId], r);
+                            r = Miscellaneousness.merge(STORE[name][projectId], r);
                         } else {
-                            r = Miscellaneousness.merge(_this.store[name], r);
+                            r = Miscellaneousness.merge(STORE[name], r);
                         }
                     }
 
@@ -402,200 +408,41 @@ var egrid;
                 });
 
                 return $deferred.promise();
-            };
-            Storage.key = 'lindo_de_remedio';
-            Storage.outOfService = 'unsavedItems';
-            return Storage;
-        })();
-        utils.Storage = Storage;
-
-        var Miscellaneousness = (function () {
-            function Miscellaneousness() {
             }
-            Miscellaneousness.merge = function (o, b) {
-                if (typeof o === "undefined") { o = {}; }
-                if (typeof b === "undefined") { b = {}; }
-                var j = o;
+            storage.retrieve = retrieve;
 
-                for (var i = 0, t = Object.keys(b), l = t.length; i < l; i++) {
-                    j[t[i]] = b[t[i]];
-                }
+            var Miscellaneousness;
+            (function (Miscellaneousness) {
+                function merge(o, b) {
+                    if (typeof o === "undefined") { o = {}; }
+                    if (typeof b === "undefined") { b = {}; }
+                    var j = o;
 
-                return j;
-            };
-
-            Miscellaneousness.construct = function () {
-                var properties = [];
-                for (var _i = 0; _i < (arguments.length - 0); _i++) {
-                    properties[_i] = arguments[_i + 0];
-                }
-                return properties.reduceRight(function (p, c) {
-                    var o = {};
-
-                    o[c] = p;
-
-                    return o;
-                }, {});
-            };
-            return Miscellaneousness;
-        })();
-        utils.Miscellaneousness = Miscellaneousness;
-    })(egrid.utils || (egrid.utils = {}));
-    var utils = egrid.utils;
-})(egrid || (egrid = {}));
-
-var egrid;
-(function (egrid) {
-    egrid.storage = new egrid.utils.Storage();
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var Entity = (function () {
-            function Entity() {
-            }
-
-            Object.defineProperty(Entity.prototype, "key", {
-                get: function () {
-                    return (this.key_) ? this.key_.value : '';
-                },
-                set: function (key) {
-                    if (!this.key_)
-                        this.key_ = new model.ValueObject(key);
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Entity.prototype.load = function (o) {
-                throw new Error('NotImplementedException');
-            };
-
-            Entity.prototype.get = function (key) {
-                throw new Error('NotImplementedException');
-            };
-
-            Entity.prototype.save = function () {
-                throw new Error('NotImplementedException');
-            };
-
-            Entity.listUrl = function (key) {
-                throw new Error('NotImplementedException');
-            };
-
-            Entity.prototype.url = function (key) {
-                throw new Error('NotImplementedException');
-            };
-
-            Entity.prototype.toJSON = function (t) {
-                var replacement = {};
-
-                for (var k in this) {
-                    if (!(this[k] instanceof model.ValueObject)) {
-                        replacement[k] = this[k];
+                    for (var i = 0, t = Object.keys(b), l = t.length; i < l; i++) {
+                        j[t[i]] = b[t[i]];
                     }
+
+                    return j;
                 }
+                Miscellaneousness.merge = merge;
 
-                return replacement;
-            };
-            return Entity;
-        })();
-        model.Entity = Entity;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var Dictionary = (function () {
-            function Dictionary() {
-                this.pairs = {};
-            }
-            Dictionary.prototype.getItem = function (k) {
-                return this.pairs[k];
-            };
+                function construct() {
+                    var properties = [];
+                    for (var _i = 0; _i < (arguments.length - 0); _i++) {
+                        properties[_i] = arguments[_i + 0];
+                    }
+                    return properties.reduceRight(function (p, c) {
+                        var o = {};
 
-            Dictionary.prototype.removeItem = function (k) {
-                delete this.pairs[k];
-            };
+                        o[c] = p;
 
-            Dictionary.prototype.setItem = function (k, v) {
-                this.pairs[k] = v;
-            };
-
-            Dictionary.prototype.toArray = function () {
-                var _this = this;
-                return Object.keys(this.pairs).map(function (v, i, ar) {
-                    return _this.pairs[v];
-                });
-            };
-
-            Dictionary.prototype.toJSON = function () {
-                var _this = this;
-                var replacement = {};
-
-                Object.keys(this.pairs).forEach(function (k) {
-                    replacement[k] = _this.pairs[k];
-                });
-
-                return replacement;
-            };
-            return Dictionary;
-        })();
-        model.Dictionary = Dictionary;
-
-        var NotationDeserializer = (function () {
-            function NotationDeserializer() {
-            }
-            NotationDeserializer.load = function (o) {
-                var b = JSON.parse(o);
-
-                return b ? Object.keys(b).map(function (v, i, ar) {
-                    return b[v];
-                }) : [];
-            };
-            return NotationDeserializer;
-        })();
-        model.NotationDeserializer = NotationDeserializer;
-
-        var CollectionBase = (function () {
-            function CollectionBase(pairs) {
-                this.pairs_ = new model.ValueObject(pairs);
-            }
-            Object.defineProperty(CollectionBase.prototype, "pairs", {
-                get: function () {
-                    return this.pairs_;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            CollectionBase.prototype.addItem = function (item) {
-                this.pairs.value.setItem(item.key, item);
-            };
-
-            CollectionBase.prototype.getItem = function (k) {
-                return this.pairs.value.getItem(k);
-            };
-
-            CollectionBase.prototype.removeItem = function (k) {
-                return this.pairs.value.removeItem(k);
-            };
-
-            CollectionBase.prototype.query = function (key) {
-                throw new Error('NotImplementedException');
-            };
-
-            CollectionBase.prototype.toArray = function () {
-                return this.pairs.value.toArray();
-            };
-
-            CollectionBase.pluralize = function (word) {
-                return word + 's';
-            };
-            return CollectionBase;
-        })();
-        model.CollectionBase = CollectionBase;
+                        return o;
+                    }, {});
+                }
+                Miscellaneousness.construct = construct;
+            })(Miscellaneousness || (Miscellaneousness = {}));
+        })(model.storage || (model.storage = {}));
+        var storage = model.storage;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));
@@ -608,6 +455,16 @@ var __extends = this.__extends || function (d, b) {
 var egrid;
 (function (egrid) {
     (function (model) {
+        var TYPE = 'Project';
+
+        function load(obj, project) {
+            var loaded = project === undefined ? new Project(obj) : project;
+            loaded.key_ = obj.key;
+            loaded.createdAt_ = new Date(obj.createdAt);
+            loaded.updatedAt_ = new Date(obj.updatedAt);
+            return loaded;
+        }
+
         var Project = (function (_super) {
             __extends(Project, _super);
             function Project(obj) {
@@ -618,82 +475,92 @@ var egrid;
                     this.note = obj.note;
                 }
             }
-            Object.defineProperty(Project.prototype, "createdAt", {
-                get: function () {
-                    return this.createdAt_ ? this.createdAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(Project.prototype, "updatedAt", {
-                get: function () {
-                    return this.updatedAt_ ? this.updatedAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Project.prototype.setCreatedAt = function (date) {
-                if (!this.createdAt_)
-                    this.createdAt_ = new model.ValueObject(date);
-            };
-
-            Project.prototype.setUpdatedAt = function (date) {
-                if (!this.updatedAt_)
-                    this.updatedAt_ = new model.ValueObject(date);
-            };
-
-            Project.prototype.load = function (o) {
-                this.key = o.key;
-
-                this.name = o.name;
-                this.note = o.note;
-
-                this.setCreatedAt(new Date(o.createdAt));
-                this.setUpdatedAt(new Date(o.updatedAt));
-
-                return this;
-            };
-
-            Project.load = function (o) {
-                return new Project().load(o);
-            };
-
-            Project.prototype.get = function (key) {
-                var _this = this;
-                return egrid.storage.get(Project.type, key).then(function (data) {
-                    return _this.load(data);
+            Project.get = function (key) {
+                return model.storage.get(TYPE, key).then(function (data) {
+                    return load(data);
                 });
             };
 
-            Project.get = function (key) {
-                var project = new Project();
-                return project.get(key);
+            Project.query = function () {
+                return model.storage.retrieve(TYPE).then(function (data) {
+                    var result = [];
+                    var key;
+                    for (key in data) {
+                        result.push(load(data[key]));
+                    }
+                    return result;
+                });
             };
 
             Project.prototype.save = function () {
                 var _this = this;
-                return egrid.storage.add(this, Project.type, this.key).done(function (v) {
-                    _this.load(v);
+                return model.storage.add(this, TYPE, this.key).done(function (v) {
+                    load(v, _this);
                 });
             };
 
-            Project.listUrl = function () {
-                return '/api/projects';
-            };
-
-            Project.prototype.url = function (key) {
-                return Project.listUrl() + '/' + key;
-            };
-
             Project.prototype.remove = function () {
-                return egrid.storage.remove(Project.type, this.key);
+                var _this = this;
+                return model.storage.remove(TYPE, this.key).then(function () {
+                    _this.key_ = undefined;
+                    _this.createdAt_ = undefined;
+                    _this.updatedAt_ = undefined;
+                });
             };
-            Project.type = 'Project';
             return Project;
         })(model.Entity);
         model.Project = Project;
+    })(egrid.model || (egrid.model = {}));
+    var model = egrid.model;
+})(egrid || (egrid = {}));
+var egrid;
+(function (egrid) {
+    (function (model) {
+        var TYPE = 'Analysis';
+
+        function load(obj) {
+            var analysis = new Analysis(obj);
+            analysis.key_ = obj.key;
+            analysis.createdAt_ = new Date(obj.createdAt);
+            analysis.updatedAt_ = new Date(obj.updatedAt);
+            return analysis;
+        }
+
+        var Analysis = (function (_super) {
+            __extends(Analysis, _super);
+            function Analysis(obj) {
+                _super.call(this);
+                this.name = obj.name;
+                this.project = obj.project;
+                this.projectKey = obj.projectKey;
+            }
+            Analysis.get = function (projectKey, key) {
+                return model.storage.get(TYPE, projectKey, key).then(function (data) {
+                    return load(data);
+                });
+            };
+
+            Analysis.query = function (projectKey) {
+                return model.storage.retrieve(TYPE, projectKey).then(function (data) {
+                    var result = [];
+                    var key;
+                    for (key in data) {
+                        result.push(load(data[key]));
+                    }
+                    return result;
+                });
+            };
+
+            Analysis.prototype.save = function () {
+                return model.storage.add(this, TYPE, this.projectKey, this.key);
+            };
+
+            Analysis.prototype.remove = function () {
+                return model.storage.remove(TYPE, this.projectKey, this.key);
+            };
+            return Analysis;
+        })(model.Entity);
+        model.Analysis = Analysis;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));
@@ -737,20 +604,16 @@ var egrid;
                 throw new Error('NotSupportedException');
             };
 
+            Collaborator.query = function (projectKey) {
+                return model.storage.retrieve(Collaborator.type, projectKey);
+            };
+
             Collaborator.prototype.save = function () {
-                return egrid.storage.add(this, Collaborator.type, this.projectKey, this.key);
-            };
-
-            Collaborator.listUrl = function (key) {
-                return model.Project.listUrl() + '/' + key + '/collaborators';
-            };
-
-            Collaborator.prototype.url = function (key) {
-                return Collaborator.listUrl(this.projectKey) + '/' + key;
+                return model.storage.add(this, Collaborator.type, this.projectKey, this.key);
             };
 
             Collaborator.prototype.remove = function () {
-                return egrid.storage.remove(Collaborator.type, this.projectKey, this.key);
+                return model.storage.remove(Collaborator.type, this.projectKey, this.key);
             };
             Collaborator.type = 'Collaborator';
             Collaborator.url = '/api/projects/:projectId/collaborators/:collaboratorId';
@@ -763,28 +626,16 @@ var egrid;
 var egrid;
 (function (egrid) {
     (function (model) {
-        var CollaboratorCollection = (function (_super) {
-            __extends(CollaboratorCollection, _super);
-            function CollaboratorCollection() {
-                _super.call(this, new model.Dictionary());
-            }
-            CollaboratorCollection.prototype.query = function (projectKey) {
-                return egrid.storage.retrieve(model.Collaborator.type, projectKey);
-            };
+        var TYPE = 'Participant';
 
-            CollaboratorCollection.prototype.getItem = function (k) {
-                var o = _super.prototype.getItem.call(this, k);
-                return new model.Collaborator(o).load(o);
-            };
-            return CollaboratorCollection;
-        })(model.CollectionBase);
-        model.CollaboratorCollection = CollaboratorCollection;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
+        function load(obj) {
+            var participant = new Participant(obj);
+            participant.key_ = obj.key;
+            participant.createdAt_ = new Date(obj.createdAt);
+            participant.updatedAt_ = new Date(obj.updatedAt);
+            return participant;
+        }
+
         var Participant = (function (_super) {
             __extends(Participant, _super);
             function Participant(obj) {
@@ -797,70 +648,30 @@ var egrid;
                     this.projectKey = obj.projectKey;
                 }
             }
-            Object.defineProperty(Participant.prototype, "createdAt", {
-                get: function () {
-                    return this.createdAt_ ? this.createdAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(Participant.prototype, "updatedAt", {
-                get: function () {
-                    return this.updatedAt_ ? this.updatedAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Participant.prototype.setCreatedAt = function (date) {
-                if (!this.createdAt_)
-                    this.createdAt_ = new model.ValueObject(date);
+            Participant.get = function (projectKey, key) {
+                return model.storage.get(TYPE, projectKey, key).then(function (data) {
+                    return load(data);
+                });
             };
 
-            Participant.prototype.setUpdatedAt = function (date) {
-                if (!this.updatedAt_)
-                    this.updatedAt_ = new model.ValueObject(date);
-            };
-
-            Participant.prototype.load = function (o) {
-                this.key = o.key;
-
-                this.name = o.name;
-                this.note = o.note;
-
-                this.project = o.project;
-
-                this.setCreatedAt(o.createdAt);
-                this.setUpdatedAt(o.updatedAt);
-
-                return this;
-            };
-
-            Participant.prototype.get = function (key) {
-                var _this = this;
-                return egrid.storage.get(Participant.type, this.projectKey, key).then(function (participant) {
-                    return _this.load(participant);
+            Participant.query = function (projectKey) {
+                return model.storage.retrieve(TYPE, projectKey).then(function (data) {
+                    var result = [];
+                    var key;
+                    for (key in data) {
+                        result.push(load(data[key]));
+                    }
+                    return result;
                 });
             };
 
             Participant.prototype.save = function () {
-                return egrid.storage.add(this, Participant.type, this.projectKey, this.key);
-            };
-
-            Participant.listUrl = function (key) {
-                return model.Project.listUrl() + '/' + key + '/participants';
-            };
-
-            Participant.prototype.url = function (key) {
-                return Participant.listUrl(this.projectKey) + '/' + key;
+                return model.storage.add(this, TYPE, this.projectKey, this.key);
             };
 
             Participant.prototype.remove = function () {
-                return egrid.storage.remove(Participant.type, this.projectKey, this.key);
+                return model.storage.remove(TYPE, this.projectKey, this.key);
             };
-            Participant.type = 'Participant';
-            Participant.url = '/api/projects/:projectId/participants/:participantId';
             return Participant;
         })(model.Entity);
         model.Participant = Participant;
@@ -870,50 +681,27 @@ var egrid;
 var egrid;
 (function (egrid) {
     (function (model) {
-        var ParticipantCollection = (function (_super) {
-            __extends(ParticipantCollection, _super);
-            function ParticipantCollection() {
-                _super.call(this, new model.Dictionary());
-            }
-            ParticipantCollection.prototype.query = function (projectKey) {
-                return egrid.storage.retrieve(model.Participant.type, projectKey);
-            };
-            return ParticipantCollection;
-        })(model.CollectionBase);
-        model.ParticipantCollection = ParticipantCollection;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var ParticipantGrid = (function () {
+        var ParticipantGrid = (function (_super) {
+            __extends(ParticipantGrid, _super);
             function ParticipantGrid(obj) {
+                _super.call(this);
                 this.projectKey = obj.projectKey;
-                this.participantKey = this.key = obj.participantKey;
+                this.participantKey = this.key_ = obj.participantKey;
                 this.nodes = obj.nodes;
                 this.links = obj.links;
             }
             ParticipantGrid.prototype.update = function () {
-                return egrid.storage.add(this, ParticipantGrid.type, this.projectKey, this.key);
-            };
-
-            ParticipantGrid.prototype.url = function () {
-                return ParticipantGrid.url(this.projectKey, this.key);
+                return model.storage.add(this, ParticipantGrid.type, this.projectKey, this.participantKey);
             };
 
             ParticipantGrid.get = function (projectKey, participantKey) {
-                return egrid.storage.get(ParticipantGrid.type, projectKey, participantKey).then(function (pg) {
+                return model.storage.get(ParticipantGrid.type, projectKey, participantKey).then(function (pg) {
                     return new ParticipantGrid(pg);
                 });
             };
-
-            ParticipantGrid.url = function (projectKey, participantKey) {
-                return '/api/projects/' + projectKey + '/participants/' + participantKey + '/grid';
-            };
             ParticipantGrid.type = 'ParticipantGrid';
             return ParticipantGrid;
-        })();
+        })(model.Entity);
         model.ParticipantGrid = ParticipantGrid;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
@@ -921,68 +709,19 @@ var egrid;
 var egrid;
 (function (egrid) {
     (function (model) {
-        var ProjectCollection = (function (_super) {
-            __extends(ProjectCollection, _super);
-            function ProjectCollection() {
-                _super.call(this, new model.Dictionary());
-            }
-            ProjectCollection.prototype.query = function (key) {
-                return egrid.storage.retrieve(model.Project.type).then(function (data) {
-                    var result = {};
-                    for (key in data) {
-                        result[key] = model.Project.load(data[key]);
-                    }
-                    return result;
-                });
-            };
-
-            ProjectCollection.query = function () {
-                var projects = new ProjectCollection();
-                return projects.query();
-            };
-            return ProjectCollection;
-        })(model.CollectionBase);
-        model.ProjectCollection = ProjectCollection;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var ProjectGrid = (function () {
+        var ProjectGrid = (function (_super) {
+            __extends(ProjectGrid, _super);
             function ProjectGrid(obj) {
+                _super.call(this);
+
                 this.projectKey = obj.projectKey;
                 this.nodes = obj.nodes;
                 this.links = obj.links;
                 this.name = obj.name;
                 this.note = obj.note;
             }
-            Object.defineProperty(ProjectGrid.prototype, "key", {
-                get: function () {
-                    return this.key_;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(ProjectGrid.prototype, "createdAt", {
-                get: function () {
-                    return this.createdAt_;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(ProjectGrid.prototype, "updatedAt", {
-                get: function () {
-                    return this.updatedAt_;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
             ProjectGrid.prototype.save = function () {
-                return egrid.storage.add(this, ProjectGrid.type, this.projectKey, this.key);
+                return model.storage.add(this, ProjectGrid.type, this.projectKey, this.key);
             };
 
             ProjectGrid.prototype.url = function () {
@@ -1004,13 +743,13 @@ var egrid;
             ProjectGrid.get = function (projectKey, projectGridId) {
                 var key = projectGridId ? projectGridId : 'current';
 
-                return egrid.storage.get(ProjectGrid.type, projectKey, key).then(function (projectGrid) {
+                return model.storage.get(ProjectGrid.type, projectKey, key).then(function (projectGrid) {
                     return ProjectGrid.load(projectGrid);
                 });
             };
 
             ProjectGrid.query = function (projectKey) {
-                return egrid.storage.retrieve(ProjectGrid.type, projectKey);
+                return model.storage.retrieve(ProjectGrid.type, projectKey);
             };
 
             ProjectGrid.load = function (obj) {
@@ -1029,7 +768,7 @@ var egrid;
             };
             ProjectGrid.type = 'ProjectGrid';
             return ProjectGrid;
-        })();
+        })(model.Entity);
         model.ProjectGrid = ProjectGrid;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
@@ -1037,6 +776,14 @@ var egrid;
 var egrid;
 (function (egrid) {
     (function (model) {
+        function load(obj) {
+            var semProject = new SemProject(obj);
+            semProject.key_ = obj.key;
+            semProject.createdAt_ = new Date(obj.createdAt);
+            semProject.updatedAt_ = new Date(obj.updatedAt);
+            return semProject;
+        }
+
         var SemProject = (function (_super) {
             __extends(SemProject, _super);
             function SemProject(obj) {
@@ -1048,100 +795,34 @@ var egrid;
                     this.projectKey = obj.projectKey;
                 }
             }
-            Object.defineProperty(SemProject.prototype, "createdAt", {
-                get: function () {
-                    return this.createdAt_ ? this.createdAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(SemProject.prototype, "updatedAt", {
-                get: function () {
-                    return this.updatedAt_ ? this.updatedAt_.value : null;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            SemProject.prototype.setCreatedAt = function (date) {
-                if (!this.createdAt_)
-                    this.createdAt_ = new model.ValueObject(date);
-            };
-
-            SemProject.prototype.setUpdatedAt = function (date) {
-                if (!this.updatedAt_)
-                    this.updatedAt_ = new model.ValueObject(date);
-            };
-
-            SemProject.prototype.load = function (o) {
-                this.key = o.key;
-
-                this.name = o.name;
-
-                this.project = o.project;
-
-                this.setCreatedAt(o.createdAt);
-                this.setUpdatedAt(o.updatedAt);
-
-                return this;
-            };
-
             SemProject.prototype.get = function (key) {
-                var _this = this;
-                return egrid.storage.get(SemProject.type, this.projectKey, key).then(function (semProject) {
-                    return _this.load(semProject);
+                return model.storage.get(SemProject.type, this.projectKey, key).then(function (data) {
+                    return load(data);
                 });
             };
 
-            SemProject.prototype.save = function () {
-                var _this = this;
-                var $deferred = $.Deferred();
-                var key = this.key;
+            SemProject.query = function (projectKey) {
+                return model.storage.retrieve(SemProject.type, projectKey);
+            };
 
-                $.ajax({
-                    url: key ? this.url(key) : SemProject.listUrl(this.projectKey),
-                    type: key ? 'PUT' : 'POST',
+            SemProject.prototype.save = function () {
+                return $.ajax({
+                    url: this.key ? this.url(this.key) : SemProject.listUrl(this.projectKey),
+                    type: this.key ? 'PUT' : 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        key: key,
+                        key: this.key,
                         name: this.name
                     }),
                     dataFilter: function (data) {
                         var obj = JSON.parse(data);
-
-                        return _this.load(obj);
+                        return load(obj);
                     }
-                }).then(function (p) {
-                    return $deferred.resolve(p);
-                }, function () {
-                    var reasons = [];
-                    for (var _i = 0; _i < (arguments.length - 0); _i++) {
-                        reasons[_i] = arguments[_i + 0];
-                    }
-                    var o = {};
-                    var storageKey = 'unsavedItems.' + model.CollectionBase.pluralize(SemProject.type);
-                    var unsavedItems = JSON.parse(window.localStorage.getItem(storageKey)) || {};
-                    var irregulars;
-
-                    if (_this.key) {
-                        o[_this.key] = _this;
-                    } else {
-                        o[Object.keys(unsavedItems).length] = _this;
-                    }
-
-                    irregulars = $.extend({}, unsavedItems, o);
-
-                    window.localStorage.setItem(storageKey, JSON.stringify(irregulars));
-
-                    return $deferred.reject();
                 });
-
-                return $deferred.promise();
             };
 
             SemProject.listUrl = function (key) {
-                return model.Project.listUrl() + '/' + key + '/sem-projects';
+                return '/api/projects/' + key + '/sem-projects';
             };
 
             SemProject.prototype.url = function (key) {
@@ -1152,23 +833,6 @@ var egrid;
             return SemProject;
         })(model.Entity);
         model.SemProject = SemProject;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var SemProjectCollection = (function (_super) {
-            __extends(SemProjectCollection, _super);
-            function SemProjectCollection() {
-                _super.call(this, new model.Dictionary());
-            }
-            SemProjectCollection.prototype.query = function (projectKey) {
-                return egrid.storage.retrieve(model.SemProject.type, projectKey);
-            };
-            return SemProjectCollection;
-        })(model.CollectionBase);
-        model.SemProjectCollection = SemProjectCollection;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));

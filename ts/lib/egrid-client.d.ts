@@ -1,106 +1,71 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts" />
 declare module egrid.model {
-    class ValueObject<T> {
-        private value_;
-        constructor(v: T);
-        public value : T;
-        public toString(): string;
-    }
-}
-declare module egrid.model.interfaces {
-    interface IEntity {
+    interface StorableData {
         key: string;
+        createdAt: Date;
+        updatedAt: Date;
     }
-}
-declare module egrid.utils {
-    var API_URL_BASE: string;
-    class Api {
-        static get<T>(name: string, projectId: string, participantId?: string): JQueryPromise<T>;
-        static post<T>(data: T, name: string, projectId?: string): JQueryPromise<T>;
-        static put<T>(data: T, name: string, projectId: string, participantId?: string): JQueryPromise<T>;
-        static remove(name: string, projectId: string, participantId?: string): JQueryPromise<any>;
-        static retrieve<T extends model.interfaces.IEntity>(name: string, projectId?: string): JQueryPromise<T[]>;
+    interface SerializedData {
+        key: string;
+        createdAt: string;
+        updatedAt: string;
     }
-    class Storage {
-        private static key;
-        private static outOfService;
-        private store;
-        constructor();
-        private flush<T extends model.interfaces.IEntity>();
-        public add<T extends model.interfaces.IEntity>(value: T, name: string, projectId?: string, participantId?: string): JQueryPromise<T>;
-        public get<T extends model.interfaces.IEntity>(name: string, projectId: string, participantId?: string): JQueryPromise<T>;
-        public remove<T extends model.interfaces.IEntity>(name: string, projectId: string, participantId?: string): JQueryPromise<boolean>;
-        public retrieve<T extends model.interfaces.IEntity>(name: string, projectId?: string): JQueryPromise<any>;
-    }
-    class Miscellaneousness {
-        static merge(o?: any, b?: any): any;
-        static construct(...properties: string[]): any;
-    }
-}
-declare module egrid {
-    var storage: utils.Storage;
-}
-declare module egrid.model {
-    class Entity implements interfaces.IEntity {
+    class Entity implements StorableData {
         private key_;
-        static type: string;
+        private createdAt_;
+        private updatedAt_;
         public key : string;
-        public load(o: any): Entity;
-        public get(key: string): JQueryPromise<Entity>;
-        public save(): JQueryPromise<Entity>;
-        static listUrl(key?: string): string;
-        public url(key?: string): string;
-        public toJSON(t: any): any;
+        public createdAt : Date;
+        public updatedAt : Date;
+        public persisted(): boolean;
     }
 }
-declare module egrid.model {
-    class Dictionary<TValue> {
-        private pairs;
-        public getItem(k: string): TValue;
-        public removeItem(k: string): void;
-        public setItem(k: string, v: TValue): void;
-        public toArray(): TValue[];
-        public toJSON(): any;
+declare module egrid.model.storage {
+    var API_URL_BASE: string;
+    module Api {
+        function get<T>(name: string, projectKey: string, key?: string): JQueryPromise<T>;
+        function post<T>(data: T, name: string, projectKey?: string): JQueryPromise<T>;
+        function put<T>(data: T, name: string, projectKey: string, key?: string): JQueryPromise<T>;
+        function remove(name: string, projectKey: string, key?: string): JQueryPromise<void>;
+        function retrieve<T extends StorableData>(name: string, projectKey?: string): JQueryPromise<T[]>;
     }
-    class NotationDeserializer {
-        static load(o: any): any[];
-    }
-    class CollectionBase<T extends Entity> {
-        private pairs_;
-        constructor(pairs: Dictionary<T>);
-        public pairs : ValueObject<Dictionary<T>>;
-        public addItem(item: T): void;
-        public getItem(k: string): T;
-        public removeItem(k: string): void;
-        public query(key?: string): JQueryPromise<T[]>;
-        public toArray(): T[];
-        static pluralize(word: string): string;
-    }
+}
+declare module egrid.model.storage {
+    function add<T extends StorableData>(value: T, name: string, projectId?: string, participantId?: string): JQueryPromise<void>;
+    function get<T extends StorableData>(name: string, projectId: string, participantId?: string): JQueryPromise<T>;
+    function remove<T extends StorableData>(name: string, projectId: string, participantId?: string): JQueryPromise<void>;
+    function retrieve<T extends StorableData>(name: string, projectId?: string): JQueryPromise<any>;
 }
 declare module egrid.model {
     interface ProjectData {
         name: string;
         note: string;
     }
-    class Project extends Entity {
-        private createdAt_;
-        private updatedAt_;
+    class Project extends Entity implements ProjectData {
         public name: string;
         public note: string;
-        static type: string;
         constructor(obj?: ProjectData);
-        public createdAt : Date;
-        public updatedAt : Date;
-        private setCreatedAt(date);
-        private setUpdatedAt(date);
-        public load(o: any): Project;
-        static load(o: any): Project;
-        public get(key: string): JQueryPromise<Project>;
         static get(key: string): JQueryPromise<Project>;
-        public save(): JQueryPromise<Project>;
-        static listUrl(): string;
-        public url(key?: string): string;
-        public remove(): JQueryPromise<boolean>;
+        static query(): JQueryPromise<Project[]>;
+        public save(): JQueryPromise<void>;
+        public remove(): JQueryPromise<void>;
+    }
+}
+declare module egrid.model {
+    interface AnalysisData {
+        name?: string;
+        project?: ProjectData;
+        projectKey: string;
+    }
+    class Analysis extends Entity implements AnalysisData {
+        public name: string;
+        public project: ProjectData;
+        public projectKey: string;
+        constructor(obj: AnalysisData);
+        static get(projectKey: string, key: string): JQueryPromise<Analysis>;
+        static query(projectKey: string): JQueryPromise<Analysis[]>;
+        public save(): JQueryPromise<void>;
+        public remove(): JQueryPromise<void>;
     }
 }
 declare module egrid.model {
@@ -135,17 +100,9 @@ declare module egrid.model {
         constructor(obj?: CollaboratorData);
         public load(o: any): Collaborator;
         public get(key: string): JQueryPromise<Collaborator>;
-        public save(): JQueryPromise<Collaborator>;
-        static listUrl(key?: string): string;
-        public url(key?: string): string;
-        public remove(): JQueryPromise<boolean>;
-    }
-}
-declare module egrid.model {
-    class CollaboratorCollection extends CollectionBase<Collaborator> {
-        constructor();
-        public query(projectKey?: string): JQueryPromise<Collaborator[]>;
-        public getItem(k: string): Collaborator;
+        static query(projectKey: string): JQueryPromise<Collaborator[]>;
+        public save(): JQueryPromise<void>;
+        public remove(): JQueryPromise<void>;
     }
 }
 declare module egrid.model {
@@ -156,31 +113,15 @@ declare module egrid.model {
         projectKey: string;
     }
     class Participant extends Entity {
-        private createdAt_;
-        private updatedAt_;
         public name: string;
         public note: string;
         public project: ProjectData;
         public projectKey: string;
-        static type: string;
-        static url: string;
         constructor(obj?: ParticipantData);
-        public createdAt : Date;
-        public updatedAt : Date;
-        private setCreatedAt(date);
-        private setUpdatedAt(date);
-        public load(o: any): Participant;
-        public get(key: string): JQueryPromise<Participant>;
-        public save(): JQueryPromise<Participant>;
-        static listUrl(key?: string): string;
-        public url(key?: string): string;
-        public remove(): JQueryPromise<boolean>;
-    }
-}
-declare module egrid.model {
-    class ParticipantCollection extends CollectionBase<Participant> {
-        constructor();
-        public query(projectKey?: string): JQueryPromise<Participant[]>;
+        static get(projectKey: string, key: string): JQueryPromise<Participant>;
+        static query(projectKey: string): JQueryPromise<Participant[]>;
+        public save(): JQueryPromise<void>;
+        public remove(): JQueryPromise<void>;
     }
 }
 declare module egrid.model {
@@ -204,25 +145,15 @@ declare module egrid.model {
         nodes: ParticipantGridNodeData[];
         links: ParticipantGridLinkData[];
     }
-    class ParticipantGrid implements ParticipantGridData, interfaces.IEntity {
-        public key: string;
+    class ParticipantGrid extends Entity implements ParticipantGridData {
         public participantKey: string;
         public projectKey: string;
         public nodes: ParticipantGridNodeData[];
         public links: ParticipantGridLinkData[];
         static type: string;
         constructor(obj: ParticipantGridData);
-        public update(): JQueryPromise<ParticipantGrid>;
-        private url();
+        public update(): JQueryPromise<void>;
         static get(projectKey: string, participantKey: string): JQueryPromise<ParticipantGrid>;
-        private static url(projectKey, participantKey);
-    }
-}
-declare module egrid.model {
-    class ProjectCollection extends CollectionBase<Project> {
-        constructor();
-        public query(key?: string): JQueryPromise<Project[]>;
-        static query(): JQueryPromise<Project[]>;
     }
 }
 declare module egrid.model {
@@ -242,10 +173,7 @@ declare module egrid.model {
         name?: string;
         note?: string;
     }
-    class ProjectGrid implements ProjectGridData, interfaces.IEntity {
-        private key_;
-        private createdAt_;
-        private updatedAt_;
+    class ProjectGrid extends Entity implements ProjectGridData {
         public name: string;
         public note: string;
         public projectKey: string;
@@ -253,10 +181,7 @@ declare module egrid.model {
         public links: ProjectGridLinkData[];
         static type: string;
         constructor(obj: ProjectGridData);
-        public key : string;
-        public createdAt : Date;
-        public updatedAt : Date;
-        public save(): JQueryPromise<ProjectGrid>;
+        public save(): JQueryPromise<void>;
         private url();
         private load(obj);
         static get(projectKey: string, projectGridId?: string): JQueryPromise<ProjectGrid>;
@@ -272,29 +197,17 @@ declare module egrid.model {
         projectKey: string;
     }
     class SemProject extends Entity {
-        private createdAt_;
-        private updatedAt_;
         public name: string;
         public project: ProjectData;
         public projectKey: string;
         static type: string;
         static url: string;
         constructor(obj?: SemProjectData);
-        public createdAt : Date;
-        public updatedAt : Date;
-        private setCreatedAt(date);
-        private setUpdatedAt(date);
-        public load(o: any): SemProject;
         public get(key: string): JQueryPromise<SemProject>;
+        static query(projectKey: string): JQueryPromise<SemProject[]>;
         public save(): JQueryPromise<SemProject>;
         static listUrl(key?: string): string;
         public url(key?: string): string;
-    }
-}
-declare module egrid.model {
-    class SemProjectCollection extends CollectionBase<SemProject> {
-        constructor();
-        public query(projectKey?: string): JQueryPromise<SemProject[]>;
     }
 }
 declare module egrid.model {

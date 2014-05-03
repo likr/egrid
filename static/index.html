@@ -21,26 +21,20 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                {{ user.nickname }}さん<b class="caret"></b>
+                {{user.nickname}}さん<b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li><a href ng-click="changeLanguage('ja')">Japanese</a></li>
                 <li><a href ng-click="changeLanguage('en')">English</a></li>
                 <li class="divider"></li>
-                <li><a href="{{ logoutUrl }}">Logout</a></li>
+                <li><a href="{{logoutUrl}}">Logout</a></li>
               </ul>
             </li>
           </ul>
         </nav>
       </div>
     </header>
-    <div class="container" style="padding-top: 50px;">
-      <div id="alerts">
-        <alert ng-repeat="alert in $root.alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
-      </div>
-
-      <div ui-view></div>
-    </div>
+    <div ui-view="base"></div>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.min.js"></script>
     <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
