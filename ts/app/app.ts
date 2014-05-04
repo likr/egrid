@@ -9,11 +9,8 @@
 /// <reference path="projects/get/analyses/get.ts"/>
 /// <reference path="projects/get/analyses/get/grid.ts"/>
 /// <reference path="projects/get/analyses/get/grid/detail.ts"/>
-/// <reference path="projects/get/analyses/get/sem/sem-project.ts"/>
-/// <reference path="projects/get/analyses/get/sem/sem-project-analysis.ts"/>
-/// <reference path="projects/get/analyses/get/sem/sem-project-create.ts"/>
-/// <reference path="projects/get/analyses/get/sem/sem-project-questionnaire-edit.ts"/>
-/// <reference path="projects/get/analyses/get/sem/sem-project-list.ts"/>
+/// <reference path="projects/get/analyses/get/sem.ts"/>
+/// <reference path="projects/get/analyses/get/questionnaire.ts"/>
 /// <reference path="projects/get/collaborators/all/list.ts"/>
 /// <reference path="projects/get/collaborators/all/new.ts"/>
 /// <reference path="projects/get/participants/all/list.ts"/>
@@ -37,6 +34,9 @@ module egrid.app {
           }, 10);
         }
       };
+    }])
+    .config(['$compileProvider', $compileProvider => {
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|data):/);
     }])
     .config([
         '$stateProvider',
@@ -308,9 +308,11 @@ module egrid.app {
           },
         })
         .state('egrid.projects.get.analyses.get.questionnaire', {
+          resolve: SemProjectQuestionnaireEditController.resolve,
           url: '/questionnaire',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'QuestionnaireController as questionnaire',
               templateUrl: '/partials/projects/get/analyses/get/questionnaire.html',
             },
           },
@@ -319,6 +321,7 @@ module egrid.app {
           url: '/sem',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'SemController',
               templateUrl: '/partials/projects/get/analyses/get/sem.html',
             },
           },
@@ -368,11 +371,8 @@ module egrid.app {
     .controller('ProjectListController', ProjectListController)
     .controller('ProjectGridController', ProjectGridController)
     .controller('ProjectGridEditController', ProjectGridEditController)
-    .controller('SemProjectController', SemProjectController)
-    .controller('SemProjectAnalysisController', SemProjectAnalysisController)
-    .controller('SemProjectCreateController', SemProjectCreateController)
-    .controller('SemProjectListController', SemProjectListController)
-    .controller('SemProjectQuestionnaireEditController', SemProjectQuestionnaireEditController)
+    .controller('SemController', SemProjectAnalysisController)
+    .controller('QuestionnaireController', SemProjectQuestionnaireEditController)
     .run(['$rootScope', '$translate', '$http', ($rootScope: any, $translate: any, $http: any) => {
       $rootScope.alerts = [];
 

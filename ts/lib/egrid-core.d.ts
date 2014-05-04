@@ -69,6 +69,10 @@ declare module egrid {
         links: LinkData[];
     }
     class Node implements NodeData {
+        public text: string;
+        public weight: number;
+        public original: boolean;
+        public participants: string[];
         public index: number;
         public x: number;
         public y: number;
@@ -77,15 +81,12 @@ declare module egrid {
         public width: number;
         public height: number;
         public theta: number;
-        public text: string;
         public dagre: any;
-        public weight: number;
         public key: number;
-        public original: boolean;
         public isTop: boolean;
         public isBottom: boolean;
         public active: boolean;
-        public participants: string[];
+        public visible: boolean;
         private static nextKey;
         constructor(text: string, weight?: number, original?: boolean, participants?: string[]);
         public left(): Svg.Point;
@@ -98,11 +99,11 @@ declare module egrid {
     class Link {
         public source: Node;
         public target: Node;
+        public weight: number;
         public index: number;
         public points: Svg.Point[];
         public previousPoints: Svg.Point[];
         public dagre: any;
-        public weight: number;
         public key: number;
         private static nextKey;
         constructor(source: Node, target: Node, weight?: number);

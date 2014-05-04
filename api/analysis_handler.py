@@ -27,9 +27,11 @@ class AnalysisListHandler(webapp2.RequestHandler):
         project = Project.get(project_id)
         participants = Participant.all().filter('project =', project)
         grid = merge_grids(participants)
+        questionnaire = [node['text'] for node in grid['nodes']]
         analysis = Analysis(
             name=data.get('name'),
             grid=json.dumps(grid),
+            questionnaire=json.dumps(questionnaire),
             project=project)
         analysis.put()
         self.response.write(json.dumps(analysis.to_dict()))
@@ -52,13 +54,13 @@ class AnalysisGridHandler(webapp2.RequestHandler):
 class AnalysisQuestionnaireHandler(webapp2.RequestHandler):
     def get(self, project_id, analysis_id):
         analysis = Analysis.get(analysis_id)
-        result = json.loads(analysis.questionnaire)
-        result['projectKey'] = project_id
-        result['semProjectKey'] = analysis_id
-        self.response.write(json.dumps(result))
+        if analysis.deleted_at is not None:
+            self.error(404)
+        self.response.write(json.dumps(analysis.get_questionnaire()))
 
     def put(self, project_id, analysis_id):
+        items = json.loads(self.request.body)['items']
         analysis = Analysis.get(analysis_id)
-        analysis.questionnaire = self.request.body
+        analysis.questionnaire = json.dumps(items)
         analysis.put()
         self.response.write(json.dumps(analysis.to_dict()))

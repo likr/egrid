@@ -553,66 +553,42 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('/partials/projects/get/analyses/get/questionnaire.html',
     "<div class=\"tab-pane active\">\n" +
-    "  <h2>アンケート設定</h2>\n" +
-    "  <form class=\"form-horizontal\">\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-2 control-label\">アンケート題名</label>\n" +
-    "      <div class=\"col-sm-10\">\n" +
-    "        <input class=\"form-control\" type=\"text\" placeholder=\"アンケート題名\" ng-model=\"questionnaire.data.title\"/>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-2 control-label\">アンケート説明</label>\n" +
-    "      <div class=\"col-sm-10\">\n" +
-    "        <textarea class=\"form-control\" placeholder=\"アンケート説明\" ng-model=\"questionnaire.data.description\"></textarea>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </form>\n" +
-    "\n" +
-    "  <h3>質問項目設定</h3>\n" +
-    "  <div class=\"row\">\n" +
-    "    <div class=\"span8\">\n" +
-    "      <div id=\"sem-questionnaire-design-display\">\n" +
-    "        <svg width=\"100%\" height=\"500px\"></svg>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"span4\" style=\"height: 500px; overflow: scroll;\">\n" +
-    "      <table class=\"table\">\n" +
-    "        <tr ng-repeat=\"item in questionnaire.items\">\n" +
-    "          <td>\n" +
-    "            <label class=\"checkbox\">\n" +
-    "              <input type=\"checkbox\" ng-model=\"item.checked\" ng-change=\"questionnaire.updateItems()\"/>{{item.text}}\n" +
-    "            </label>\n" +
-    "          </td>\n" +
-    "          <td>{{item.weight}}</td>\n" +
-    "        </tr>\n" +
-    "      </table>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div>\n" +
-    "    <div ng-repeat=\"item in questionnaire.data.items\">\n" +
-    "      <form class=\"form-horizontal\">\n" +
-    "        <fieldset>\n" +
-    "          <legend>{{item.text}}</legend>\n" +
-    "          <div class=\"control-group\">\n" +
-    "            <label class=\"control-label\">質問項目</label>\n" +
-    "            <div class=\"controls\">\n" +
-    "              <input class=\"span6\" type=\"text\" ng-model=\"item.title\"/>\n" +
-    "            </div>\n" +
-    "          </div>\n" +
-    "          <div class=\"control-group\">\n" +
-    "            <label class=\"control-label\">質問文</label>\n" +
-    "            <div class=\"controls\">\n" +
-    "              <textarea class=\"span6\" rows=\"3\" ng-model=\"item.description\"></textarea>\n" +
-    "            </div>\n" +
-    "          </div>\n" +
-    "        </fieldset>\n" +
+    "  <div class=\"navbar navbar-default\">\n" +
+    "    <div class=\"navbar-collapse\">\n" +
+    "      <form class=\"navbar-form\">\n" +
+    "        <a class=\"btn btn-primary\" ng-click=\"questionnaire.submit()\">{{'ACTION.SAVE' | translate}}</a>\n" +
+    "        <a class=\"btn btn-default\" href=\"{{questionnaire.exportContent()}}\" download=\"{{questionnaire.project.name}} - {{questionnaire.analysis.name}}.csv\">エクスポート</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <div>\n" +
-    "    <a class=\"btn btn-primary btn-large\">{{'ACTION.SAVE' | translate}}</a>\n" +
+    "  <div class=\"row\">\n" +
+    "    <div class=\"col-sm-8\">\n" +
+    "      <div class=\"thumbnail\" id=\"sem-questionnaire-design-display\">\n" +
+    "        <svg width=\"100%\" height=\"500px\"></svg>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-sm-4\" style=\"height: 515px; overflow-y: scroll;\">\n" +
+    "      <table class=\"table\">\n" +
+    "        <thead>\n" +
+    "          <tr>\n" +
+    "            <th>評価項目</th>\n" +
+    "            <th>回答数</th>\n" +
+    "            <th>リンク数</th>\n" +
+    "          </tr>\n" +
+    "        <thead>\n" +
+    "        <tbody>\n" +
+    "          <tr ng-repeat=\"item in questionnaire.items\">\n" +
+    "            <td>\n" +
+    "              <label class=\"checkbox\">\n" +
+    "                <input type=\"checkbox\" ng-model=\"item.visible\" ng-change=\"questionnaire.updateItems()\"/>{{item.text}}\n" +
+    "              </label>\n" +
+    "            </td>\n" +
+    "            <td>{{item.weight}}</td>\n" +
+    "            <td>{{item.weight}}</td>\n" +
+    "          </tr>\n" +
+    "        </tbody>\n" +
+    "      </table>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
   );

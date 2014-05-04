@@ -127,18 +127,19 @@ var egrid;
 (function (egrid) {
     var Node = (function () {
         function Node(text, weight, original, participants) {
-            if (typeof weight === "undefined") { weight = undefined; }
-            if (typeof original === "undefined") { original = undefined; }
-            if (typeof participants === "undefined") { participants = undefined; }
+            if (typeof weight === "undefined") { weight = 1; }
+            if (typeof original === "undefined") { original = false; }
+            if (typeof participants === "undefined") { participants = []; }
             this.text = text;
+            this.weight = weight;
+            this.original = original;
+            this.participants = participants;
             this.x = 0;
             this.y = 0;
             this.theta = 0;
-            this.weight = weight || 1;
-            this.key = Node.nextKey++;
             this.active = true;
-            this.original = original || false;
-            this.participants = participants || [];
+            this.visible = true;
+            this.key = Node.nextKey++;
         }
         Node.prototype.left = function () {
             return Svg.Rect.left(this.x, this.y, this.width, this.height);
@@ -170,10 +171,10 @@ var egrid;
 
     var Link = (function () {
         function Link(source, target, weight) {
-            if (typeof weight === "undefined") { weight = undefined; }
+            if (typeof weight === "undefined") { weight = 1; }
             this.source = source;
             this.target = target;
-            this.weight = weight || 1;
+            this.weight = weight;
             this.key = Link.nextKey++;
         }
         Link.prototype.toString = function () {
@@ -220,8 +221,8 @@ var egrid;
             this.paths = [];
             this.undoStack = [];
             this.redoStack = [];
-            this.linkMatrix = [];
-            this.pathMatrix = [];
+            this.checkActive_ = false;
+            this.minimumWeight_ = 0;
         }
         Grid.prototype.appendNode = function (node) {
             var _this = this;
@@ -471,7 +472,7 @@ var egrid;
         Grid.prototype.activeNodes = function () {
             var _this = this;
             return this.nodes().filter(function (node) {
-                return (!_this.checkActive_ || node.active) && node.weight >= _this.minimumWeight_;
+                return (!_this.checkActive_ || node.active) && node.weight >= _this.minimumWeight_ && node.visible;
             });
         };
 
@@ -498,7 +499,7 @@ var egrid;
         Grid.prototype.activeLinks = function () {
             var _this = this;
             var removeNodes = this.nodes().filter(function (node) {
-                return node.weight < _this.minimumWeight_;
+                return node.weight < _this.minimumWeight_ || !node.visible;
             });
             var newPathMatrix = this.linkMatrix.map(function (row) {
                 return row.map(function (v) {
@@ -516,7 +517,7 @@ var egrid;
                 }
             });
             return this.paths.filter(function (link) {
-                return newPathMatrix[link.source.index][link.target.index] && (!_this.checkActive_ || link.source.active) && link.source.weight >= _this.minimumWeight_ && (!_this.checkActive_ || link.target.active) && link.target.weight >= _this.minimumWeight_;
+                return newPathMatrix[link.source.index][link.target.index] && (!_this.checkActive_ || link.source.active) && link.source.weight >= _this.minimumWeight_ && link.source.visible && (!_this.checkActive_ || link.target.active) && link.target.weight >= _this.minimumWeight_ && link.target.visible;
             });
         };
 

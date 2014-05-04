@@ -182,12 +182,18 @@ declare module egrid.model {
         static type: string;
         constructor(obj: ProjectGridData);
         public save(): JQueryPromise<void>;
-        private url();
         private load(obj);
-        static get(projectKey: string, projectGridId?: string): JQueryPromise<ProjectGrid>;
+        static get(projectKey: string, key?: string): JQueryPromise<ProjectGrid>;
         static query(projectKey: string): JQueryPromise<ProjectGrid>;
         private static load(obj);
-        private static url(projectKey, projectGridKey?);
+    }
+}
+declare module egrid.model {
+    class Questionnaire extends Entity {
+        public projectKey: string;
+        public items: string[];
+        public save(): JQueryPromise<void>;
+        static get(projectKey: string, key: string): JQueryPromise<Questionnaire>;
     }
 }
 declare module egrid.model {
@@ -208,30 +214,5 @@ declare module egrid.model {
         public save(): JQueryPromise<SemProject>;
         static listUrl(key?: string): string;
         public url(key?: string): string;
-    }
-}
-declare module egrid.model {
-    interface QuestionnaireItem {
-        title: string;
-        description: string;
-    }
-    interface SemProjectQuestionnaireData {
-        description?: string;
-        items?: QuestionnaireItem[];
-        projectKey: string;
-        semProjectKey: string;
-        title?: string;
-    }
-    class SemProjectQuestionnaire implements SemProjectQuestionnaireData {
-        public description: string;
-        public items: QuestionnaireItem[];
-        public projectKey: string;
-        public semProjectKey: string;
-        public title: string;
-        constructor(obj: SemProjectQuestionnaireData);
-        public save(): JQueryXHR;
-        private url();
-        static get(projectKey: string, semProjectKey: string): JQueryXHR;
-        private static url(projectKey, semProjectKey);
     }
 }

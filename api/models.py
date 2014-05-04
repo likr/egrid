@@ -64,6 +64,7 @@ class Analysis(EgridModel):
     name = db.StringProperty(required=True)
     note = db.TextProperty()
     grid = db.TextProperty(required=True)
+    questionnaire = db.TextProperty(required=True)
     project = db.ReferenceProperty(Project)
 
     def get_grid(self):
@@ -73,6 +74,13 @@ class Analysis(EgridModel):
             'projectKey': str(self.project.key()),
             'nodes': data['nodes'],
             'links': data['links'],
+        }
+
+    def get_questionnaire(self):
+        return {
+            'key': str(self.key()),
+            'projectKey': str(self.project.key()),
+            'items': json.loads(self.questionnaire),
         }
 
     def to_dict(self):

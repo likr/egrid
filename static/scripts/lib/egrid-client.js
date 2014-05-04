@@ -90,6 +90,16 @@ var egrid;
                     return '/api/projects/' + projectKey + '/analyses/' + analysisKey + '/grid';
                 }
                 Uri.ProjectGrid = ProjectGrid;
+
+                function Questionnaire(projectKey, analysisKey) {
+                    return '/api/projects/' + projectKey + '/analyses/' + analysisKey + '/questionnaire';
+                }
+                Uri.Questionnaire = Questionnaire;
+
+                function Sem(projectKey, analysisKey) {
+                    return '/api/projects/' + projectKey + '/analyses/' + analysisKey + '/sem';
+                }
+                Uri.Sem = Sem;
             })(Uri || (Uri = {}));
 
             (function (Api) {
@@ -724,10 +734,6 @@ var egrid;
                 return model.storage.add(this, ProjectGrid.type, this.projectKey, this.key);
             };
 
-            ProjectGrid.prototype.url = function () {
-                return ProjectGrid.url(this.projectKey, this.key);
-            };
-
             ProjectGrid.prototype.load = function (obj) {
                 this.name = obj.name;
                 this.note = obj.note;
@@ -740,9 +746,7 @@ var egrid;
                 return this;
             };
 
-            ProjectGrid.get = function (projectKey, projectGridId) {
-                var key = projectGridId ? projectGridId : 'current';
-
+            ProjectGrid.get = function (projectKey, key) {
                 return model.storage.get(ProjectGrid.type, projectKey, key).then(function (projectGrid) {
                     return ProjectGrid.load(projectGrid);
                 });
@@ -758,18 +762,39 @@ var egrid;
                 });
                 return projectGrid.load(obj);
             };
-
-            ProjectGrid.url = function (projectKey, projectGridKey) {
-                if (projectGridKey) {
-                    return '/api/projects/' + projectKey + '/grid/' + projectGridKey;
-                } else {
-                    return '/api/projects/' + projectKey + '/grid';
-                }
-            };
             ProjectGrid.type = 'ProjectGrid';
             return ProjectGrid;
         })(model.Entity);
         model.ProjectGrid = ProjectGrid;
+    })(egrid.model || (egrid.model = {}));
+    var model = egrid.model;
+})(egrid || (egrid = {}));
+var egrid;
+(function (egrid) {
+    (function (model) {
+        var Questionnaire = (function (_super) {
+            __extends(Questionnaire, _super);
+            function Questionnaire() {
+                _super.apply(this, arguments);
+            }
+            Questionnaire.prototype.save = function () {
+                return model.storage.add(this, 'Questionnaire', this.projectKey, this.key);
+            };
+
+            Questionnaire.get = function (projectKey, key) {
+                return model.storage.get('Questionnaire', projectKey, key).then(function (data) {
+                    var questionnaire = new Questionnaire;
+                    questionnaire.key_ = data.key;
+                    questionnaire.createdAt_ = new Date(data.createdAt);
+                    questionnaire.updatedAt_ = new Date(data.updatedAt);
+                    questionnaire.projectKey = data.projectKey;
+                    questionnaire.items = data.items;
+                    return questionnaire;
+                });
+            };
+            return Questionnaire;
+        })(model.Entity);
+        model.Questionnaire = Questionnaire;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));
@@ -833,52 +858,6 @@ var egrid;
             return SemProject;
         })(model.Entity);
         model.SemProject = SemProject;
-    })(egrid.model || (egrid.model = {}));
-    var model = egrid.model;
-})(egrid || (egrid = {}));
-var egrid;
-(function (egrid) {
-    (function (model) {
-        var SemProjectQuestionnaire = (function () {
-            function SemProjectQuestionnaire(obj) {
-                this.description = obj.description;
-                this.items = obj.items;
-                this.projectKey = obj.projectKey;
-                this.semProjectKey = obj.semProjectKey;
-                this.title = obj.title;
-            }
-            SemProjectQuestionnaire.prototype.save = function () {
-                var _this = this;
-                return $.ajax({
-                    url: this.url(),
-                    type: 'PUT',
-                    dataFilter: function (data) {
-                        return _this;
-                    }
-                });
-            };
-
-            SemProjectQuestionnaire.prototype.url = function () {
-                return SemProjectQuestionnaire.url(this.projectKey, this.semProjectKey);
-            };
-
-            SemProjectQuestionnaire.get = function (projectKey, semProjectKey) {
-                return $.ajax({
-                    url: SemProjectQuestionnaire.url(projectKey, semProjectKey),
-                    type: 'GET',
-                    dataFilter: function (data) {
-                        var obj = JSON.parse(data);
-                        return new SemProjectQuestionnaire(obj);
-                    }
-                });
-            };
-
-            SemProjectQuestionnaire.url = function (projectKey, semProjectKey) {
-                return '/api/projects/' + projectKey + '/sem-project/' + semProjectKey + '/questionnaire';
-            };
-            return SemProjectQuestionnaire;
-        })();
-        model.SemProjectQuestionnaire = SemProjectQuestionnaire;
     })(egrid.model || (egrid.model = {}));
     var model = egrid.model;
 })(egrid || (egrid = {}));
