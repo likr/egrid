@@ -318,10 +318,11 @@ module egrid.app {
           },
         })
         .state('egrid.projects.get.analyses.get.sem', {
+          resolve: SemProjectAnalysisController.resolve,
           url: '/sem',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'SemController',
+              controller: 'SemController as sem',
               templateUrl: '/partials/projects/get/analyses/get/sem.html',
             },
           },

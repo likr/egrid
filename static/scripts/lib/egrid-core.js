@@ -2079,6 +2079,21 @@ var egrid;
                 _this.displayWidth = regionWidth || $(window).width();
                 _this.displayHeight = regionHeight || $(window).height();
                 selection.attr("viewBox", (new Svg.ViewBox(0, 0, _this.displayWidth, _this.displayHeight)).toString());
+                selection.append('defs').append('style').attr('type', 'text/css').text("\
+            .element text, text.measure {\
+              font-size: 0.8cm;\
+              font-family: 'Lucida Grande', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, sans-serif;\
+            }\
+            .element rect {\
+              fill: white;\
+              stroke: #323a48;\
+              stroke-width: 5;\
+            }\
+            .link {\
+              stroke: #323a48;\
+              fill: none;\
+            }\
+          ");
                 selection.append("text").classed("measure", true);
 
                 selection.append("rect").attr("fill", "#fff").attr("width", _this.displayWidth).attr("height", _this.displayHeight);

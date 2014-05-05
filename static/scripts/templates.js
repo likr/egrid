@@ -595,23 +595,51 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('/partials/projects/get/analyses/get/sem.html',
-    "<div class=\"tab-pane active\" select=\"drawSemAnalysis()\">\n" +
-    "  <div id=\"sem-analysis-display\">\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"span10\">\n" +
-    "        <svg width=\"100%\" height=\"500px\"></svg>\n" +
+    "<div>\n" +
+    "  <h2>ファイル読み込み</h2>\n" +
+    "  <form class=\"form-horizontal\" ng-submit=\"sem.loadFile()\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-2 control-label\">エンコーディング</label>\n" +
+    "      <div class=\"col-sm-10\">\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"utf-8\"/>UTF-8</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"sjis\"/>Shift-JIS</label>\n" +
     "      </div>\n" +
-    "      <div class=\"span2\">\n" +
-    "        <table class=\"table\">\n" +
-    "          <tr ng-repeat=\"item in items\">\n" +
-    "            <td>\n" +
-    "              <label class=\"checkbox\">\n" +
-    "                <input type=\"checkbox\" ng-model=\"item.active\" ng-change=\"removeNode()\"/>{{ item.text }}\n" +
-    "              </label>\n" +
-    "            </td>\n" +
-    "          </tr>\n" +
-    "        </table>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-2 control-label\">CSVファイル</label>\n" +
+    "      <div class=\"col-sm-10\">\n" +
+    "        <input class=\"form-control\" type=\"file\" id=\"fileInput\"/>\n" +
     "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <div class=\"col-sm-offset-2 col-sm-10\">\n" +
+    "        <button type=\"submit\" class=\"btn btn-default\">読み込み</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "  <h2>パスモデリング</h2>\n" +
+    "  <div style=\"height:600px;\">\n" +
+    "    <div class=\"navbar navbar-default\">\n" +
+    "      <div class=\"navbar-collapse\">\n" +
+    "        <form class=\"navbar-form\">\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
+    "        </form>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-sm-10\" id=\"sem-analysis-display\">\n" +
+    "      <!--<p>GFI:{{sem.gfiValue}}</p>-->\n" +
+    "      <svg style=\"height:550px;\"></svg>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-sm-2\" style=\"overflow: auto; max-height: 600px\">\n" +
+    "      <table class=\"table\">\n" +
+    "        <tr ng-repeat=\"item in sem.items\">\n" +
+    "          <td>\n" +
+    "            <label class=\"checkbox\">\n" +
+    "              <input type=\"checkbox\" ng-model=\"item.active\" ng-change=\"sem.removeNode()\"/>{{item.text}}\n" +
+    "            </label>\n" +
+    "          </td>\n" +
+    "        </tr>\n" +
+    "      </table>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
