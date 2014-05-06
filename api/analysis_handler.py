@@ -46,7 +46,7 @@ class AnalysisGridHandler(webapp2.RequestHandler):
 
     def put(self, project_id, analysis_id):
         analysis = Analysis.get(analysis_id)
-        analysis.grid = self.request.body
+        analysis.grid = self.request.body.decode('utf-8')
         analysis.put()
         self.response.write(json.dumps(analysis.get_grid()))
 

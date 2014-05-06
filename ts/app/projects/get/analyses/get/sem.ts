@@ -116,7 +116,7 @@ export class SemProjectAnalysisController {
       return new egrid.Node(d);
     });
     var egmLinks = links.map((d) => {
-      return new egrid.Link(egmNodes[d.target], egmNodes[d.source]);
+      return new egrid.Link(egmNodes[d.source], egmNodes[d.target]);
     });
 
     this.dag.nodes(egmNodes).links(egmLinks);
@@ -140,7 +140,7 @@ export class SemProjectAnalysisController {
       });
       this.gfiValue = result.GFI;
       this.dag.links().forEach((link: any) => {
-        link.coef = A[link.source.index][link.target.index];
+        link.coef = A[link.target.index][link.source.index];
       });
       this.dag.draw().focusCenter();
       this.$scope.$apply();

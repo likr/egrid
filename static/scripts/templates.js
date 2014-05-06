@@ -573,7 +573,6 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "          <tr>\n" +
     "            <th>評価項目</th>\n" +
     "            <th>回答数</th>\n" +
-    "            <th>リンク数</th>\n" +
     "          </tr>\n" +
     "        <thead>\n" +
     "        <tbody>\n" +
@@ -583,7 +582,6 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "                <input type=\"checkbox\" ng-model=\"item.visible\" ng-change=\"questionnaire.updateItems()\"/>{{item.text}}\n" +
     "              </label>\n" +
     "            </td>\n" +
-    "            <td>{{item.weight}}</td>\n" +
     "            <td>{{item.weight}}</td>\n" +
     "          </tr>\n" +
     "        </tbody>\n" +

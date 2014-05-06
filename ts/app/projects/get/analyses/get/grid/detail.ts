@@ -7,24 +7,35 @@
 
 module egrid.app {
   export class ProjectGridEditController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan'];
+    public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'grid', 'project', 'participants'];
     public static resolve = {
+      grid: ['$q', '$stateParams', ($q, $stateParams) => {
+        return $q.when(model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']));
+      }],
+      participants: ['$q', '$stateParams', ($q, $stateParams) => {
+        return $q.when(model.Participant.query($stateParams['projectKey']));
+      }],
     };
-    projectKey : string;
-    projectGridKey : string;
-    grid : model.ProjectGrid;
     egm : EGM;
     filter : {} = {};
-    project: model.Project;
-    participants: model.Participant[];
     participantState : {} = {};
 
-    constructor($window, private $q, $rootScope, $stateParams, private $state, private $scope, private $modal, $timeout, $filter, alertLifeSpan) {
+    constructor(
+        $window,
+        private $q,
+        $rootScope,
+        private $state,
+        private $scope,
+        private $modal,
+        $timeout,
+        $filter,
+        alertLifeSpan,
+        private grid: model.ProjectGrid,
+        private project: model.Project,
+        private participants: model.Participant[]) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
       var __this = this;
-      this.projectKey = $stateParams.projectKey;
-      this.projectGridKey = $stateParams.analysisKey;
 
       var egmui = egrid.egmui();
       this.egm = egmui.egm();
@@ -71,10 +82,10 @@ module egrid.app {
         .on("click", function() {
           __this.hideNodeController();
           __this.egm.exportSVG((svgText : string) => {
-            var base64svgText = btoa(encodeURIComponent(svgText));
+            var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
             d3.select(this).attr({
               href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
-              download: this.project.name + '.svg',
+              download: __this.project.name + '.svg',
             });
             });
         });
@@ -164,54 +175,18 @@ module egrid.app {
         })
         ;
 
-      this.$q.when(model.Project.get(this.projectKey))
-        .then((project: model.Project) => {
-          this.project = project;
+        var nodes = this.grid.nodes.map(d => new Node(d.text, d.weight, d.original, d.participants));
+        var links = this.grid.links.map(d => new Link(nodes[d.source], nodes[d.target], d.weight));
+        this.egm
+          .nodes(nodes)
+          .links(links)
+          .draw()
+          .focusCenter()
+          ;
+        this.participants.forEach(participant => {
+          this.participantState[participant.key] = false;
+          this.filter[participant.key] = true;
         });
-
-      this.$q.when(model.ProjectGrid.get(this.projectKey, this.projectGridKey))
-        .then((grid : model.ProjectGrid) => {
-          this.grid = grid;
-          var nodes = grid.nodes.map(d => new Node(d.text, d.weight, d.original, d.participants));
-          var links = grid.links.map(d => new Link(nodes[d.source], nodes[d.target], d.weight));
-          this.egm
-            .nodes(nodes)
-            .links(links)
-            .draw()
-            .focusCenter()
-            ;
-        }, (reason) => {
-          if (reason.status === 401) {
-            $window.location.href = this.$rootScope.logoutUrl;
-          }
-
-          if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.all.list');
-
-            this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
-          }
-        })
-        ;
-
-      this.$q.when(model.Participant.query(this.projectKey))
-        .then((participants : model.Participant[]) => {
-          this.participants = participants;
-          this.participants.forEach(participant => {
-              this.participantState[participant.key] = false;
-              this.filter[participant.key] = true;
-            });
-        }, (reason) => {
-          if (reason.status === 401) {
-            $window.location.href = this.$rootScope.logoutUrl;
-          }
-
-          if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.all.list');
-
-            this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
-          }
-        })
-        ;
     }
 
     save() {
@@ -224,8 +199,8 @@ module egrid.app {
         };
       });
       this.$q.when(this.grid.save())
-        .then(grid => {
-          this.$state.go('egrid.projects.get.evaluation', {projectKey: grid.projectKey});
+        .then(() => {
+          this.$state.go('egrid.projects.get.analyses.get.grid', {projectKey: this.grid.projectKey});
 
           this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
         }, (...reasons: any[]) => {

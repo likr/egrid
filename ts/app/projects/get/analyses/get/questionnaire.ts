@@ -25,6 +25,9 @@ module egrid.app {
         private grid: model.ProjectGrid,
         private questionnaire: model.Questionnaire) {
       this.egm = new EGM;
+      var options = new EgmOption;
+      options.scaleType = ScaleType.None;
+      this.egm.options(options);
 
       var width = $("#sem-questionnaire-deisgn-display").width();
       var height = $("#sem-questionnaire-deisgn-display").height();
@@ -68,7 +71,7 @@ module egrid.app {
     }
 
     exportContent(): string {
-      var content = this.items.filter(d => d.visible).map(d => d.text).join(',');
+      var content = this.items.filter(d => d.visible).map(d => unescape(encodeURIComponent(d.text))).join(',');
       return 'data:text/csv;charset=utf-8;base64,' + btoa(content);
     }
   }
