@@ -40,10 +40,14 @@ handlers:
 - url: /locations
   static_dir: static/locations
 
+- url: /api/public/.*
+  script: main.app
+
 - url: /api/.*
   script: main.app
   login: required
   auth_fail_action: unauthorized
+
 
 - url: .*
   static_dir: static

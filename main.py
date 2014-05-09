@@ -9,7 +9,7 @@ from api.analysis_handler import AnalysisListHandler
 from api.analysis_handler import AnalysisGridHandler
 from api.analysis_handler import AnalysisQuestionnaireHandler
 from api.user_handler import UserHandler
-from api.user_handler import UserLogoutHandler
+from api.user_handler import UserAuthUrlHandler
 
 
 app = webapp2.WSGIApplication([
@@ -25,5 +25,5 @@ app = webapp2.WSGIApplication([
     Route('/api/projects/<project_id:[\w\-]+>/participants/<participant_id:[\w\-]+>', ParticipantHandler),
     Route('/api/projects/<project_id:[\w\-]+>/participants/<participant_id:[\w\-]+>/grid', ParticipantGridHandler),
     Route('/api/users', UserHandler),
-    Route('/api/users/logout', UserLogoutHandler),
+    Route('/api/public/auth', UserAuthUrlHandler),
 ], debug=True)

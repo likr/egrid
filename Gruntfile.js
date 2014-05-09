@@ -6,7 +6,6 @@ module.exports = function(grunt) {
         dest: 'static/files.appcache',
         options: {
           basePath: 'static',
-          cache: ['api/users'],
           hash: true,
           master: ['static/index.html'],
           timestamp: true,

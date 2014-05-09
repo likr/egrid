@@ -21,6 +21,7 @@
 
 module egrid.app {
   interface EgridScope extends ng.IScope {
+    loginUrl: string;
     logoutUrl: string;
   }
 
@@ -48,16 +49,19 @@ module egrid.app {
         .state('egrid', {
           abstract: true,
           resolve: {
-            logoutUrl: ['$q', '$http', ($q: ng.IQService, $http: ng.IHttpService) => {
+            authUrl: ['$q', '$http', ($q: ng.IQService, $http: ng.IHttpService) => {
               var deferred = $q.defer();
               var dest_url = '/';
               $http
-                .get('/api/users/logout?dest_url=' + encodeURIComponent(dest_url))
+                .get('/api/public/auth?dest_url=' + encodeURIComponent(dest_url))
                 .success((data: any) => {
-                  deferred.resolve(data.logout_url);
+                  deferred.resolve(data);
                 })
                 .error(() => {
-                  deferred.resolve('');
+                  deferred.resolve({
+                    loginUrl: '',
+                    logoutUrl: ''
+                  });
                 });
               return deferred.promise;
             }],
@@ -65,8 +69,9 @@ module egrid.app {
           url: '/app',
           views: {
             'base@': {
-              controller: ['$scope', 'logoutUrl', ($scope: EgridScope, logoutUrl: string) => {
-                $scope.logoutUrl = logoutUrl;
+              controller: ['$rootScope', 'authUrl', ($scope: EgridScope, authUrl: any) => {
+                $scope.loginUrl = authUrl.login_url;
+                $scope.logoutUrl = authUrl.logout_url;
               }],
               templateUrl: '/partials/base.html',
             },
@@ -374,7 +379,7 @@ module egrid.app {
     .controller('ProjectGridEditController', ProjectGridEditController)
     .controller('SemController', SemProjectAnalysisController)
     .controller('QuestionnaireController', SemProjectQuestionnaireEditController)
-    .run(['$rootScope', '$translate', '$http', ($rootScope: any, $translate: any, $http: any) => {
+    .run(['$rootScope', '$translate', '$http', '$window', ($rootScope: any, $translate: any, $http: any, $window: any) => {
       $rootScope.alerts = [];
 
       $rootScope.changeLanguage = (langKey: any) => {
@@ -393,6 +398,12 @@ module egrid.app {
           $rootScope.user = user;
           $translate.use(user.location);
         });
+
+      $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
+        if (error.status == 401) {
+          $window.location.href = $rootScope.logoutUrl;
+        }
+      })
     }])
     ;
 }
