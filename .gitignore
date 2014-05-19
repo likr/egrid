@@ -1,7 +1,9 @@
 doc
 node_modules
 static/scripts/collaboegm.js
+static/scripts/collaboegm.min.js
 static/scripts/collaboegm.js.map
+static/files.appcache
 egm.data
 
 [._]*.s[a-w][a-z]
@@ -12,3 +14,5 @@ Session.vim
 *~
 
 *.pyc
+
+.tscache

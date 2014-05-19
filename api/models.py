@@ -2,9 +2,10 @@ import json
 from google.appengine.api import users
 from google.appengine.ext import db
 from version import VERSION
+from model_base import DeletableModelBase
 
 
-class EgridModel(db.Model):
+class EgridModel(DeletableModelBase):
     created_at = db.DateTimeProperty(auto_now_add=True)
     updated_at = db.DateTimeProperty(auto_now=True)
     version = db.IntegerProperty(default=VERSION)
@@ -25,6 +26,13 @@ class User(EgridModel):
             'federated_identity': self.user.federated_identity(),
             'federated_provider': self.user.federated_provider(),
         }
+
+    def is_collaborator_on(self, project):
+        if project:
+            collaborators = Collaborator.all().filter('project =', project)
+            for collaborator in collaborators:
+                if collaborator.user.key() == self.key():
+                    return True
 
     @staticmethod
     def current_user():
@@ -47,27 +55,41 @@ class Project(EgridModel):
             'key': str(self.key()),
             'name': self.name,
             'note': self.note,
-            'created_at': self.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            'updated_at': self.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'createdAt': self.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'updatedAt': self.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
 
 
-class ProjectGrid(EgridModel):
+class Analysis(EgridModel):
     name = db.StringProperty(required=True)
     note = db.TextProperty()
-    json = db.TextProperty()
+    grid = db.TextProperty(required=True)
+    questionnaire = db.TextProperty(required=True)
     project = db.ReferenceProperty(Project)
 
+    def get_grid(self):
+        data = json.loads(self.grid)
+        return {
+            'key': str(self.key()),
+            'projectKey': str(self.project.key()),
+            'nodes': data['nodes'],
+            'links': data['links'],
+        }
+
+    def get_questionnaire(self):
+        return {
+            'key': str(self.key()),
+            'projectKey': str(self.project.key()),
+            'items': json.loads(self.questionnaire),
+        }
+
     def to_dict(self):
-        data = json.loads(self.json)
         return {
             'key': str(self.key()),
             'name': self.name,
             'note': self.note,
             'project': self.project.to_dict(),
             'projectKey': str(self.project.key()),
-            'nodes': data['nodes'],
-            'links': data['links'],
             'createdAt': self.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'updatedAt': self.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
@@ -87,8 +109,8 @@ class Participant(EgridModel):
             'project': self.project.to_dict(),
             'projectKey': str(self.project.key()),
             'json': self.json,
-            'created_at': self.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            'updated_at': self.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'createdAt': self.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'updatedAt': self.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
 
 
@@ -106,41 +128,3 @@ class Collaborator(EgridModel):
             'userKey': str(self.user.key()),
             'isManager': int(bool(self.is_manager))
         }
-
-
-class SemProject(EgridModel):
-    name = db.StringProperty(required=True)
-    project = db.ReferenceProperty(Project)
-    questionnaire = db.TextProperty()
-
-    def to_dict(self):
-        return {
-            'key': str(self.key()),
-            'name': self.name,
-            'project': self.project.to_dict(),
-            'projectKey': str(self.project.key()),
-            'questionnaire': self.questionnaire,
-        }
-
-
-class QuestionnaireParticipant(EgridModel):
-    name = db.StringProperty()
-    note = db.TextProperty()
-    sem_project = db.ReferenceProperty(SemProject)
-
-
-class QuestionnaireItem(EgridModel):
-    name = db.StringProperty()
-    message = db.StringProperty()
-    sem_project = db.ReferenceProperty(SemProject)
-
-
-class QuestionnaireItemRelation(EgridModel):
-    text = db.StringProperty()
-    questionnaire_item = db.ReferenceProperty(QuestionnaireItem)
-
-
-class QuestionnaireAnswer(EgridModel):
-    value = db.IntegerProperty()
-    questionnaire_item = db.ReferenceProperty(QuestionnaireItem)
-    questionnaire_participant = db.ReferenceProperty(QuestionnaireParticipant)

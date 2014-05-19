@@ -14,6 +14,11 @@ handlers:
   upload: /
   login: required
 
+- url: /(.+\.appcache)
+  static_files: static/\1
+  mime_type: text/cache-manifest
+  upload: static/(.+\.appcache)
+
 - url: /img
   static_dir: static/img
 
@@ -35,9 +40,14 @@ handlers:
 - url: /locations
   static_dir: static/locations
 
+- url: /api/public/.*
+  script: main.app
+
 - url: /api/.*
   script: main.app
   login: required
+  auth_fail_action: unauthorized
+
 
 - url: .*
   static_dir: static

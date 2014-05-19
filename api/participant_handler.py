@@ -9,11 +9,14 @@ class ParticipantHandler(webapp2.RequestHandler):
     def get(self, project_id, participant_id=None):
         if participant_id:
             participant = Participant.get(participant_id)
+            if participant.deleted_at is not None:
+                self.error(404)
             self.response.write(json.dumps(participant.to_dict()))
         else:
             project = Project.get(project_id)
             participants = Participant.all()\
                 .filter('project =', project)\
+                .filter('deleted_at =', None)\
                 .order('created_at')
             self.response.write(json.dumps([p.to_dict() for p in participants]))
 
@@ -27,6 +30,18 @@ class ParticipantHandler(webapp2.RequestHandler):
             json=DEFAULT_JSON)
         participant.put()
         self.response.write(json.dumps(participant.to_dict()))
+
+    def put(self, project_id, participant_id):
+        data = json.loads(self.request.body)
+        participant = Participant.get(participant_id)
+        participant.name = data.get('name')
+        participant.note = data.get('note')
+        participant.put()
+        self.response.write(json.dumps(participant.to_dict()))
+
+    def delete(self, project_id, participant_id):
+        participant = Participant.get(participant_id)
+        participant.remove()
 
 
 class ParticipantGridHandler(webapp2.RequestHandler):

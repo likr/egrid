@@ -18,7 +18,14 @@
     "SELECT": "選択",
     "SHOW": "表示",
     "SUBMIT": "送信",
-    "UNDO": "元に戻す"
+    "UNDO": "元に戻す",
+    "DIALOG": {
+      "REMOVE": {
+        "CANCEL": "いいえ",
+        "HEADING": "削除しますか",
+        "OK": "はい"
+      }
+    }
   },
   "COLLABORATOR": {
     "ATTRIBUTES": {
@@ -31,6 +38,7 @@
     "COLLABORATOR": "コラボレーター",
     "ROLE": {
       "MANAGER": "管理者",
+      "USER": "通常",
       "ROLE": "役割"
     }
   },
@@ -71,6 +79,12 @@
     "LOWERMOST_EVALUATION_ITEM": "最下位評価項目",
     "OVERALL_EVALUATION_STRUCTURE": "全体評価構造",
     "UPPERMOST_EVALUATION_ITEM": "最上位評価項目"
+  },
+  "MESSAGES": {
+    "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
+    "NOT_AUTHENTICATED": "認証しなければ続行できません",
+    "ITEM_NOT_FOUND": "アイテムが存在しません",
+    "OPERATION_SUCCESSFULLY_COMPLETED": "保存しました"
   },
   "PARTICIPANT": {
     "PARTICIPANTS": "実験参加者",

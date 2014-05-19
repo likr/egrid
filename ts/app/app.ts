@@ -1,80 +1,374 @@
 /// <reference path="../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../lib/egrid-client.d.ts"/>
 /// <reference path="modules/app.ts"/>
-/// <reference path="collaborator-create.ts"/>
-/// <reference path="collaborator-list.ts"/>
-/// <reference path="participant.ts"/>
-/// <reference path="participant-create.ts"/>
-/// <reference path="participant-grid.ts"/>
-/// <reference path="participant-grid-edit.ts"/>
-/// <reference path="participant-list.ts"/>
-/// <reference path="project.ts"/>
-/// <reference path="project-create.ts"/>
-/// <reference path="project-grid-create.ts"/>
-/// <reference path="project-grid-edit.ts"/>
-/// <reference path="project-grid-list.ts"/>
-/// <reference path="project-list.ts"/>
-/// <reference path="sem-project.ts"/>
-/// <reference path="sem-project-analysis.ts"/>
-/// <reference path="sem-project-create.ts"/>
-/// <reference path="sem-project-questionnaire-edit.ts"/>
-/// <reference path="sem-project-list.ts"/>
-/// <reference path="url.ts"/>
+/// <reference path="projects/all/list.ts"/>
+/// <reference path="projects/all/new.ts"/>
+/// <reference path="projects/get.ts"/>
+/// <reference path="projects/get/analyses/all/list.ts"/>
+/// <reference path="projects/get/analyses/all/new.ts"/>
+/// <reference path="projects/get/analyses/get.ts"/>
+/// <reference path="projects/get/analyses/get/grid.ts"/>
+/// <reference path="projects/get/analyses/get/grid/detail.ts"/>
+/// <reference path="projects/get/analyses/get/sem.ts"/>
+/// <reference path="projects/get/analyses/get/questionnaire.ts"/>
+/// <reference path="projects/get/collaborators/all/list.ts"/>
+/// <reference path="projects/get/collaborators/all/new.ts"/>
+/// <reference path="projects/get/participants/all/list.ts"/>
+/// <reference path="projects/get/participants/all/new.ts"/>
+/// <reference path="projects/get/participants/get.ts"/>
+/// <reference path="projects/get/participants/get/grid.ts"/>
+/// <reference path="projects/get/participants/get/grid/detail.ts"/>
 
 module egrid.app {
-  angular.module('collaboegm', ['paginator', 'ngRoute', "ui.bootstrap", "pascalprecht.translate"])
-    .directive('focusMe', ['$timeout', function($timeout) {
+  class AuthorizationError {
+    constructor(public loginUrl: string) {
+    }
+  }
+
+
+  interface EgridScope extends ng.IScope {
+    logedIn: boolean;
+    loginUrl: string;
+    logoutUrl: string;
+    user: any;
+  }
+
+
+  angular.module('collaboegm', ['paginator', 'ui.router', "ui.bootstrap", "pascalprecht.translate"])
+    .directive('focusMe', ['$timeout', function($timeout: ng.ITimeoutService) {
       return {
-         link: function (scope, element, attrs, model) {
-            $timeout(function () {
-              element[0].focus();
-            }, 10);
-          }
+        link: (scope: any, element: any) => {
+          $timeout(function () {
+            element[0].focus();
+          }, 10);
+        }
       };
     }])
-    .config(['$routeProvider', $routeProvider => {
-      $routeProvider
-        .when(Url.projectGridUrlBase, {
-          controller: 'ProjectGridEditController',
-          controllerAs: 'projectGrid',
-          templateUrl: '/partials/project-grid-edit.html',
+    .config(['$compileProvider', $compileProvider => {
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|data):/);
+    }])
+    .config([
+        '$stateProvider',
+        '$urlRouterProvider',
+        (
+          $stateProvider: ng.ui.IStateProvider,
+          $urlRouterProvider: ng.ui.IUrlRouterProvider) => {
+      $stateProvider
+        .state('egrid', {
+          abstract: true,
+          resolve: {
+            authorization: ['$q', '$http', ($q: ng.IQService, $http: ng.IHttpService) => {
+              var deferred = $q.defer();
+              var destUrl = '/';
+              $http.get('/api/public/auth?dest_url=' + encodeURIComponent(destUrl))
+                .success(data => {
+                  if (data.logedIn) {
+                    deferred.resolve(data);
+                  } else {
+                    deferred.reject(new AuthorizationError(data.loginUrl));
+                  }
+                })
+                .error(() => {
+                  deferred.reject();
+                });
+              return deferred.promise;
+            }],
+            user: ['$http', 'authorization', ($http: ng.IHttpService) => {
+              return $http.get('/api/users');
+            }],
+            projects: ['authorization', () => {
+              return model.Project.query();
+            }],
+          },
+          url: '/app',
+          views: {
+            'base@': {
+              controller: ['$rootScope', '$translate', 'authorization', 'user', ($rootScope: EgridScope, $translate: any, auth: any, user: any) => {
+                $rootScope.logedIn = auth.logedIn;
+                $rootScope.loginUrl = auth.loginUrl;
+                $rootScope.logoutUrl = auth.logoutUrl;
+                $rootScope.user = user.data;
+                $translate.use(user.location);
+              }],
+              templateUrl: '/partials/base.html',
+            },
+          },
         })
-        .when(Url.participantGridUrlBase, {
-          controller: 'ParticipantGridEditController',
-          controllerAs: 'participantGrid',
-          templateUrl: '/partials/egm-edit.html',
+        .state('egrid.projects', {
+          abstract: true,
+          url: '/projects',
         })
-        .when(Url.participantUrlBase, {
-          controller: 'ParticipantController',
-          controllerAs: 'participant',
-          templateUrl: '/partials/participant-detail.html',
+        .state('egrid.projects.get.collaborators', {
+          abstract: true,
+          url: '/collaborators',
         })
-        .when(Url.semProjectUrlBase, {
-          controller: 'SemProjectController',
-          controllerAs: 'semProject',
-          templateUrl: '/partials/sem-project-detail.html',
+        .state('egrid.projects.get.analyses', {
+          abstract: true,
+          url: '/analyses',
         })
-        .when(Url.projectUrlBase, {
-          controller: 'ProjectController',
-          controllerAs: 'project',
-          templateUrl: '/partials/project-detail.html',
+        .state('egrid.projects.get.participants', {
+          abstract: true,
+          url: '/participants',
         })
-        .when(Url.projectListUrlBase, {
-          templateUrl: '/partials/project-list.html',
+        ;
+
+      $stateProvider
+        .state('egrid.projects.all', {
+          abstract: true,
+          url: '/all',
+          views: {
+            'content@egrid': {
+              templateUrl: '/partials/projects/all.html',
+            },
+          },
         })
-        .when("/help", {
-          templateUrl: '/partials/help.html',
+        .state('egrid.projects.all.list', {
+          url: '/list',
+          views: {
+            'tab-content@egrid.projects.all': {
+              controller: 'ProjectListController as ctrl',
+              templateUrl: '/partials/projects/all/list.html',
+            },
+          },
         })
-        .when("/about", {
-          templateUrl: '/partials/about.html',
+        .state('egrid.projects.all.new', {
+          url: '/new',
+          views: {
+            'tab-content@egrid.projects.all': {
+              controller: 'ProjectCreateController as newProject',
+              templateUrl: '/partials/projects/all/new.html',
+            },
+          },
         })
-        .otherwise({
-          redirectTo : Url.projectListUrl(),
-        });
+        ;
+
+      $stateProvider
+        .state('egrid.projects.get', {
+          abstract: true,
+          resolve: {
+            project: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+              return model.Project.get($stateParams['projectKey']);
+            }],
+          },
+          url: '/{projectKey}',
+          views: {
+            'content@egrid': {
+              controller: ['$scope', 'project', ($scope: any, project: any) => {
+                $scope.project = project;
+              }],
+              templateUrl: '/partials/projects/get.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.detail', {
+          url: '/detail',
+          views: {
+            'tab-content@egrid.projects.get': {
+              controller: 'ProjectController as ctrl',
+              templateUrl: '/partials/projects/get/detail.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.participants.all', {
+          abstract: true,
+          url: '/all',
+          views: {
+            'tab-content@egrid.projects.get': {
+              templateUrl: '/partials/projects/get/participants/all.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.participants.all.list', {
+          resolve: ParticipantListController.resolve,
+          url: '/list',
+          views: {
+            'sub-tab-content@egrid.projects.get.participants.all': {
+              controller: 'ParticipantListController as ctrl',
+              templateUrl: '/partials/projects/get/participants/all/list.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.participants.all.new', {
+          url: '/new',
+          views: {
+            'sub-tab-content@egrid.projects.get.participants.all': {
+              controller: 'ParticipantCreateController as newParticipant',
+              templateUrl: '/partials/projects/get/participants/all/new.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.all', {
+          abstract: true,
+          url: '/all',
+          views: {
+            'tab-content@egrid.projects.get': {
+              templateUrl: '/partials/projects/get/analyses/all.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.all.list', {
+          resolve: AnalysisListController.resolve,
+          url: '/list',
+          views: {
+            'sub-tab-content@egrid.projects.get.analyses.all': {
+              controller: 'AnalysisListController as analyses',
+              templateUrl: '/partials/projects/get/analyses/all/list.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.all.new', {
+          url: '/new',
+          views: {
+            'sub-tab-content@egrid.projects.get.analyses.all': {
+              controller: 'AnalysisCreateController as analysis',
+              templateUrl: '/partials/projects/get/analyses/all/new.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.collaborators.all', {
+          abstract: true,
+          url: '/all',
+          views: {
+            'tab-content@egrid.projects.get': {
+              templateUrl: '/partials/projects/get/collaborators/all.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.collaborators.all.list', {
+          resolve: CollaboratorListController.resolve,
+          url: '/list',
+          views: {
+            'sub-tab-content@egrid.projects.get.collaborators.all': {
+              controller: 'CollaboratorListController as collaborators',
+              templateUrl: '/partials/projects/get/collaborators/all/list.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.collaborators.all.new', {
+          url: '/new',
+          views: {
+            'sub-tab-content@egrid.projects.get.collaborators.all': {
+              templateUrl: '/partials/projects/get/collaborators/all/new.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.projects.get.participants.get', {
+          abstract: true,
+          resolve: ParticipantController.resolve,
+          url: '/{participantKey}',
+          views: {
+            'content@egrid': {
+              controller: 'ParticipantController as ctrl',
+              templateUrl: '/partials/projects/get/participants/get.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.participants.get.detail', {
+          url: '/detail',
+          views: {
+            'tab-content@egrid.projects.get.participants.get': {
+              templateUrl: '/partials/projects/get/participants/get/detail.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.participants.get.grid', {
+          resolve: ParticipantGridController.resolve,
+          url: '/grid',
+          views: {
+            'tab-content@egrid.projects.get.participants.get': {
+              controller: 'ParticipantGridController as participantGrid',
+              templateUrl: '/partials/projects/get/participants/get/grid.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.projects.get.participants.get.grid.detail', {
+          resolve: ParticipantGridEditController.resolve,
+          url: '/detail',
+          views: {
+            'base@': {
+              controller: 'ParticipantGridEditController as participantGrid',
+              templateUrl: '/partials/projects/get/participants/get/grid/detail.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.projects.get.analyses.get', {
+          resolve: AnalysisController.resolve,
+          url: '/{analysisKey}',
+          views: {
+            'content@egrid': {
+              controller: 'AnalysisController as analysis',
+              templateUrl: '/partials/projects/get/analyses/get.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.get.detail', {
+          url: '/detail',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              templateUrl: '/partials/projects/get/analyses/get/detail.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.get.grid', {
+          resolve: ProjectGridController.resolve,
+          url: '/grid',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'ProjectGridController as grid',
+              templateUrl: '/partials/projects/get/analyses/get/grid.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.get.questionnaire', {
+          resolve: SemProjectQuestionnaireEditController.resolve,
+          url: '/questionnaire',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'QuestionnaireController as questionnaire',
+              templateUrl: '/partials/projects/get/analyses/get/questionnaire.html',
+            },
+          },
+        })
+        .state('egrid.projects.get.analyses.get.sem', {
+          resolve: SemProjectAnalysisController.resolve,
+          url: '/sem',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'SemController as sem',
+              templateUrl: '/partials/projects/get/analyses/get/sem.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.projects.get.analyses.get.grid.detail', {
+          resolve: ProjectGridEditController.resolve,
+          url: '/detail',
+          views: {
+            'base@': {
+              controller: 'ProjectGridEditController as projectGrid',
+              templateUrl: '/partials/projects/get/analyses/get/grid/detail.html',
+            },
+          },
+        })
+        ;
+
+      $urlRouterProvider.otherwise('/app/projects/all/list');
     }])
     .filter('count', () => {
       return (input : any[]) => input.length;
     })
-    .config(["$translateProvider", $translateProvider => {
+    .config(["$translateProvider", ($translateProvider: any) => {
       $translateProvider
         .useStaticFilesLoader({
           prefix: 'locations/',
@@ -83,29 +377,29 @@ module egrid.app {
         .fallbackLanguage("en")
         .preferredLanguage("ja");
     }])
-    .controller('CollaboratorCreateController', ['$q', '$routeParams', '$location', CollaboratorCreateController])
-    .controller('CollaboratorListController', ['$q', '$routeParams', CollaboratorListController])
-    .controller('ParticipantController', ['$q', '$routeParams', ParticipantController])
-    .controller('ParticipantCreateController', ['$q', '$routeParams', '$location', ParticipantCreateController])
-    .controller('ParticipantGridController', ['$q', '$routeParams', '$scope', ParticipantGridController])
-    .controller('ParticipantGridEditController', ['$q', '$routeParams', '$location', '$modal', '$scope', ParticipantGridEditController])
-    .controller('ParticipantListController', ['$q', '$routeParams', ParticipantListController])
-    .controller('ProjectController', ['$q', '$routeParams', ProjectController])
-    .controller('ProjectCreateController', ['$q', '$location', ProjectCreateController])
-    .controller('ProjectGridCreateController', ['$q', '$routeParams', '$location', ProjectGridCreateController])
-    .controller('ProjectGridEditController', ['$q', '$routeParams', '$modal', '$scope', '$location', ProjectGridEditController])
-    .controller('ProjectGridListController', ['$q', '$routeParams', ProjectGridListController])
-    .controller('ProjectListController', ['$q', ProjectListController])
-    .controller('SemProjectController', ['$q', '$routeParams', SemProjectController])
-    .controller('SemProjectAnalysisController', ['$q', '$routeParams', SemProjectAnalysisController])
-    .controller('SemProjectCreateController', ['$q', '$routeParams', '$location', SemProjectCreateController])
-    .controller('SemProjectListController', ['$q', '$routeParams', SemProjectListController])
-    .controller('SemProjectQuestionnaireEditController', ['$q', '$routeParams', SemProjectQuestionnaireEditController])
-    .run(['$rootScope', '$translate', '$http', ($rootScope, $translate, $http) => {
-      $rootScope.Url = Url;
+    .value('alertLifeSpan', 3200)
+    .controller('AnalysisController', AnalysisController)
+    .controller('AnalysisCreateController', AnalysisCreateController)
+    .controller('AnalysisListController', AnalysisListController)
+    .controller('CollaboratorCreateController', CollaboratorCreateController)
+    .controller('CollaboratorListController', CollaboratorListController)
+    .controller('ParticipantController', ParticipantController)
+    .controller('ParticipantCreateController', ParticipantCreateController)
+    .controller('ParticipantGridController', ParticipantGridController)
+    .controller('ParticipantGridEditController', ParticipantGridEditController)
+    .controller('ParticipantListController', ParticipantListController)
+    .controller('ProjectController', ProjectController)
+    .controller('ProjectCreateController', ProjectCreateController)
+    .controller('ProjectListController', ProjectListController)
+    .controller('ProjectGridController', ProjectGridController)
+    .controller('ProjectGridEditController', ProjectGridEditController)
+    .controller('SemController', SemProjectAnalysisController)
+    .controller('QuestionnaireController', SemProjectQuestionnaireEditController)
+    .run(['$rootScope', '$translate', '$http', '$window', ($rootScope: any, $translate: any, $http: any, $window: any) => {
+      $rootScope.alerts = [];
 
-      $rootScope.changeLanguage = function(langKey) {
-        $translate.uses(langKey);
+      $rootScope.changeLanguage = (langKey: any) => {
+        $translate.use(langKey);
         $http({
           method: "POST",
           url: '/api/users',
@@ -115,15 +409,11 @@ module egrid.app {
         });
       };
 
-      $http.get("/api/users").success(user => {
-        $rootScope.user = user;
-        $translate.uses(user.location);
-      });
-
-      var dest_url = "/";
-      $http.get("/api/users/logout?dest_url=" + encodeURIComponent(dest_url)).success(data => {
-        $rootScope.logoutUrl = data.logout_url;
-      });
+      $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
+        if (error instanceof AuthorizationError) {
+          $window.location.href = error.loginUrl;
+        }
+      })
     }])
     ;
 }
