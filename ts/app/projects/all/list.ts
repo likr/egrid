@@ -4,11 +4,6 @@
 module egrid.app {
   export class ProjectListController extends PaginationController {
     public static $inject : string[] = ['projects'];
-    public static resolve = {
-      projects: [() => {
-        return model.Project.query();
-      }],
-    };
 
     constructor(private projects : model.Project[]) {
       super();

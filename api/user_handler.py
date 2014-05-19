@@ -23,10 +23,12 @@ class UserHandler(webapp2.RequestHandler):
 class UserAuthUrlHandler(webapp2.RequestHandler):
     def get(self):
         dest_url = self.request.GET['dest_url']
+        current_user = users.get_current_user()
         login_url = users.create_login_url(dest_url)
         data = {
-            'login_url': login_url,
-            'logout_url': users.create_logout_url(login_url)
+            'logedIn': current_user is not None,
+            'loginUrl': login_url,
+            'logoutUrl': users.create_logout_url(login_url)
         }
         content = json.dumps(data)
         self.response.write(content)

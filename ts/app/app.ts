@@ -20,9 +20,17 @@
 /// <reference path="projects/get/participants/get/grid/detail.ts"/>
 
 module egrid.app {
+  class AuthorizationError {
+    constructor(public loginUrl: string) {
+    }
+  }
+
+
   interface EgridScope extends ng.IScope {
+    logedIn: boolean;
     loginUrl: string;
     logoutUrl: string;
+    user: any;
   }
 
 
@@ -49,29 +57,38 @@ module egrid.app {
         .state('egrid', {
           abstract: true,
           resolve: {
-            authUrl: ['$q', '$http', ($q: ng.IQService, $http: ng.IHttpService) => {
+            authorization: ['$q', '$http', ($q: ng.IQService, $http: ng.IHttpService) => {
               var deferred = $q.defer();
-              var dest_url = '/';
-              $http
-                .get('/api/public/auth?dest_url=' + encodeURIComponent(dest_url))
-                .success((data: any) => {
-                  deferred.resolve(data);
+              var destUrl = '/';
+              $http.get('/api/public/auth?dest_url=' + encodeURIComponent(destUrl))
+                .success(data => {
+                  if (data.logedIn) {
+                    deferred.resolve(data);
+                  } else {
+                    deferred.reject(new AuthorizationError(data.loginUrl));
+                  }
                 })
                 .error(() => {
-                  deferred.resolve({
-                    loginUrl: '',
-                    logoutUrl: ''
-                  });
+                  deferred.reject();
                 });
               return deferred.promise;
+            }],
+            user: ['$http', 'authorization', ($http: ng.IHttpService) => {
+              return $http.get('/api/users');
+            }],
+            projects: ['authorization', () => {
+              return model.Project.query();
             }],
           },
           url: '/app',
           views: {
             'base@': {
-              controller: ['$rootScope', 'authUrl', ($scope: EgridScope, authUrl: any) => {
-                $scope.loginUrl = authUrl.login_url;
-                $scope.logoutUrl = authUrl.logout_url;
+              controller: ['$rootScope', '$translate', 'authorization', 'user', ($rootScope: EgridScope, $translate: any, auth: any, user: any) => {
+                $rootScope.logedIn = auth.logedIn;
+                $rootScope.loginUrl = auth.loginUrl;
+                $rootScope.logoutUrl = auth.logoutUrl;
+                $rootScope.user = user.data;
+                $translate.use(user.location);
               }],
               templateUrl: '/partials/base.html',
             },
@@ -106,7 +123,6 @@ module egrid.app {
           },
         })
         .state('egrid.projects.all.list', {
-          resolve: ProjectListController.resolve,
           url: '/list',
           views: {
             'tab-content@egrid.projects.all': {
@@ -393,15 +409,9 @@ module egrid.app {
         });
       };
 
-      $http.get("/api/users")
-        .success((user: any) => {
-          $rootScope.user = user;
-          $translate.use(user.location);
-        });
-
       $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
-        if (error.status == 401) {
-          $window.location.href = $rootScope.logoutUrl;
+        if (error instanceof AuthorizationError) {
+          $window.location.href = error.loginUrl;
         }
       })
     }])
