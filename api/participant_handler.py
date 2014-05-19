@@ -16,7 +16,6 @@ class ParticipantHandler(webapp2.RequestHandler):
             project = Project.get(project_id)
             participants = Participant.all()\
                 .filter('project =', project)\
-                .filter('deleted_at =', None)\
                 .order('created_at')
             self.response.write(json.dumps([p.to_dict() for p in participants]))
 

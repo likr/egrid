@@ -16,6 +16,11 @@ indexes:
   - name: project
   - name: created_at
 
+- kind: Analysis
+  properties:
+  - name: project
+  - name: created_at
+
 - kind: Participant
   properties:
   - name: deleted_at
