@@ -17,7 +17,7 @@ module egrid.app {
         return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
       }],
       projectGrid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.ProjectGrid.get($stateParams['projectKey']));
+        return $q.when(model.ProjectGrid.get($stateParams['projectKey'], 'current'));
       }],
     };
     participantKey : string;

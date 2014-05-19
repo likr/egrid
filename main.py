@@ -4,6 +4,7 @@ from api.collaborator_handler import CollaboratorHandler
 from api.participant_handler import ParticipantHandler
 from api.participant_handler import ParticipantGridHandler
 from api.project_handler import ProjectHandler
+from api.project_handler import ProjectGridCurrentHandler
 from api.analysis_handler import AnalysisHandler
 from api.analysis_handler import AnalysisListHandler
 from api.analysis_handler import AnalysisGridHandler
@@ -19,6 +20,8 @@ app = webapp2.WSGIApplication([
           '/analyses', AnalysisListHandler),
     Route('/api/projects/<project_id:[\w\-]+>'
           '/analyses/<analysis_id:[\w\-]+>', AnalysisHandler),
+    Route('/api/projects/<project_id:[\w\-]+>'
+          '/analyses/current/grid', ProjectGridCurrentHandler),
     Route('/api/projects/<project_id:[\w\-]+>'
           '/analyses/<analysis_id:[\w\-]+>/grid', AnalysisGridHandler),
     Route('/api/projects/<project_id:[\w\-]+>'
