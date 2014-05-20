@@ -1,0 +1,13 @@
+{
+  "name": "E-Grid",
+  "description": "E-Grid is an interview support and visual analysis tools for the evaluation grid method.",
+  "launch_path": "/",
+  "icons": {
+    "256": "/images/icon/icon256.png"
+  },
+  "developer": {
+    "name": "Yosuke Onoue",
+    "url": "http://www.likr-lab.com/"
+  },
+  "default_locale": "ja"
+}
