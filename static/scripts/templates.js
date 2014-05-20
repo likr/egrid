@@ -232,6 +232,12 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('/partials/install.html',
+    "<h2>FireFox</h2>\n" +
+    "<button class=\"btn btn-primary\" ng-click=\"installApp()\">Install</button>\n"
+  );
+
+
   $templateCache.put('/partials/projects/all.html',
     "<h2>{{'PROJECT.PROJECTS' | translate}}</h2>\n" +
     "\n" +

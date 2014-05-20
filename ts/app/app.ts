@@ -363,6 +363,50 @@ module egrid.app {
         })
         ;
 
+      $stateProvider
+        .state('egrid.help', {
+          url: '/help',
+          views: {
+            'content@egrid': {
+              templateUrl: '/partials/help.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.about', {
+          url: '/about',
+          views: {
+            'content@egrid': {
+              templateUrl: '/partials/about.html',
+            },
+          },
+        })
+        ;
+
+      $stateProvider
+        .state('egrid.install', {
+          url: '/install',
+          views: {
+            'content@egrid': {
+              controller: ['$scope', '$window', ($scope, $window) => {
+                $scope.installApp = function() {
+                  var request = $window.navigator.mozApps.install($window.location.origin + '/egrid.webapp');
+                  request.onsuccess = function() {
+                    console.log('success', this.result);
+                  };
+                  request.onerror = function() {
+                    console.log('error', this.error);
+                  };
+                };
+              }],
+              templateUrl: '/partials/install.html',
+            },
+          },
+        })
+        ;
+
       $urlRouterProvider.otherwise('/app/projects/all/list');
     }])
     .filter('count', () => {

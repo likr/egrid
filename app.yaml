@@ -19,6 +19,11 @@ handlers:
   mime_type: text/cache-manifest
   upload: static/(.+\.appcache)
 
+- url: /egrid\.webapp
+  static_files: static/egrid.webapp
+  upload: static/egrid\.webapp
+  mime_type: application/x-web-app-manifest+json
+
 - url: /img
   static_dir: static/img
 
