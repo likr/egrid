@@ -1,6 +1,7 @@
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../../../../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-core.d.ts"/>
 /// <reference path="../../../../../controller-base.ts"/>
@@ -258,6 +259,13 @@ module egrid.app {
         .style("top", nodeRect.top + nodeRect.height + 10 + "px")
         .style("left", nodeRect.left + (nodeRect.width - controllerWidth) / 2 + "px")
         ;
+    }
+
+    public exportJSON($event) {
+      $($event.currentTarget).attr({
+        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
+        download: this.project.name + '.json',
+      });
     }
   }
 }
