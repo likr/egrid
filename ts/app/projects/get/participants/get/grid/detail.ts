@@ -256,7 +256,7 @@ module egrid.app {
     public exportJSON($event) {
       $($event.currentTarget).attr({
         href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
-        download: this.participant.project.name + ' - ' + this.participant.name + '.svg',
+        download: this.participant.project.name + ' - ' + this.participant.name + '.json',
       });
     }
   }
