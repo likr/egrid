@@ -3,6 +3,10 @@
   "description": "E-Grid is an interview support and visual analysis tools for the evaluation grid method.",
   "launch_path": "/",
   "icons": {
+    "32": "/images/icon/icon32.png",
+    "60": "/images/icon/icon60.png",
+    "90": "/images/icon/icon90.png",
+    "120": "/images/icon/icon120.png",
     "256": "/images/icon/icon256.png"
   },
   "developer": {
