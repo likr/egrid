@@ -1,6 +1,9 @@
 /// <reference path="dagre.d.ts" />
 /// <reference path="../ts-definitions/DefinitelyTyped/d3/d3.d.ts" />
 /// <reference path="../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts" />
+declare module egrid {
+  var core: any;
+}
 declare module Svg {
     module Transform {
         class Translate {
