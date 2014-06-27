@@ -44,7 +44,6 @@ module egrid.app {
         projectGrid) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
-      var __this = this;
       if ($stateParams.disableCompletion) {
         this.disableCompletion = true;
       }
@@ -117,39 +116,6 @@ module egrid.app {
           }
         }
       });
-
-      //d3.select("#saveButton")
-      //  .call(egmui.saveButton()
-      //      .save(data => {
-      //        grid.nodes = data.nodes;
-      //        grid.links = data.links;
-      //        $q.when(grid.update())
-      //          .then(() => {
-      //            $state.go('egrid.projects.get.participants.get.grid', {}, {reload: true});
-
-      //            this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
-      //          }, (...reasons: any[]) => {
-      //            var k: string = reasons[0].status === 401
-      //              ? 'MESSAGES.NOT_AUTHENTICATED'
-      //              : 'MESSAGES.DESTINATION_IS_NOT_REACHABLE';
-
-      //            this.showAlert(k, 'danger');
-      //          })
-      //          ;
-      //      }));
-
-      //d3.select("#exportSVG")
-      //  .on("click", function() {
-      //    __this.hideNodeController();
-      //    __this.egm.exportSVG((svgText : string) => {
-      //      var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
-      //      d3.select(this).attr({
-      //        href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
-      //        download: __this.participant.project.name + ' - ' + __this.participant.name + '.svg',
-      //      });
-      //    });
-      //  });
-
 
       this.overallNodes = projectGrid.nodes;
     }
@@ -235,6 +201,27 @@ module egrid.app {
       this.$state.go('egrid.projects.get.participants.get.grid');
     }
 
+    exportSVG() {
+      //d3.select("#exportSVG")
+      //  .on("click", function() {
+      //    __this.hideNodeController();
+      //    __this.egm.exportSVG((svgText : string) => {
+      //      var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
+      //      d3.select(this).attr({
+      //        href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
+      //        download: __this.participant.project.name + ' - ' + __this.participant.name + '.svg',
+      //      });
+      //    });
+      //  });
+    }
+
+    exportJSON() {
+      //$(this.$event.currentTarget).attr({
+      //  href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
+      //  download: this.participant.project.name + ' - ' + this.participant.name + '.json',
+      //});
+    }
+
     private openInputTextDialog(callback: (result: string) => any, initialText: string = '') {
       var texts = this.completionTexts();
       var m = this.$modal.open({
@@ -254,13 +241,6 @@ module egrid.app {
         if (result) {
           callback(result);
         }
-      });
-    }
-
-    public exportJSON($event) {
-      $($event.currentTarget).attr({
-        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
-        download: this.participant.project.name + ' - ' + this.participant.name + '.json',
       });
     }
 

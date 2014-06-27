@@ -17,9 +17,13 @@ module egrid.app {
         return $q.when(model.Participant.query($stateParams['projectKey']));
       }],
     };
-    egm : EGM;
+    egm : any;
+    grid: any;
+    selection: D3.Selection;
     filter : {} = {};
     participantState : {} = {};
+    changed: boolean = false;
+    saved: boolean = false;
 
     constructor(
         $window,
@@ -31,176 +35,165 @@ module egrid.app {
         $timeout,
         $filter,
         alertLifeSpan,
-        private grid: model.ProjectGrid,
+        private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
-      var __this = this;
-
-      var egmui = egrid.egmui();
-      this.egm = egmui.egm();
-      this.egm.showRemoveLinkButton(true);
-      var calcHeight = () => {
-        return $(window).height() - 100; //XXX
-      };
-      d3.select("#display")
-        .attr({
-          width: $(window).width(),
-          height: calcHeight(),
+      this.egm = egrid.core.egm()
+        .maxTextLength(10)
+        .vertexScale((d) => {
+          return d.participants.length;
         })
-        .call(this.egm.display($(window).width(), calcHeight()))
-        ;
+        .vertexColor((d) => {
+          return d.color;
+        })
+        .vertexButtons([
+          {
+            icon: 'images/glyphicons_210_left_arrow.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.ladderUp(u, result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              });
+            }
+          },
+          {
+            icon: 'images/glyphicons_207_remove_2.png',
+            onClick: (d, u) => {
+              this.grid.removeConstruct(u);
+              this.selection.call(this.egm);
+              this.$scope.$apply();
+              this.changed = true;
+            }
+          },
+          {
+            icon: 'images/glyphicons_030_pencil.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.updateConstruct(u, 'text', result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              }, d.text);
+            }
+          },
+          {
+            icon: 'images/glyphicons_234_brush.png',
+            onClick: (d, u) => {
+              this.openColorDialog(d.color).then((color) => {
+                d.color = color;
+                this.selection.call(this.egm);
+              });
+            }
+          },
+          {
+            icon: 'images/glyphicons_211_right_arrow.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.ladderDown(u, result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              });
+            }
+          },
+        ])
+        .onClickVertex(() => {
+          this.$scope.$apply();
+        })
+        .size([$(window).width(), $(window).height() - 150]);
+      this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
+      this.selection = d3.select('#display')
+        .datum(this.grid.graph())
+        .call(this.egm.css())
+        .call(this.egm)
+        .call(this.egm.center());
+
       d3.select(window)
         .on('resize', () => {
-          d3.select("#display")
-            .attr({
-              width: $(window).width(),
-              height: calcHeight(),
-            })
-            ;
+          this.selection
+            .call(this.egm.resize($(window).width(), $(window).height() - 150));
         })
         ;
 
-      d3.select("#undoButton")
-        .call(egmui.undoButton()
-            .onEnable(() => {
-              d3.select("#undoButton").classed("disabled", false);
-            })
-            .onDisable(() => {
-              d3.select("#undoButton").classed("disabled", true);
-            }));
-      d3.select("#redoButton")
-        .call(egmui.redoButton()
-            .onEnable(() => {
-              d3.select("#redoButton").classed("disabled", false);
-            })
-            .onDisable(() => {
-              d3.select("#redoButton").classed("disabled", true);
-            }));
+      $scope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
+        if (!this.saved && this.changed) {
+          if (!confirm('保存せずにページを移動しようとしています')) {
+            event.preventDefault();
+          }
+        }
+      });
 
-      d3.select("#exportSVG")
-        .on("click", function() {
-          __this.hideNodeController();
-          __this.egm.exportSVG((svgText : string) => {
-            var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
-            d3.select(this).attr({
-              href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
-              download: __this.project.name + '.svg',
-            });
-            });
+      this.participants.forEach(participant => {
+        this.participantState[participant.key] = false;
+        this.filter[participant.key] = true;
+      });
+    }
+
+    addConstruct() {
+      this.openInputTextDialog((result: string) => {
+        this.grid.addConstruct(result);
+        this.selection.call(this.egm);
+        this.changed = true;
+      });
+    }
+
+    mergeConstructs() {
+      var vertices = this.selection
+        .selectAll('g.vertex')
+        .filter((vertex) => {
+          return vertex.selected;
+        })
+        .data()
+        .map((vertex) => {
+          return vertex.key;
         });
+      this.grid.merge(vertices[0], vertices[1]);
+      this.selection.call(this.egm);
+      this.changed = true;
+    }
 
-      d3.select("#removeNodeButton")
-        .call(egmui.removeNodeButton()
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#mergeNodeButton")
-        .call(egmui.mergeNodeButton()
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#editNodeButton")
-        .call(egmui.editNodeButton()
-            .onClick(callback => {
-              var node = this.egm.selectedNode();
-              this.openInputTextDialog(callback, node.text)
-            })
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
+    undo() {
+      this.grid.undo();
+      this.selection.call(this.egm);
+    }
 
-      d3.select("#filterButton")
-        .on("click", () => {
-          var node = this.egm.selectedNode();
-          this.participants.forEach(participant => {
-            if (node) {
-              this.participantState[participant.key] = node.participants.indexOf(participant.key) >= 0;
-            } else {
-              this.participantState[participant.key] = false;
-            }
-          });
-          var m = $modal.open({
-            backdrop: true,
-            keyboard: true,
-            backdropClick: true,
-            templateUrl: '/partials/filter-participants-dialog.html',
-            controller: ($scope, $modalInstance) => {
-              $scope.results = this.filter;
-              $scope.participants = this.participants;
-              $scope.active = this.participantState;
-              $scope.close = () => {
-                $modalInstance.close($scope.results);
-              };
-            },
-          });
-          m.result.then(result => {
-            this.egm.nodes().forEach(d => {
-              d.active = d.participants.some(key => result[key]);
-            });
-            this.egm
-              .draw()
-              .focusCenter()
-              ;
-          });
-          $scope.$apply();
-        })
-        ;
+    redo() {
+      this.grid.redo();
+      this.selection.call(this.egm);
+    }
 
-      d3.select("#layoutButton")
-        .on("click", () => {
-          var m = $modal.open({
-            backdrop: true,
-            keyboard: true,
-            backdropClick: true,
-            templateUrl: '/partials/setting-dialog.html',
-            controller: ($scope, $modalInstance) => {
-              $scope.options = this.egm.options();
-              $scope.ViewMode = egrid.ViewMode;
-              $scope.InactiveNode = egrid.InactiveNode;
-              $scope.RankDirection = egrid.RankDirection;
-              $scope.ScaleType = egrid.ScaleType;
-              $scope.close = () => {
-                $modalInstance.close();
-              }
-            },
-          });
-          m.result.then(() => {
-            this.egm
-              .draw()
-              .focusCenter()
-              ;
-          });
-          $scope.$apply();
-        })
-        ;
+    mergeDisabled() {
+      var numSelected = this.selection.selectAll('g.vertex.selected').size();
+      var loop = this.selection.selectAll('g.edge.upper.lower').size() > 0;
+      return numSelected != 2 || loop;
+    }
 
-        var nodes = this.grid.nodes.map(d => new Node(d.text, d.weight, d.original, d.participants));
-        var links = this.grid.links.map(d => new Link(nodes[d.source], nodes[d.target], d.weight));
-        this.egm
-          .nodes(nodes)
-          .links(links)
-          .draw()
-          .focusCenter()
-          ;
-        this.participants.forEach(participant => {
-          this.participantState[participant.key] = false;
-          this.filter[participant.key] = true;
-        });
+    undoDisabled() {
+      return !this.grid.canUndo();
+    }
+
+    redoDisabled() {
+      return !this.grid.canRedo();
     }
 
     save() {
-      this.grid.nodes = this.egm.grid().nodes();
-      this.grid.links = this.egm.grid().links().map(link => {
+      var graph = this.grid.graph();
+      var vertexMap = {};
+      this.gridData.nodes = graph.vertices().map((u, i) => {
+        vertexMap[u] = i;
+        return graph.get(u);
+      });
+      this.gridData.links = graph.edges().map((edge) => {
         return {
-          source: link.source.index,
-          target: link.target.index,
-          weight: link.weight,
+          source: vertexMap[edge[0]],
+          target: vertexMap[edge[1]]
         };
       });
-      this.$q.when(this.grid.save())
+
+      this.$q.when(this.gridData.save())
         .then(() => {
+          this.saved = true;
           this.$state.go('egrid.projects.get.analyses.get.grid', {projectKey: this.grid.projectKey});
 
           this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
@@ -214,6 +207,65 @@ module egrid.app {
         ;
     }
 
+    close() {
+      this.$state.go('egrid.projects.get.analyses.get.grid');
+    }
+
+    openFilterSetting() {
+      var graph = this.grid.graph();
+      this.participants.forEach(participant => {
+        this.participantState[participant.key] = false;
+      });
+      graph.vertices().forEach((u) => {
+        graph.get(u).participants.forEach((key) => {
+          this.participantState[key] = true;
+        });
+      });
+      var m = this.$modal.open({
+        backdrop: true,
+        keyboard: true,
+        backdropClick: true,
+        templateUrl: '/partials/filter-participants-dialog.html',
+        controller: ($scope, $modalInstance) => {
+          $scope.results = this.filter;
+          $scope.participants = this.participants;
+          $scope.active = this.participantState;
+          $scope.close = () => {
+            $modalInstance.close();
+          };
+        },
+      });
+      m.result.then(() => {
+        this.selection
+          .call(this.egm)
+          .call(this.egm.center());
+      });
+    }
+
+    openLayoutSetting() {
+      var m = this.$modal.open({
+        backdrop: true,
+        keyboard: true,
+        backdropClick: true,
+        templateUrl: '/partials/setting-dialog.html',
+        controller: ($scope, $modalInstance) => {
+          //$scope.options = this.egm.options();
+          //$scope.ViewMode = egrid.ViewMode;
+          //$scope.InactiveNode = egrid.InactiveNode;
+          //$scope.RankDirection = egrid.RankDirection;
+          //$scope.ScaleType = egrid.ScaleType;
+          $scope.close = () => {
+            $modalInstance.close();
+          }
+        },
+      });
+      m.result.then(() => {
+        this.selection
+          .call(this.egm)
+          .call(this.egm.center());
+      });
+    }
+
     private openInputTextDialog(callback, initialText : string = '') {
       var texts = [];
       var m = this.$modal.open({
@@ -224,7 +276,7 @@ module egrid.app {
         controller: ($scope, $modalInstance) => {
           $scope.result = initialText;
           $scope.texts = texts;
-          $scope.close = function(result) {
+          $scope.close = (result) => {
             $modalInstance.close(result);
           }
         },
@@ -235,31 +287,24 @@ module egrid.app {
       this.$scope.$apply();
     }
 
-    private showNodeController(selection) {
-      if (!selection.empty()) {
-        var nodeRect = selection.node().getBoundingClientRect();
-        var controllerWidth = $("#nodeController").width();
-        d3.select("#nodeController")
-          .classed("invisible", false)
-          .style("top", nodeRect.top + nodeRect.height + 10 - 100 + "px")
-          .style("left", nodeRect.left + (nodeRect.width - controllerWidth) / 2 + "px")
-          ;
-      }
+    private openColorDialog(initialColor) {
+      return this.$modal.open({
+        backdrop: true,
+        keyboard: true,
+        backdropClick: true,
+        templateUrl: '/partials/dialogs/color.html',
+        controller: ($scope, $modalInstance) => {
+          $scope.color = initialColor
+          $scope.submit = (color) => {
+            $modalInstance.close(color);
+          };
+          $scope.close = () => {
+            $modalInstance.dismiss();
+          };
+        },
+      }).result;
     }
 
-    private hideNodeController() {
-      d3.select("#nodeController")
-        .classed("invisible", true);
-    }
-
-    private moveNodeController(selection) {
-      var nodeRect = selection.node().getBoundingClientRect();
-      var controllerWidth = $("#nodeController").width();
-      d3.select("#nodeController")
-        .style("top", nodeRect.top + nodeRect.height + 10 + "px")
-        .style("left", nodeRect.left + (nodeRect.width - controllerWidth) / 2 + "px")
-        ;
-    }
 
     public exportJSON($event) {
       $($event.currentTarget).attr({

@@ -67,6 +67,25 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('/partials/dialogs/color.html',
+    "<div class=\"modal-header\">\n" +
+    "  <h3>Color</h3>\n" +
+    "</div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <form class=\"form-horizontal\" ng-submit=\"submit(color)\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <input type=\"color\" class=\"form-control\" ng-model=\"color\"/>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button class=\"btn btn-primary\" ng-click=\"submit(color)\">{{'ACTION.SUBMIT' | translate}}</button>\n" +
+    "  <button class=\"btn btn-primary\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
+    "</div>\n" +
+    "\n"
+  );
+
+
   $templateCache.put('/partials/filter-participants-dialog.html',
     "<div class=\"modal-header\">\n" +
     "  <h3>{{'PARTICIPANT.FILTER' | translate}}</h3>\n" +
@@ -501,18 +520,18 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <div class=\"thumbnail\" style=\"height: 500px;\">\n" +
-    "    <svg id=\"display\" width=\"100%\" height=\"100%\"></svg>\n" +
+    "  <div class=\"thumbnail\" id=\"display-wrapper\" style=\"height: 510px;\">\n" +
+    "    <svg id=\"display\"></svg>\n" +
     "  </div>\n" +
     "  <h3>サマリー</h3>\n" +
     "  <table class=\"table table-bordered\">\n" +
     "    <tr>\n" +
     "      <th class=\"col-xs-6\">評価項目数</th>\n" +
-    "      <td class=\"col-xs-6\">{{grid.egm.nodes().length}}</td>\n" +
+    "      <td class=\"col-xs-6\">{{grid.numConstructs()}}</td>\n" +
     "    </tr>\n" +
     "    <tr>\n" +
     "      <th>接続数</th>\n" +
-    "      <td>{{grid.egm.links().length}}</td>\n" +
+    "      <td>{{grid.numLinks()}}</td>\n" +
     "    </tr>\n" +
     "  </table>\n" +
     "</div>\n"
@@ -524,12 +543,14 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <div class=\"navbar navbar-default navbar-fixed-top\" style=\"top: 50px;\">\n" +
     "    <div class=\"container\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <a class=\"btn btn-default\" id=\"filterButton\">{{'ACTION.FILTER' | translate}}</a>\n" +
-    "        <a class=\"btn btn-default\" id=\"layoutButton\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</a>\n" +
-    "        <a class=\"btn btn-default\" id=\"appendNodeButton\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</a>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.openFilterSetting()\">{{'ACTION.FILTER' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <a class=\"btn btn-default pull-right\" id=\"saveButton\" ng-click=\"projectGrid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</a>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
+    "        <a class=\"btn btn-default\" ng-click=\"grid.close()\">閉じる</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -544,8 +565,8 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
     "    <div class=\"container\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <a class=\"btn btn-default\" id=\"undoButton\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</a>\n" +
-    "        <a class=\"btn btn-default\" id=\"redoButton\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</a>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.undoDisabled()\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
     "        <a ng-click=\"projectGrid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
@@ -1021,11 +1042,11 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <table class=\"table table-bordered\">\n" +
     "    <tr>\n" +
     "      <th class=\"col-xs-6\">評価項目数</th>\n" +
-    "      <td class=\"col-xs-6\">{{participantGrid.numConstructs()}}</td>\n" +
+    "      <td class=\"col-xs-6\">{{grid.numConstructs()}}</td>\n" +
     "    </tr>\n" +
     "    <tr>\n" +
     "      <th>接続数</th>\n" +
-    "      <td>{{participantGrid.numLinks()}}</td>\n" +
+    "      <td>{{grid.numLinks()}}</td>\n" +
     "    </tr>\n" +
     "  </table>\n" +
     "</div>\n"
@@ -1037,12 +1058,12 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <div class=\"navbar navbar-default navbar-fixed-top\" style=\"top: 50px;\">\n" +
     "    <div class=\"container\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"participantGrid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"participantGrid.mergeDisabled()\" ng-click=\"participantGrid.mergeConstructs()\">結合</button>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"participantGrid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
-    "        <a class=\"btn btn-default\" ng-click=\"participantGrid.close()\">閉じる</a>\n" +
+    "        <button class=\"btn btn-default\" ng-click=\"grid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
+    "        <a class=\"btn btn-default\" ng-click=\"grid.close()\">閉じる</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -1059,11 +1080,11 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
     "    <div class=\"container\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"participantGrid.undoDisabled()\" ng-click=\"participantGrid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"participantGrid.redoDisabled()\" ng-click=\"participantGrid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.undoDisabled()\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <a ng-click=\"participantGrid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
+    "        <a ng-click=\"grid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
     "        <a class=\"btn btn-default\" id=\"exportSVG\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>SVG {{'ACTION.EXPORT' | translate}}</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
