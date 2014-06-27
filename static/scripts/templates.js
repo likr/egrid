@@ -1042,7 +1042,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
     "        <button class=\"btn btn-default\" ng-click=\"participantGrid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
-    "        <a class=\"btn btn-default\" ng-click=\"close()\">閉じる</a>\n" +
+    "        <a class=\"btn btn-default\" ng-click=\"participantGrid.close()\">閉じる</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
