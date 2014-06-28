@@ -81,8 +81,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "<div class=\"modal-footer\">\n" +
     "  <button class=\"btn btn-primary\" ng-click=\"submit(color)\">{{'ACTION.SUBMIT' | translate}}</button>\n" +
     "  <button class=\"btn btn-primary\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
-    "</div>\n" +
-    "\n"
+    "</div>\n"
   );
 
 
@@ -547,6 +546,9 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
     "        <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
     "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
+    "        <div class=\"form-group\">\n" +
+    "          <input class=\"form-control\" ng-model=\"grid.searchText\">\n" +
+    "        </div>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
     "        <button class=\"btn btn-default\" ng-click=\"grid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +

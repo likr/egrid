@@ -20,10 +20,11 @@ module egrid.app {
     egm : any;
     grid: any;
     selection: D3.Selection;
-    filter : {} = {};
+    filter: {} = {};
     participantState : {} = {};
     changed: boolean = false;
     saved: boolean = false;
+    searchText: string = ''
 
     constructor(
         $window,
@@ -42,17 +43,27 @@ module egrid.app {
 
       this.egm = egrid.core.egm()
         .maxTextLength(10)
+        .edgeOpacity((source, target) => {
+          if (source.text.indexOf(this.searchText) >= 0 && target.text.indexOf(this.searchText) >= 0) {
+            return 1;
+          } else {
+            return 0.3;
+          }
+        })
         .vertexScale((d) => {
-          return d.participants.length;
+          return d.participants === undefined ? 1 : d.participants.length;
         })
         .vertexColor((d) => {
           return d.color;
+        })
+        .vertexOpacity((d) => {
+          return d.text.indexOf(this.searchText) >= 0 ? 1 : 0.3;
         })
         .vertexButtons([
           {
             icon: 'images/glyphicons_210_left_arrow.png',
             onClick: (d, u) => {
-              this.openInputTextDialog((result: string) => {
+              this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderUp(u, result);
                 this.selection.call(this.egm);
                 this.changed = true;
@@ -71,11 +82,11 @@ module egrid.app {
           {
             icon: 'images/glyphicons_030_pencil.png',
             onClick: (d, u) => {
-              this.openInputTextDialog((result: string) => {
+              this.openInputTextDialog(d.text).then((result: string) => {
                 this.grid.updateConstruct(u, 'text', result);
                 this.selection.call(this.egm);
                 this.changed = true;
-              }, d.text);
+              });
             }
           },
           {
@@ -90,7 +101,7 @@ module egrid.app {
           {
             icon: 'images/glyphicons_211_right_arrow.png',
             onClick: (d, u) => {
-              this.openInputTextDialog((result: string) => {
+              this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderDown(u, result);
                 this.selection.call(this.egm);
                 this.changed = true;
@@ -124,6 +135,12 @@ module egrid.app {
         }
       });
 
+      $scope.$watch('grid.searchText', (oldValue, newValue) => {
+        if (oldValue != newValue) {
+          this.selection.call(this.egm.updateColor());
+        }
+      });
+
       this.participants.forEach(participant => {
         this.participantState[participant.key] = false;
         this.filter[participant.key] = true;
@@ -131,7 +148,7 @@ module egrid.app {
     }
 
     addConstruct() {
-      this.openInputTextDialog((result: string) => {
+      this.openInputTextDialog().then((result: string) => {
         this.grid.addConstruct(result);
         this.selection.call(this.egm);
         this.changed = true;
@@ -266,9 +283,15 @@ module egrid.app {
       });
     }
 
-    private openInputTextDialog(callback, initialText : string = '') {
-      var texts = [];
-      var m = this.$modal.open({
+    private openInputTextDialog(initialText : string = '') {
+      var texts = this.grid.graph().vertices().map((u) => {
+        var d = this.grid.graph().get(u);
+        return {
+          text: d.text,
+          weight: d.weight,
+        };
+      });
+      return this.$modal.open({
         backdrop: true,
         keyboard: true,
         backdropClick: true,
@@ -280,11 +303,7 @@ module egrid.app {
             $modalInstance.close(result);
           }
         },
-      });
-      m.result.then(result => {
-        callback(result);
-      });
-      this.$scope.$apply();
+      }).result;
     }
 
     private openColorDialog(initialColor) {
