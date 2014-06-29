@@ -91,10 +91,10 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "<div class=\"modal-body\">\n" +
     "  <table class=\"table table-hover\">\n" +
-    "    <tr ng-class=\"{'success':active[participant.key()]}\" ng-repeat=\"participant in participants\">\n" +
+    "    <tr ng-class=\"{'success':active[participant.key]}\" ng-repeat=\"participant in participants\">\n" +
     "      <td>\n" +
     "        <label class=\"checkbox\">\n" +
-    "          <input type=\"checkbox\" ng-model=\"results[participant.key()]\"/>{{participant.name}}\n" +
+    "          <input type=\"checkbox\" ng-model=\"results[participant.key]\"/>{{participant.name}}\n" +
     "        </label>\n" +
     "      </td>\n" +
     "    </tr>\n" +

@@ -21,7 +21,6 @@ module egrid.app {
     grid: any;
     selection: D3.Selection;
     filter: {} = {};
-    participantState : {} = {};
     changed: boolean = false;
     saved: boolean = false;
     searchText: string = ''
@@ -41,6 +40,17 @@ module egrid.app {
         private participants: model.Participant[]) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
+      this.participants.forEach(participant => {
+        this.filter[participant.key] = true;
+      });
+
+      this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
+      var vertexScale = d3.scale.linear()
+        .domain(d3.extent(this.grid.graph().vertices(), (u) => {
+          return this.grid.graph().get(u).participants.length;
+        }))
+        .range([1, 3]);
+
       this.egm = egrid.core.egm()
         .maxTextLength(10)
         .edgeOpacity((source, target) => {
@@ -51,13 +61,18 @@ module egrid.app {
           }
         })
         .vertexScale((d) => {
-          return d.participants === undefined ? 1 : d.participants.length;
+          return vertexScale(d.participants === undefined ? 1 : d.participants.length);
         })
         .vertexColor((d) => {
           return d.color;
         })
         .vertexOpacity((d) => {
           return d.text.indexOf(this.searchText) >= 0 ? 1 : 0.3;
+        })
+        .vertexVisibility((d) => {
+          return d.participants.some((key) => {
+            return this.filter[key];
+          });
         })
         .vertexButtons([
           {
@@ -113,7 +128,6 @@ module egrid.app {
           this.$scope.$apply();
         })
         .size([$(window).width(), $(window).height() - 150]);
-      this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
         .call(this.egm.css())
@@ -139,11 +153,6 @@ module egrid.app {
         if (oldValue != newValue) {
           this.selection.call(this.egm.updateColor());
         }
-      });
-
-      this.participants.forEach(participant => {
-        this.participantState[participant.key] = false;
-        this.filter[participant.key] = true;
       });
     }
 
@@ -230,12 +239,13 @@ module egrid.app {
 
     openFilterSetting() {
       var graph = this.grid.graph();
+      var participantState = {};
       this.participants.forEach(participant => {
-        this.participantState[participant.key] = false;
+        participantState[participant.key] = false;
       });
-      graph.vertices().forEach((u) => {
-        graph.get(u).participants.forEach((key) => {
-          this.participantState[key] = true;
+      this.selection.selectAll('g.vertex.selected').data().forEach((vertex) => {
+        vertex.data.participants.forEach((key) => {
+          participantState[key] = true;
         });
       });
       var m = this.$modal.open({
@@ -246,7 +256,7 @@ module egrid.app {
         controller: ($scope, $modalInstance) => {
           $scope.results = this.filter;
           $scope.participants = this.participants;
-          $scope.active = this.participantState;
+          $scope.active = participantState;
           $scope.close = () => {
             $modalInstance.close();
           };
