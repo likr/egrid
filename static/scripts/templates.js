@@ -592,8 +592,8 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  </div>\n" +
     "  <div class=\"row\">\n" +
     "    <div class=\"col-sm-8\">\n" +
-    "      <div class=\"thumbnail\" id=\"sem-questionnaire-design-display\">\n" +
-    "        <svg width=\"100%\" height=\"500px\"></svg>\n" +
+    "      <div class=\"thumbnail\" id=\"display-wrapper\" style=\"height: 500px\">\n" +
+    "        <svg id=\"display\"></svg>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"col-sm-4\" style=\"height: 515px; overflow-y: scroll;\">\n" +
@@ -1143,7 +1143,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "    <div class=\"form-group\">\n" +
     "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.SCALING.MAX' | translate}}</label>\n" +
     "      <div class=\"col-sm-8\">\n" +
-    "        <input class=\"form-control\" type=\"number\" min=\"1\" ng-model=\"options.maxScale\"/>\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"1\" ng-model=\"options.maxVertexScale\"/>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"form-group\">\n" +

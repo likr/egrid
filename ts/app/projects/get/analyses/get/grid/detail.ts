@@ -23,7 +23,11 @@ module egrid.app {
     filter: {} = {};
     changed: boolean = false;
     saved: boolean = false;
-    searchText: string = ''
+    searchText: string = '';
+    vertexScale: any;
+    layoutOptions: any = {
+      maxVertexScale: 3,
+    };
 
     constructor(
         $window,
@@ -45,11 +49,11 @@ module egrid.app {
       });
 
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
-      var vertexScale = d3.scale.linear()
+      this.vertexScale = d3.scale.linear()
         .domain(d3.extent(this.grid.graph().vertices(), (u) => {
           return this.grid.graph().get(u).participants.length;
         }))
-        .range([1, 3]);
+        .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm = egrid.core.egm()
         .maxTextLength(10)
@@ -61,7 +65,7 @@ module egrid.app {
           }
         })
         .vertexScale((d) => {
-          return vertexScale(d.participants === undefined ? 1 : d.participants.length);
+          return this.vertexScale(d.participants === undefined ? 1 : d.participants.length);
         })
         .vertexColor((d) => {
           return d.color;
@@ -276,17 +280,14 @@ module egrid.app {
         backdropClick: true,
         templateUrl: '/partials/setting-dialog.html',
         controller: ($scope, $modalInstance) => {
-          //$scope.options = this.egm.options();
-          //$scope.ViewMode = egrid.ViewMode;
-          //$scope.InactiveNode = egrid.InactiveNode;
-          //$scope.RankDirection = egrid.RankDirection;
-          //$scope.ScaleType = egrid.ScaleType;
+          $scope.options = this.layoutOptions;
           $scope.close = () => {
-            $modalInstance.close();
+            $modalInstance.close($scope.options);
           }
         },
       });
-      m.result.then(() => {
+      m.result.then((options) => {
+        this.vertexScale.range([1, this.layoutOptions.maxVertexScale])
         this.selection
           .call(this.egm)
           .call(this.egm.center());
