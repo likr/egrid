@@ -87,7 +87,6 @@ export class SemProjectAnalysisController {
       sem.solver()
         .solve(n, alpha, sigma, s)
         .then(result => {
-          console.log(result);
           this.semGrid = egrid.core.grid();
           var graph = this.semGrid.graph();
           var vertices = attributes.map(attr => {
@@ -95,11 +94,34 @@ export class SemProjectAnalysisController {
               text: attr,
             });
           });
-          result.alpha.forEach(link => {
-            graph.addEdge(link[0], link[1], {
-              coef: link[2],
+          var paths = vertices.map(function() {
+            return vertices.map(function() {
+              return null;
             });
           });
+          result.alpha.forEach(link => {
+            var u = vertices[link[0]];
+            var v = vertices[link[1]];
+            graph.addEdge(u, v);
+            paths[u][v] = link[2];
+          });
+
+          var edgeWidthScale = d3.scale.linear()
+            .domain([0, d3.max(result.alpha, (link) => {
+              return Math.abs(link[2]);
+            })])
+            .range([1, 5]);
+          var edgeTextFormat = d3.format('4.2g')
+          this.sem
+            .edgeColor(function(u, v) {
+              return paths[u][v] >= 0 ? 'blue' : 'red';
+            })
+            .edgeText(function(u, v) {
+              return edgeTextFormat(paths[u][v]);
+            })
+            .edgeWidth(function(u, v) {
+              return edgeWidthScale(paths[u][v]);
+            });
 
           d3.select('#display')
             .datum(graph)
