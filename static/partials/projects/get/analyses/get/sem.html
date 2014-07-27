@@ -29,17 +29,30 @@
         </form>
       </div>
     </div>
-    <div class="col-sm-10" id="sem-analysis-display">
-      <!--<p>GFI:{{sem.gfiValue}}</p>-->
-      <svg style="height:550px;"></svg>
+    <div class="col-sm-12 row">
+      <div class="col-sm-10 thumbnail" id="display-wrapper">
+        <!--<p>GFI:{{sem.gfiValue}}</p>-->
+        <svg id="display" style="height:550px;"></svg>
+      </div>
+      <div class="col-sm-2" style="overflow: auto; max-height: 600px">
+        <table class="table">
+          <tr ng-repeat="item in sem.items">
+            <td>
+              <label class="checkbox">
+                <input type="checkbox" ng-model="item.active" ng-change="sem.removeNode()"/>{{item.text}}
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div class="col-sm-2" style="overflow: auto; max-height: 600px">
-      <table class="table">
-        <tr ng-repeat="item in sem.items">
-          <td>
-            <label class="checkbox">
-              <input type="checkbox" ng-model="item.active" ng-change="sem.removeNode()"/>{{item.text}}
-            </label>
+    <div class="col-sm-12 row">
+      <table class="table table-bordered table-responsive" id="path-matrix">
+        <tr ng-repeat="row in sem.pathMatrix">
+          <td ng-repeat="cell in row">
+            <p style="font-size: 8pt;">{{cell.p | number}}</p>
+            <p style="font-size: 8pt;">{{cell.sigma | number}}</p>
+            <input class="checkbox" type="checkbox" ng-model="cell.connected">
           </td>
         </tr>
       </table>

@@ -653,17 +653,30 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        </form>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    <div class=\"col-sm-10\" id=\"sem-analysis-display\">\n" +
-    "      <!--<p>GFI:{{sem.gfiValue}}</p>-->\n" +
-    "      <svg style=\"height:550px;\"></svg>\n" +
+    "    <div class=\"col-sm-12 row\">\n" +
+    "      <div class=\"col-sm-10 thumbnail\" id=\"display-wrapper\">\n" +
+    "        <!--<p>GFI:{{sem.gfiValue}}</p>-->\n" +
+    "        <svg id=\"display\" style=\"height:550px;\"></svg>\n" +
+    "      </div>\n" +
+    "      <div class=\"col-sm-2\" style=\"overflow: auto; max-height: 600px\">\n" +
+    "        <table class=\"table\">\n" +
+    "          <tr ng-repeat=\"item in sem.items\">\n" +
+    "            <td>\n" +
+    "              <label class=\"checkbox\">\n" +
+    "                <input type=\"checkbox\" ng-model=\"item.active\" ng-change=\"sem.removeNode()\"/>{{item.text}}\n" +
+    "              </label>\n" +
+    "            </td>\n" +
+    "          </tr>\n" +
+    "        </table>\n" +
+    "      </div>\n" +
     "    </div>\n" +
-    "    <div class=\"col-sm-2\" style=\"overflow: auto; max-height: 600px\">\n" +
-    "      <table class=\"table\">\n" +
-    "        <tr ng-repeat=\"item in sem.items\">\n" +
-    "          <td>\n" +
-    "            <label class=\"checkbox\">\n" +
-    "              <input type=\"checkbox\" ng-model=\"item.active\" ng-change=\"sem.removeNode()\"/>{{item.text}}\n" +
-    "            </label>\n" +
+    "    <div class=\"col-sm-12 row\">\n" +
+    "      <table class=\"table table-bordered table-responsive\" id=\"path-matrix\">\n" +
+    "        <tr ng-repeat=\"row in sem.pathMatrix\">\n" +
+    "          <td ng-repeat=\"cell in row\">\n" +
+    "            <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
+    "            <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +
+    "            <input class=\"checkbox\" type=\"checkbox\" ng-model=\"cell.connected\">\n" +
     "          </td>\n" +
     "        </tr>\n" +
     "      </table>\n" +
