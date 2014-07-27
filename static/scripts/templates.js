@@ -645,20 +645,21 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "  </form>\n" +
     "  <h2>パスモデリング</h2>\n" +
-    "  <div style=\"height:600px;\">\n" +
+    "  <div>\n" +
     "    <div class=\"navbar navbar-default\">\n" +
     "      <div class=\"navbar-collapse\">\n" +
     "        <form class=\"navbar-form\">\n" +
     "          <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"sem.solve()\">更新</button>\n" +
     "        </form>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"col-sm-12 row\">\n" +
     "      <div class=\"col-sm-10 thumbnail\" id=\"display-wrapper\">\n" +
-    "        <!--<p>GFI:{{sem.gfiValue}}</p>-->\n" +
     "        <svg id=\"display\" style=\"height:550px;\"></svg>\n" +
     "      </div>\n" +
     "      <div class=\"col-sm-2\" style=\"overflow: auto; max-height: 600px\">\n" +
+    "        <p>GFI:{{sem.gfiValue}}</p>\n" +
     "        <table class=\"table\">\n" +
     "          <tr ng-repeat=\"item in sem.items\">\n" +
     "            <td>\n" +
@@ -672,7 +673,12 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <div class=\"col-sm-12 row\">\n" +
     "      <table class=\"table table-bordered table-responsive\" id=\"path-matrix\">\n" +
+    "        <tr>\n" +
+    "          <th></th>\n" +
+    "          <th ng-repeat=\"attribute in sem.attributes\">{{attribute}}</th>\n" +
+    "        </tr>\n" +
     "        <tr ng-repeat=\"row in sem.pathMatrix\">\n" +
+    "          <th>{{sem.attributes[$index]}}</th>\n" +
     "          <td ng-repeat=\"cell in row\">\n" +
     "            <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
     "            <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +

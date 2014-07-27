@@ -18,16 +18,20 @@ export class SemProjectAnalysisController {
   };
   public encoding: string = 'utf-8';
   public pathMatrix: any[][];
+  public gfiValue: number;
   private sem: any;
   private grid: any;
   private semGrid: any;
+  private x: number[][];
+  private attributes: string[];
 
   constructor(private $scope, private gridData: model.ProjectGrid) {
     this.grid = egrid.core.grid(gridData.nodes, gridData.links);
     var width = $('#display-wrapper').width();
     var height = $('#display-wrapper').height();
     this.sem = egrid.core.egm()
-      .size([width, height]);
+      .size([width, height])
+      .dagreRankSep(80);
   }
 
   loadFile() {
@@ -35,24 +39,22 @@ export class SemProjectAnalysisController {
     var reader = new FileReader();
     reader.onload = e => {
       var data = d3.csv.parse(e.target.result);
-      var attributes = [];
+      this.attributes = [];
       for (var attr in data[0]) {
-        attributes.push(attr);
+        this.attributes.push(attr);
       }
-      var x = attributes.map(key => {
+      this.x = this.attributes.map(key => {
         return data.map(d => {
           return +d[key];
         });
       });
-      var P = sem.stats.partialcorr(x);
-      var n = x.length;
-      var s = sem.stats.cov(x);
-      this.pathMatrix = x.map((_, i) => {
-        return x.map((_, j) => {
+      var n = this.x.length;
+      var P = sem.stats.partialcorr(this.x);
+      this.pathMatrix = this.x.map((_, i) => {
+        return this.x.map((_, j) => {
           return {
             p: P[i][j],
-            connected: Math.abs(P[i][j]) > 0.1,
-            sigma: s[i][j],
+            connected: false
           };
         });
       });
@@ -65,100 +67,94 @@ export class SemProjectAnalysisController {
       graph.vertices().forEach(u => {
         egmNodes[graph.get(u).text] = u;
       });
-
-      var alpha = [];
-      var sigma = [];
       for (var i = 0; i < n; ++i) {
         for (var j = i; j < n; ++j) {
-          if (this.pathMatrix[i][j].connected) {
-            var u = egmNodes[attributes[i]];
-            var v = egmNodes[attributes[j]];
+          if (Math.abs(this.pathMatrix[i][j].p) > 0.1) {
+            var u = egmNodes[this.attributes[i]];
+            var v = egmNodes[this.attributes[j]];
             if (u !== undefined && v !== undefined && i != j && egmPaths[u][v] < Infinity) {
-              alpha.push([i, j]);
+              this.pathMatrix[i][j].connected = true;
             } else if (u !== undefined && v !== undefined && i != j && egmPaths[v][u] < Infinity) {
-              alpha.push([j, i]);
+              this.pathMatrix[j][i].connected = true;
             } else  {
-              sigma.push([i, j]);
+              this.pathMatrix[i][j].connected = true;
+              this.pathMatrix[j][i].connected = true;
             }
           }
         }
       }
 
-      sem.solver()
-        .solve(n, alpha, sigma, s)
-        .then(result => {
-          this.semGrid = egrid.core.grid();
-          var graph = this.semGrid.graph();
-          var vertices = attributes.map(attr => {
-            return graph.addVertex({
-              text: attr,
-            });
-          });
-          var paths = vertices.map(function() {
-            return vertices.map(function() {
-              return null;
-            });
-          });
-          result.alpha.forEach(link => {
-            var u = vertices[link[0]];
-            var v = vertices[link[1]];
-            graph.addEdge(u, v);
-            paths[u][v] = link[2];
-          });
-
-          var edgeWidthScale = d3.scale.linear()
-            .domain([0, d3.max(result.alpha, (link) => {
-              return Math.abs(link[2]);
-            })])
-            .range([1, 5]);
-          var edgeTextFormat = d3.format('4.2g')
-          this.sem
-            .edgeColor(function(u, v) {
-              return paths[u][v] >= 0 ? 'blue' : 'red';
-            })
-            .edgeText(function(u, v) {
-              return edgeTextFormat(paths[u][v]);
-            })
-            .edgeWidth(function(u, v) {
-              return edgeWidthScale(paths[u][v]);
-            });
-
-          d3.select('#display')
-            .datum(graph)
-            .call(this.sem.css())
-            .call(this.sem)
-            .call(this.sem.center());
-
-          this.$scope.$apply();
-        });
-      //var indices = {};
-      //this.egm.nodes().forEach(node => {
-      //  indices[node.text] = node.index;
-      //});
-      //var links = [];
-      //attributes.forEach((attr1, i) => {
-      //  var index1 = indices[attr1];
-      //  attributes.forEach((attr2, j) => {
-      //    var index2 = indices[attr2];
-      //    if (index1 != index2 && this.egm.grid().hasPath(index1, index2)) {
-      //      links.push({
-      //        source: i,
-      //        target: j,
-      //      });
-      //    }
-      //  });
-      //});
-      //Sem.cov(x, cov => {
-      //  var S = cov.data;
-      //  this.loadData(attributes, links, S);
-      //  this.$scope.$apply();
-      //});
+      this.solve();
       this.$scope.$apply();
     };
     reader.readAsText(file, this.encoding);
   }
 
   solve() {
+    var n = this.x.length;
+    var alpha = [];
+    var sigma = [];
+    var s = sem.stats.cov(this.x);
+    for (var i = 0; i < n; ++i) {
+      for (var j = i; j < n; ++j) {
+        if (this.pathMatrix[i][j].connected && this.pathMatrix[j][i].connected) {
+          sigma.push([i, j]);
+        } else if (this.pathMatrix[i][j].connected) {
+          alpha.push([i, j]);
+        } else if (this.pathMatrix[j][i].connected) {
+          alpha.push([j, i]);
+        }
+      }
+    }
+
+    sem.solver()
+      .solve(n, alpha, sigma, s)
+      .then(result => {
+        this.gfiValue = result.GFI;
+        this.semGrid = egrid.core.grid();
+        var graph = this.semGrid.graph();
+        var vertices = this.attributes.map(attr => {
+          return graph.addVertex({
+            text: attr,
+          });
+        });
+        var paths = vertices.map(function() {
+          return vertices.map(function() {
+            return null;
+          });
+        });
+        result.alpha.forEach(link => {
+          var u = vertices[link[0]];
+          var v = vertices[link[1]];
+          graph.addEdge(u, v);
+          paths[u][v] = link[2];
+        });
+
+        var edgeWidthScale = d3.scale.linear()
+          .domain([0, d3.max(result.alpha, (link) => {
+            return Math.abs(link[2]);
+          })])
+          .range([1, 5]);
+        var edgeTextFormat = d3.format(' 4.3g')
+        this.sem
+          .edgeColor(function(u, v) {
+            return paths[u][v] >= 0 ? 'blue' : 'red';
+          })
+          .edgeText(function(u, v) {
+            return edgeTextFormat(paths[u][v]);
+          })
+          .edgeWidth(function(u, v) {
+            return edgeWidthScale(Math.abs(paths[u][v]));
+          });
+
+        d3.select('#display')
+          .datum(graph)
+          .call(this.sem.css())
+          .call(this.sem)
+          .call(this.sem.center());
+
+        this.$scope.$apply();
+      });
   }
 
   addFactor() {
