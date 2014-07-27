@@ -31,7 +31,8 @@ export class SemProjectAnalysisController {
     var height = $('#display-wrapper').height();
     this.sem = egrid.core.egm()
       .size([width, height])
-      .dagreRankSep(80);
+      .dagreRankSep(80)
+      .dagreEdgeSep(40);
   }
 
   loadFile() {

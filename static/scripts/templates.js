@@ -646,29 +646,22 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  </form>\n" +
     "  <h2>パスモデリング</h2>\n" +
     "  <div>\n" +
-    "    <div class=\"navbar navbar-default\">\n" +
-    "      <div class=\"navbar-collapse\">\n" +
-    "        <form class=\"navbar-form\">\n" +
-    "          <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
-    "          <button class=\"btn btn-default\" ng-click=\"sem.solve()\">更新</button>\n" +
-    "        </form>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
     "    <div class=\"col-sm-12 row\">\n" +
     "      <div class=\"col-sm-10 thumbnail\" id=\"display-wrapper\">\n" +
     "        <svg id=\"display\" style=\"height:550px;\"></svg>\n" +
     "      </div>\n" +
-    "      <div class=\"col-sm-2\" style=\"overflow: auto; max-height: 600px\">\n" +
-    "        <p>GFI:{{sem.gfiValue}}</p>\n" +
-    "        <table class=\"table\">\n" +
-    "          <tr ng-repeat=\"item in sem.items\">\n" +
-    "            <td>\n" +
-    "              <label class=\"checkbox\">\n" +
-    "                <input type=\"checkbox\" ng-model=\"item.active\" ng-change=\"sem.removeNode()\"/>{{item.text}}\n" +
-    "              </label>\n" +
-    "            </td>\n" +
-    "          </tr>\n" +
-    "        </table>\n" +
+    "      <div class=\"col-sm-2\">\n" +
+    "        <p>GFI:{{sem.gfiValue | number}}</p>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-sm-12 row\">\n" +
+    "      <div class=\"navbar navbar-default\">\n" +
+    "        <div class=\"navbar-collapse\">\n" +
+    "          <form class=\"navbar-form\">\n" +
+    "            <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
+    "            <button class=\"btn btn-default\" ng-click=\"sem.solve()\">更新</button>\n" +
+    "          </form>\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"col-sm-12 row\">\n" +

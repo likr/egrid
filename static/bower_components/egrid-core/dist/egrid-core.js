@@ -273,9 +273,11 @@
     egm.updateColor = function() {
       return function(selection) {
         return selection.transition().call(paint({
-          vertexOpacity: egm.vertexOpacity(),
+          edgeColor: egm.edgeColor(),
+          edgeOpacity: egm.edgeOpacity(),
+          edgeWidth: egm.edgeWidth(),
           vertexColor: egm.vertexColor(),
-          edgeOpacity: egm.edgeOpacity()
+          vertexOpacity: egm.vertexOpacity()
         }));
       };
     };
@@ -549,12 +551,13 @@
         }
         return edgeLine(points);
       });
-      edge.append('text').text(function(_arg) {
+      edge.append('text');
+      selection.exit().remove();
+      return selection.select('text').text(function(_arg) {
         var source, target;
         source = _arg.source, target = _arg.target;
         return edgeText(source.key, target.key);
       });
-      return selection.exit().remove();
     };
   };
 

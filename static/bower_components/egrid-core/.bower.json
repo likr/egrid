@@ -1,7 +1,7 @@
 {
   "name": "egrid-core",
   "main": "egrid-core.js",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "homepage": "https://github.com/likr/egrid-core",
   "authors": [
     "Yosuke ONOUE <onoue@likr-lab.com>"
@@ -27,14 +27,14 @@
     "expect": "~0.3.1",
     "sinon": "~1.10.2"
   },
-  "_release": "1.0.12",
+  "_release": "1.0.14",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.12",
-    "commit": "f5f3cd68a7cb19aec02c09840e54f726c11e3288"
+    "tag": "v1.0.14",
+    "commit": "4037561333b40177a1425537f1865a7d77953fd9"
   },
   "_source": "git://github.com/likr/egrid-core.git",
-  "_target": "~1.0.12",
+  "_target": "~1.0.14",
   "_originalSource": "egrid-core",
   "_direct": true
 }

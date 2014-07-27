@@ -49,16 +49,17 @@ module egrid.app {
       });
 
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
+      var graph = this.grid.graph();
       this.vertexScale = d3.scale.linear()
-        .domain(d3.extent(this.grid.graph().vertices(), (u) => {
-          return this.grid.graph().get(u).participants.length;
+        .domain(d3.extent(graph.vertices(), (u) => {
+          return graph.get(u).participants.length;
         }))
         .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm = egrid.core.egm()
         .maxTextLength(10)
-        .edgeOpacity((source, target) => {
-          if (source.text.indexOf(this.searchText) >= 0 && target.text.indexOf(this.searchText) >= 0) {
+        .edgeOpacity((u, v) => {
+          if (graph.get(u).text.indexOf(this.searchText) >= 0 && graph.get(v).text.indexOf(this.searchText) >= 0) {
             return 1;
           } else {
             return 0.3;
