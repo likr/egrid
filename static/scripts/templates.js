@@ -57,7 +57,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('/partials/base.html',
-    "<div class=\"container\" style=\"padding-top: 50px;\">\n" +
+    "<div class=\"container-fluid\" style=\"padding-top: 50px;\">\n" +
     "  <div id=\"alerts\">\n" +
     "    <alert ng-repeat=\"alert in $root.alerts\" type=\"alert.type\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
     "  </div>\n" +
