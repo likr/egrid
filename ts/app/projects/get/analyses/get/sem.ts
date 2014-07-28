@@ -7,13 +7,10 @@
 
 module egrid.app {
 export class SemProjectAnalysisController {
-  public static $inject: string[] = ['$scope', 'grid', 'questionnaire'];
+  public static $inject: string[] = ['$scope', 'grid'];
   public static resolve = {
     grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
       return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
-    }],
-    questionnaire: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-      return model.Questionnaire.get($stateParams['projectKey'], $stateParams['analysisKey']);
     }],
   };
   public encoding: string = 'utf-8';
@@ -33,6 +30,15 @@ export class SemProjectAnalysisController {
       .size([width, height])
       .dagreRankSep(80)
       .dagreEdgeSep(40);
+
+    var cache = localStorage.getItem('sem:' + this.gridData.key);
+    if (cache) {
+      cache = JSON.parse(cache);
+      this.x = cache.x;
+      this.attributes = cache.attributes;
+      this.pathMatrix = cache.pathMatrix;
+      this.solve();
+    }
   }
 
   loadFile() {
@@ -154,102 +160,17 @@ export class SemProjectAnalysisController {
           .call(this.sem)
           .call(this.sem.center());
 
+        localStorage.setItem('sem:' + this.gridData.key, JSON.stringify({
+          x: this.x,
+          attributes: this.attributes,
+          pathMatrix: this.pathMatrix,
+        }));
+
         this.$scope.$apply();
       });
   }
 
   addFactor() {
-    // this.dag.appendNode('潜在変数' + this.factorCount++);
-    // this.dag.draw().focusCenter();
-    // this.calcPath();
-  }
-
-  removeNode() {
-    // this.dag.draw().focusCenter();
-    // this.calcPath();
-  }
-
-  private loadData(nodes, links, S) {
-    // this.SDict = {};
-    // nodes.forEach(node => {
-    //   this.SDict[node] = {};
-    // });
-    // nodes.forEach((node1, i) => {
-    //   nodes.forEach((node2, j) => {
-    //     this.SDict[node1][node2] = S[i][j];
-    //   });
-    // });
-
-    // var egmNodes = nodes.map((d) => {
-    //   return new egrid.Node(d);
-    // });
-    // var egmLinks = links.map((d) => {
-    //   return new egrid.Link(egmNodes[d.source], egmNodes[d.target]);
-    // });
-
-    // this.dag.nodes(egmNodes).links(egmLinks);
-    // this.items = this.dag.nodes();
-
-    // var n = nodes.length;
-    // var alpha = links.map((d) => {
-    //   return [d.target, d.source];
-    // });
-    // var sigma = nodes.map((_, i) => {
-    //   return [i, i];
-    // });
-    // Sem.sem(n, alpha, sigma, S, ((result) => {
-    //   var A = this.dag.nodes().map(() => {
-    //     return this.dag.nodes().map(() => {
-    //       return 0;
-    //     });
-    //   });
-    //   result.alpha.forEach((r) => {
-    //     A[r[0]][r[1]] = r[2];
-    //   });
-    //   this.gfiValue = result.GFI;
-    //   this.dag.links().forEach((link: any) => {
-    //     link.coef = A[link.target.index][link.source.index];
-    //   });
-    //   this.dag.draw().focusCenter();
-    //   this.$scope.$apply();
-    // }));
-  }
-
-  private calcPath() {
-    // var nodes = this.dag.activeNodes();
-    // var links = this.dag.activeLinks();
-    // var nodesDict = {};
-    // nodes.forEach((node, i) => {
-    //   nodesDict[node.text] = i;
-    // });
-    // var n = nodes.length;
-    // var alpha = links.map(link => {
-    //   return [nodesDict[link.source.text], nodesDict[link.target.text]];
-    // });
-    // var sigma = nodes.map((_, i) => {
-    //   return [i, i];
-    // });
-    // var S = this.items.map(node1 =>{
-    //   return this.items.map(node2 => {
-    //     return this.SDict[node1.text][node2.text];
-    //   });
-    // });
-    // Sem.sem(n, alpha, sigma, S, (result => {
-    //   var A = nodes.map(() => {
-    //     return nodes.map(() => {
-    //       return 0;
-    //     });
-    //   });
-    //   result.alpha.forEach(r => {
-    //     A[r[0]][r[1]] = r[2];
-    //   });
-    //   this.gfiValue = result.GFI;
-    //   this.dag.links().forEach((link: any) => {
-    //     link.coef = A[nodesDict[link.source.text]][nodesDict[link.target.text]];
-    //   });
-    //   this.dag.draw().focusCenter();
-    //   this.$scope.$apply();
-    // }));
   }
 }
 }
