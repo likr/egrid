@@ -75,6 +75,9 @@ module egrid.app {
           return d.text.indexOf(this.searchText) >= 0 ? 1 : 0.3;
         })
         .vertexVisibility((d) => {
+          if (d.participants === undefined) {
+            return true;
+          }
           return d.participants.some((key) => {
             return this.filter[key];
           });

@@ -624,61 +624,71 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
   $templateCache.put('/partials/projects/get/analyses/get/sem.html',
     "<div>\n" +
     "  <h2>ファイル読み込み</h2>\n" +
-    "  <form class=\"form-horizontal\" ng-submit=\"sem.loadFile()\">\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-2 control-label\">エンコーディング</label>\n" +
-    "      <div class=\"col-sm-10\">\n" +
-    "        <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"utf-8\"/>UTF-8</label>\n" +
-    "        <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"sjis\"/>Shift-JIS</label>\n" +
+    "  <div>\n" +
+    "    <form class=\"form-horizontal\" ng-submit=\"sem.loadFile()\">\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"col-sm-2 control-label\">エンコーディング</label>\n" +
+    "        <div class=\"col-sm-10\">\n" +
+    "          <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"utf-8\"/>UTF-8</label>\n" +
+    "          <label class=\"radio-inline\"><input type=\"radio\" name=\"encoding\" ng-model=\"sem.encoding\" value=\"sjis\"/>Shift-JIS</label>\n" +
+    "        </div>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-2 control-label\">CSVファイル</label>\n" +
-    "      <div class=\"col-sm-10\">\n" +
-    "        <input class=\"form-control\" type=\"file\" id=\"fileInput\"/>\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"col-sm-2 control-label\">CSVファイル</label>\n" +
+    "        <div class=\"col-sm-10\">\n" +
+    "          <input type=\"file\" id=\"fileInput\"/>\n" +
+    "        </div>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <div class=\"col-sm-offset-2 col-sm-10\">\n" +
-    "        <button type=\"submit\" class=\"btn btn-default\">読み込み</button>\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <div class=\"col-sm-offset-2 col-sm-10\">\n" +
+    "          <button type=\"submit\" class=\"btn btn-default\">読み込み</button>\n" +
+    "        </div>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "  </form>\n" +
+    "    </form>\n" +
+    "  </div>\n" +
     "  <h2>パスモデリング</h2>\n" +
     "  <div>\n" +
-    "    <div class=\"col-sm-12 row\">\n" +
-    "      <div class=\"col-sm-10 thumbnail\" id=\"display-wrapper\">\n" +
-    "        <svg id=\"display\" style=\"height:550px;\"></svg>\n" +
-    "      </div>\n" +
-    "      <div class=\"col-sm-2\">\n" +
-    "        <p>GFI:{{sem.gfiValue | number}}</p>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"col-sm-12 row\">\n" +
-    "      <div class=\"navbar navbar-default\">\n" +
-    "        <div class=\"navbar-collapse\">\n" +
-    "          <form class=\"navbar-form\">\n" +
-    "            <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
-    "            <button class=\"btn btn-default\" ng-click=\"sem.solve()\">更新</button>\n" +
-    "          </form>\n" +
+    "    <div>\n" +
+    "      <div class=\"col-sm-12\">\n" +
+    "        <div class=\"col-sm-10 thumbnail\" id=\"display-wrapper\">\n" +
+    "          <svg id=\"display\" style=\"height:550px;\"></svg>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-2\">\n" +
+    "          <p>GFI:{{sem.gfiValue | number}}</p>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    <div class=\"col-sm-12 row\">\n" +
-    "      <table class=\"table table-bordered table-responsive\" id=\"path-matrix\">\n" +
-    "        <tr>\n" +
-    "          <th></th>\n" +
-    "          <th ng-repeat=\"attribute in sem.attributes\">{{attribute}}</th>\n" +
-    "        </tr>\n" +
-    "        <tr ng-repeat=\"row in sem.pathMatrix\">\n" +
-    "          <th>{{sem.attributes[$index]}}</th>\n" +
-    "          <td ng-repeat=\"cell in row\">\n" +
-    "            <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
-    "            <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +
-    "            <input class=\"checkbox\" type=\"checkbox\" ng-model=\"cell.connected\">\n" +
-    "          </td>\n" +
-    "        </tr>\n" +
-    "      </table>\n" +
+    "    <div>\n" +
+    "      <div class=\"col-sm-12\">\n" +
+    "        <div class=\"navbar navbar-default\">\n" +
+    "          <div class=\"navbar-collapse\">\n" +
+    "            <form class=\"navbar-form\">\n" +
+    "              <button class=\"btn btn-default\" ng-click=\"sem.addFactor()\">潜在変数追加</button>\n" +
+    "              <button class=\"btn btn-default\" ng-click=\"sem.solve()\">更新</button>\n" +
+    "            </form>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div>\n" +
+    "      <div class=\"col-sm-12\">\n" +
+    "        <div class=\"table-responsive\">\n" +
+    "          <table class=\"table table-bordered\" id=\"path-matrix\">\n" +
+    "            <tr>\n" +
+    "              <th></th>\n" +
+    "              <th ng-repeat=\"attribute in sem.attributes\">{{attribute}}</th>\n" +
+    "            </tr>\n" +
+    "            <tr ng-repeat=\"row in sem.pathMatrix\">\n" +
+    "              <th>{{sem.attributes[$index]}}</th>\n" +
+    "              <td ng-repeat=\"cell in row\">\n" +
+    "                <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
+    "                <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +
+    "                <input class=\"checkbox\" type=\"checkbox\" ng-model=\"cell.connected\">\n" +
+    "              </td>\n" +
+    "            </tr>\n" +
+    "          </table>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
