@@ -125,16 +125,26 @@ export class SemProjectAnalysisController {
             text: attr,
           });
         });
-        var paths = vertices.map(function() {
+        var directEffect = vertices.map(function() {
           return vertices.map(function() {
-            return null;
+            return 0;
           });
         });
         result.alpha.forEach(link => {
           var u = vertices[link[0]];
           var v = vertices[link[1]];
           graph.addEdge(u, v);
-          paths[u][v] = link[2];
+          directEffect[u][v] = link[2];
+        });
+        var totalEffect = sem.totalEffect(directEffect);
+
+        this.attributes.forEach((_, i) => {
+          this.attributes.forEach((_, j) => {
+            var u = vertices[i];
+            var v = vertices[j];
+            this.pathMatrix[i][j].directEffect = directEffect[u][v];
+            this.pathMatrix[i][j].totalEffect = totalEffect[u][v];
+          });
         });
 
         var edgeWidthScale = d3.scale.linear()
@@ -145,13 +155,13 @@ export class SemProjectAnalysisController {
         var edgeTextFormat = d3.format(' 4.3g')
         this.sem
           .edgeColor(function(u, v) {
-            return paths[u][v] >= 0 ? 'blue' : 'red';
+            return directEffect[u][v] >= 0 ? 'blue' : 'red';
           })
           .edgeText(function(u, v) {
-            return edgeTextFormat(paths[u][v]);
+            return edgeTextFormat(directEffect[u][v]);
           })
           .edgeWidth(function(u, v) {
-            return edgeWidthScale(Math.abs(paths[u][v]));
+            return edgeWidthScale(Math.abs(directEffect[u][v]));
           });
 
         d3.select('#display')

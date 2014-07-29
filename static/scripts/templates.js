@@ -673,7 +673,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "    <div>\n" +
     "      <div class=\"col-sm-12\">\n" +
     "        <div class=\"table-responsive\">\n" +
-    "          <table class=\"table table-bordered\" id=\"path-matrix\">\n" +
+    "          <table class=\"table table-bordered\">\n" +
     "            <tr>\n" +
     "              <th></th>\n" +
     "              <th ng-repeat=\"attribute in sem.attributes\">{{attribute}}</th>\n" +
@@ -684,6 +684,25 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "                <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
     "                <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +
     "                <input class=\"checkbox\" type=\"checkbox\" ng-model=\"cell.connected\">\n" +
+    "              </td>\n" +
+    "            </tr>\n" +
+    "          </table>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div>\n" +
+    "      <div class=\"col-sm-12\">\n" +
+    "        <div class=\"table-responsive\">\n" +
+    "          <table class=\"table table-bordered\">\n" +
+    "            <tr>\n" +
+    "              <th></th>\n" +
+    "              <th ng-repeat=\"attribute in sem.attributes\">{{attribute}}</th>\n" +
+    "            </tr>\n" +
+    "            <tr ng-repeat=\"row in sem.pathMatrix\">\n" +
+    "              <th>{{sem.attributes[$index]}}</th>\n" +
+    "              <td ng-repeat=\"cell in row\">\n" +
+    "                <p style=\"font-size: 8pt;\">{{cell.totalEffect | number}}</p>\n" +
+    "                <p style=\"font-size: 8pt;\">{{cell.directEffect | number}}</p>\n" +
     "              </td>\n" +
     "            </tr>\n" +
     "          </table>\n" +

@@ -49,7 +49,7 @@
     <div>
       <div class="col-sm-12">
         <div class="table-responsive">
-          <table class="table table-bordered" id="path-matrix">
+          <table class="table table-bordered">
             <tr>
               <th></th>
               <th ng-repeat="attribute in sem.attributes">{{attribute}}</th>
@@ -60,6 +60,25 @@
                 <p style="font-size: 8pt;">{{cell.p | number}}</p>
                 <p style="font-size: 8pt;">{{cell.sigma | number}}</p>
                 <input class="checkbox" type="checkbox" ng-model="cell.connected">
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="col-sm-12">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <th></th>
+              <th ng-repeat="attribute in sem.attributes">{{attribute}}</th>
+            </tr>
+            <tr ng-repeat="row in sem.pathMatrix">
+              <th>{{sem.attributes[$index]}}</th>
+              <td ng-repeat="cell in row">
+                <p style="font-size: 8pt;">{{cell.totalEffect | number}}</p>
+                <p style="font-size: 8pt;">{{cell.directEffect | number}}</p>
               </td>
             </tr>
           </table>

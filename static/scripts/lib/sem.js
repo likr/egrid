@@ -3,14 +3,17 @@
 (function() {
   global.window.sem = {
     linalg: require('./linalg'),
+    pathList: require('./path-list'),
+    pathMatrix: require('./path-matrix'),
     solver: require('./solver'),
-    stats: require('./stats')
+    stats: require('./stats'),
+    totalEffect: require('./total-effect')
   };
 
 }).call(this);
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./linalg":2,"./solver":6,"./stats":9}],2:[function(require,module,exports){
+},{"./linalg":2,"./path-list":6,"./path-matrix":7,"./solver":8,"./stats":11,"./total-effect":13}],2:[function(require,module,exports){
 (function() {
   module.exports = {
     inv: require('./inv'),
@@ -118,6 +121,52 @@
 
 },{"./lu_decomposition":4}],6:[function(require,module,exports){
 (function() {
+  module.exports = function(a) {
+    var alpha, i, j, n, _i, _j;
+    alpha = [];
+    n = a.length;
+    for (i = _i = 0; 0 <= n ? _i < n : _i > n; i = 0 <= n ? ++_i : --_i) {
+      for (j = _j = 0; 0 <= n ? _j < n : _j > n; j = 0 <= n ? ++_j : --_j) {
+        if (a[i][j] !== 0) {
+          alpha.push([i, j, a[i][j]]);
+        }
+      }
+    }
+    return alpha;
+  };
+
+}).call(this);
+
+},{}],7:[function(require,module,exports){
+(function() {
+  module.exports = function(n, alpha) {
+    var a, i, j, link, _i, _len;
+    a = (function() {
+      var _i, _results;
+      _results = [];
+      for (i = _i = 0; 0 <= n ? _i < n : _i > n; i = 0 <= n ? ++_i : --_i) {
+        _results.push((function() {
+          var _j, _results1;
+          _results1 = [];
+          for (j = _j = 0; 0 <= n ? _j < n : _j > n; j = 0 <= n ? ++_j : --_j) {
+            _results1.push(0);
+          }
+          return _results1;
+        })());
+      }
+      return _results;
+    })();
+    for (_i = 0, _len = alpha.length; _i < _len; _i++) {
+      link = alpha[_i];
+      a[link[0]][link[1]] = link[2];
+    }
+    return a;
+  };
+
+}).call(this);
+
+},{}],8:[function(require,module,exports){
+(function() {
   module.exports = function() {
     var solver, url;
     url = 'http://hyperinfo.viz.media.kyoto-u.ac.jp/wsgi/websem';
@@ -150,7 +199,7 @@
 
 }).call(this);
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function() {
   var cov;
 
@@ -186,7 +235,7 @@
 
 }).call(this);
 
-},{"./cov":8}],8:[function(require,module,exports){
+},{"./cov":10}],10:[function(require,module,exports){
 (function() {
   module.exports = function(x) {
     var i, j, k, m, n, sigma, x_bar, _i, _j, _k;
@@ -226,7 +275,7 @@
 
 }).call(this);
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function() {
   module.exports = {
     corrcoef: require('./corrcoef'),
@@ -236,7 +285,7 @@
 
 }).call(this);
 
-},{"./corrcoef":7,"./cov":8,"./partialcorr":10}],10:[function(require,module,exports){
+},{"./corrcoef":9,"./cov":10,"./partialcorr":12}],12:[function(require,module,exports){
 (function() {
   var corrcoef, inv;
 
@@ -268,4 +317,37 @@
 
 }).call(this);
 
-},{"../linalg/inv":3,"./corrcoef":7}]},{},[1]);
+},{"../linalg/inv":3,"./corrcoef":9}],13:[function(require,module,exports){
+(function() {
+  var inv;
+
+  inv = require('./linalg/inv');
+
+  module.exports = function(a) {
+    var i, j, n, t_inv;
+    n = a.length;
+    t_inv = (function() {
+      var _i, _results;
+      _results = [];
+      for (i = _i = 0; 0 <= n ? _i < n : _i > n; i = 0 <= n ? ++_i : --_i) {
+        _results.push((function() {
+          var _j, _results1;
+          _results1 = [];
+          for (j = _j = 0; 0 <= n ? _j < n : _j > n; j = 0 <= n ? ++_j : --_j) {
+            if (i === j) {
+              _results1.push(1 - a[i][j]);
+            } else {
+              _results1.push(-a[i][j]);
+            }
+          }
+          return _results1;
+        })());
+      }
+      return _results;
+    })();
+    return inv(t_inv);
+  };
+
+}).call(this);
+
+},{"./linalg/inv":3}]},{},[1]);
