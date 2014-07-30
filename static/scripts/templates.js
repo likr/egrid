@@ -682,7 +682,6 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "              <th>{{sem.attributes[$index]}}</th>\n" +
     "              <td ng-repeat=\"cell in row\">\n" +
     "                <p style=\"font-size: 8pt;\">{{cell.p | number}}</p>\n" +
-    "                <p style=\"font-size: 8pt;\">{{cell.sigma | number}}</p>\n" +
     "                <input class=\"checkbox\" type=\"checkbox\" ng-model=\"cell.connected\">\n" +
     "              </td>\n" +
     "            </tr>\n" +

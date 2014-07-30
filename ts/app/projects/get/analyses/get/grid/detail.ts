@@ -52,7 +52,8 @@ module egrid.app {
       var graph = this.grid.graph();
       this.vertexScale = d3.scale.linear()
         .domain(d3.extent(graph.vertices(), (u) => {
-          return graph.get(u).participants.length;
+          var participants = graph.get(u).participants;
+          return participants === undefined ? 1 : participants.length;
         }))
         .range([1, this.layoutOptions.maxVertexScale]);
 

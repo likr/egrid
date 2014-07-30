@@ -58,7 +58,6 @@
               <th>{{sem.attributes[$index]}}</th>
               <td ng-repeat="cell in row">
                 <p style="font-size: 8pt;">{{cell.p | number}}</p>
-                <p style="font-size: 8pt;">{{cell.sigma | number}}</p>
                 <input class="checkbox" type="checkbox" ng-model="cell.connected">
               </td>
             </tr>
