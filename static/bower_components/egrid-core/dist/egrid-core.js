@@ -571,6 +571,7 @@
     }
     vertices = graph.vertices().filter(pred).map(function(u) {
       if (oldVerticesMap[u] != null) {
+        oldVerticesMap[u].data = graph.get(u);
         return oldVerticesMap[u];
       } else {
         return {
@@ -871,6 +872,15 @@
           return vertices[u].outAdjacencies[v];
         } else {
           return vertices[u].property;
+        }
+      };
+
+      AdjacencyList.prototype.set = function(u, v, prop) {
+        if (prop != null) {
+          return vertices[u].outAdjacencies[v] = prop;
+        } else {
+          prop = v;
+          return vertices[u].property = prop;
         }
       };
 
@@ -1274,11 +1284,16 @@
         return v;
       };
 
-      EgmGraph.prototype.merge = function(u, v) {
-        var uAdjacentVertices, uInvAdjacentVertices, uText, uValue, vAdjacentVertices, vInvAdjacentVertices, vValue;
+      EgmGraph.prototype.merge = function(u, v, f) {
+        var uAdjacentVertices, uInvAdjacentVertices, uValue, vAdjacentVertices, vInvAdjacentVertices, vValue, wValue;
+        f = f || function(u, v) {
+          return {
+            text: "" + (graph.get(u).text) + ", " + (graph.get(v).text)
+          };
+        };
         uValue = graph.get(u);
         vValue = graph.get(v);
-        uText = uValue.text;
+        wValue = f(u, v);
         uAdjacentVertices = graph.adjacentVertices(u);
         uInvAdjacentVertices = graph.invAdjacentVertices(u);
         vAdjacentVertices = graph.adjacentVertices(v);
@@ -1286,7 +1301,7 @@
         execute({
           execute: function() {
             var w, _i, _j, _len, _len1, _results;
-            uValue.text = "" + uValue.text + ", " + vValue.text;
+            graph.set(u, wValue);
             graph.clearVertex(v);
             graph.removeVertex(v);
             for (_i = 0, _len = vAdjacentVertices.length; _i < _len; _i++) {
@@ -1301,7 +1316,7 @@
             return _results;
           },
           revert: function() {
-            var w, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+            var w, _i, _j, _k, _l, _len, _len1, _len2, _len3, _results;
             graph.clearVertex(u);
             graph.addVertex(vValue, v);
             for (_i = 0, _len = uAdjacentVertices.length; _i < _len; _i++) {
@@ -1316,11 +1331,13 @@
               w = vAdjacentVertices[_k];
               graph.addEdge(v, w);
             }
+            _results = [];
             for (_l = 0, _len3 = vInvAdjacentVertices.length; _l < _len3; _l++) {
               w = vInvAdjacentVertices[_l];
               graph.addEdge(w, v);
+              _results.push(graph.set(u, uValue));
             }
-            return uValue.text = uText;
+            return _results;
           }
         });
         return u;

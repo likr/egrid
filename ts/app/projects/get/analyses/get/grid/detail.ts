@@ -174,6 +174,7 @@ module egrid.app {
     }
 
     mergeConstructs() {
+      var graph = this.grid.graph();
       var vertices = this.selection
         .selectAll('g.vertex')
         .filter((vertex) => {
@@ -183,7 +184,14 @@ module egrid.app {
         .map((vertex) => {
           return vertex.key;
         });
-      this.grid.merge(vertices[0], vertices[1]);
+      this.grid.merge(vertices[0], vertices[1], (u, v) => {
+        var uData = graph.get(u);
+        var vData = graph.get(v);
+        return {
+          text: uData.text + ', ' + vData.text,
+          participants: [].concat(uData.participants, vData.participants),
+        };
+      });
       this.selection.call(this.egm);
       this.changed = true;
     }
