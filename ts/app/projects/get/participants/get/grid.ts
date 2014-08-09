@@ -14,28 +14,30 @@ module egrid.app {
         return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
       }]
     };
-    egm : EGM;
+    grid: any;
 
     constructor($window, $rootScope, $state, $scope, $timeout, $filter, alertLifeSpan, grid) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
-      this.egm = new EGM;
-      var nodes = grid.nodes.map(d => new egrid.Node(d.text, d.weight, d.original));
-      var links = grid.links.map(d => new egrid.Link(nodes[d.source], nodes[d.target], d.weight));
-      this.egm
-        .nodes(nodes)
-        .links(links)
-        ;
-      this.draw();
+      this.grid = egrid.core.grid(grid.nodes, grid.links);
+      var egm = egrid.core.egm()
+        .maxTextLength(10)
+        .enableZoom(false)
+        .size([$('#display-wrapper').width(), 500]);
+
+      d3.select('#display')
+        .datum(this.grid.graph())
+        .call(egm.css())
+        .call(egm)
+        .call(egm.center());
     }
 
-    draw() {
-      d3.select("#display")
-        .call(this.egm.display($("#display").width(), $("#display").height()))
-        ;
-      this.egm
-        .draw()
-        .focusCenter()
+    numConstructs(): number {
+      return this.grid.graph().numVertices();
+    }
+
+    numLinks(): number {
+      return this.grid.graph().numEdges();
     }
   }
 }

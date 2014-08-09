@@ -279,7 +279,7 @@ module egrid.app {
           url: '/grid',
           views: {
             'tab-content@egrid.projects.get.participants.get': {
-              controller: 'ParticipantGridController as participantGrid',
+              controller: 'ParticipantGridController as grid',
               templateUrl: '/partials/projects/get/participants/get/grid.html',
             },
           },
@@ -292,7 +292,7 @@ module egrid.app {
           url: '/detail',
           views: {
             'base@': {
-              controller: 'ParticipantGridEditController as participantGrid',
+              controller: 'ParticipantGridEditController as grid',
               templateUrl: '/partials/projects/get/participants/get/grid/detail.html',
             },
           },
@@ -356,7 +356,7 @@ module egrid.app {
           url: '/detail',
           views: {
             'base@': {
-              controller: 'ProjectGridEditController as projectGrid',
+              controller: 'ProjectGridEditController as grid',
               templateUrl: '/partials/projects/get/analyses/get/grid/detail.html',
             },
           },

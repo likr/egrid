@@ -10,7 +10,7 @@
   </head>
   <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/#">E-Grid</a>
         </div>
@@ -36,7 +36,6 @@
       </div>
     </header>
     <div ui-view="base"></div>
-    <script src="http://hyperinfo.viz.media.kyoto-u.ac.jp/wsgi/websem/static/sem.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/angular/angular.min.js"></script>
     <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -46,9 +45,10 @@
     <script src="/bower_components/angular-translate/angular-translate.min.js"></script>
     <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
     <script src="/bower_components/d3/d3.min.js"></script>
+    <script src="/bower_components/egrid-core/dist/egrid-core.js"></script>
+    <script src="/bower_components/egrid-core/dist/dagre.js"></script>
+    <script src="/scripts/lib/sem.js"></script>
     <script src="/scripts/lib/egrid-client.js"></script>
-    <script src="/scripts/lib/egrid-core.js"></script>
-    <script src="/scripts/dagre.js"></script>
     <script src="/scripts/collaboegm.js"></script>
     <script src="/scripts/templates.js"></script>
   </body>

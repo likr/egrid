@@ -20,164 +20,231 @@ module egrid.app {
         return $q.when(model.ProjectGrid.get($stateParams['projectKey'], 'current'));
       }],
     };
-    participantKey : string;
-    egm : EGM;
-    overallNodes : model.ProjectGridNodeData[];
-    disableCompletion : boolean = false;
+    participantKey: string;
+    egm: any;
+    grid: any;
+    selection: D3.Selection;
+    overallNodes: model.ProjectGridNodeData[];
+    disableCompletion: boolean = false;
+    changed: boolean = false;
+    saved: boolean = false;
 
     constructor(
         $window,
-        $q,
+        private $q,
         $rootScope,
         $stateParams,
-        $state,
+        private $state,
         private $scope,
         private $modal,
         $timeout, $filter,
         alertLifeSpan,
         private participant,
-        grid,
+        private gridData,
         projectGrid) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
-      var __this = this;
       if ($stateParams.disableCompletion) {
         this.disableCompletion = true;
       }
 
-      var egmui = egrid.egmui();
-      this.egm = egmui.egm();
-      this.egm.showRemoveLinkButton(true);
-      this.egm.options().maxScale = 1;
-      this.egm.options().showGuide = true;
-      var calcHeight = () => {
-        return $(window).height() - 100; //XXX
-      };
-      d3.select("#display")
-        .attr({
-          width: $(window).width(),
-          height: calcHeight() - 50,
+      this.egm = egrid.core.egm()
+        .maxTextLength(10)
+        .vertexButtons([
+          {
+            icon: 'images/glyphicons_210_left_arrow.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.ladderUp(u, result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              });
+            }
+          },
+          {
+            icon: 'images/glyphicons_207_remove_2.png',
+            onClick: (d, u) => {
+              this.grid.removeConstruct(u);
+              this.selection.call(this.egm);
+              this.$scope.$apply();
+              this.changed = true;
+            }
+          },
+          {
+            icon: 'images/glyphicons_030_pencil.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.updateConstruct(u, 'text', result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              }, d.text);
+            }
+          },
+          {
+            icon: 'images/glyphicons_211_right_arrow.png',
+            onClick: (d, u) => {
+              this.openInputTextDialog((result: string) => {
+                this.grid.ladderDown(u, result);
+                this.selection.call(this.egm);
+                this.changed = true;
+              });
+            }
+          },
+        ])
+        .onClickVertex(() => {
+          this.$scope.$apply();
         })
-        .call(this.egm.display($(window).width(), calcHeight() - 50))
-        ;
+        .size([$(window).width(), $(window).height() - 150]);
+      this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
+      this.selection = d3.select('#display')
+        .datum(this.grid.graph())
+        .call(this.egm.css())
+        .call(this.egm)
+        .call(this.egm.center());
+
       d3.select(window)
         .on('resize', () => {
-          var width = $(window).width();
-          var height = calcHeight() - 50;
-          d3.select("#display")
-            .attr({
-              width: width,
-              height: height,
-            })
-            ;
-          this.egm.resize(width, height);
+          this.selection
+            .call(this.egm.resize($(window).width(), $(window).height() - 150));
         })
         ;
 
-      $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-        if (!d3.select("#undoButton").classed("disabled") && toState.url != '/grid') {
+      $scope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
+        if (!this.saved && this.changed) {
           if (!confirm('保存せずにページを移動しようとしています')) {
             event.preventDefault();
           }
         }
       });
 
-      d3.select("#appendNodeButton")
-        .call(egmui.appendNodeButton()
-          .onClick(callback => this.openInputTextDialog(callback))
-        );
-      d3.select("#undoButton")
-        .call(egmui.undoButton()
-            .onEnable(() => {
-              d3.select("#undoButton").classed("disabled", false);
-            })
-            .onDisable(() => {
-              d3.select("#undoButton").classed("disabled", true);
-            }));
-      d3.select("#redoButton")
-        .call(egmui.redoButton()
-            .onEnable(() => {
-              d3.select("#redoButton").classed("disabled", false);
-            })
-            .onDisable(() => {
-              d3.select("#redoButton").classed("disabled", true);
-            }));
-      d3.select("#saveButton")
-        .call(egmui.saveButton()
-            .save(data => {
-              grid.nodes = data.nodes;
-              grid.links = data.links;
-              $q.when(grid.update())
-                .then(() => {
-                  $state.go('egrid.projects.get.participants.get.grid', {}, {reload: true});
-
-                  this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
-                }, (...reasons: any[]) => {
-                  var k: string = reasons[0].status === 401
-                    ? 'MESSAGES.NOT_AUTHENTICATED'
-                    : 'MESSAGES.DESTINATION_IS_NOT_REACHABLE';
-
-                  this.showAlert(k, 'danger');
-                })
-                ;
-            }));
-
-      d3.select("#exportSVG")
-        .on("click", function() {
-          __this.hideNodeController();
-          __this.egm.exportSVG((svgText : string) => {
-            var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
-            d3.select(this).attr({
-              href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
-              download: __this.participant.project.name + ' - ' + __this.participant.name + '.svg',
-            });
-          });
-        });
-
-      d3.select("#ladderUpButton")
-        .call(egmui.radderUpButton()
-            .onClick(callback => this.openInputTextDialog(callback))
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#ladderDownButton")
-        .call(egmui.radderDownButton()
-            .onClick(callback =>this.openInputTextDialog(callback))
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#removeNodeButton")
-        .call(egmui.removeNodeButton()
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#mergeNodeButton")
-        .call(egmui.mergeNodeButton()
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-      d3.select("#editNodeButton")
-        .call(egmui.editNodeButton()
-            .onClick(callback => {
-              var node = this.egm.selectedNode();
-              this.openInputTextDialog(callback, node.text)
-            })
-            .onEnable(selection => this.showNodeController(selection))
-            .onDisable(() => this.hideNodeController())
-        );
-
-      var nodes = grid.nodes.map(d => new Node(d.text, d.weight, d.original));
-      var links = grid.links.map(d => new Link(nodes[d.source], nodes[d.target], d.weight));
-      this.egm
-        .nodes(nodes)
-        .links(links)
-        .draw()
-        .focusCenter()
-        ;
       this.overallNodes = projectGrid.nodes;
     }
 
-    private openInputTextDialog(callback, initialText : string = '') {
+    addConstruct() {
+      this.openInputTextDialog((result: string) => {
+        this.grid.addConstruct(result);
+        this.selection.call(this.egm);
+        this.changed = true;
+      });
+    }
+
+    mergeConstructs() {
+      var vertices = this.selection
+        .selectAll('g.vertex')
+        .filter(function(vertex) {
+          return vertex.selected;
+        })
+        .data()
+        .map(function(vertex) {
+          return vertex.key;
+        });
+      this.grid.merge(vertices[0], vertices[1]);
+      this.selection.call(this.egm);
+      this.changed = true;
+    }
+
+    undo() {
+      this.grid.undo();
+      this.selection.call(this.egm);
+    }
+
+    redo() {
+      this.grid.redo();
+      this.selection.call(this.egm);
+    }
+
+    mergeDisabled() {
+      var numSelected = this.selection.selectAll('g.vertex.selected').size();
+      var loop = this.selection.selectAll('g.edge.upper.lower').size() > 0;
+      return numSelected != 2 || loop;
+    }
+
+    undoDisabled() {
+      return !this.grid.canUndo();
+    }
+
+    redoDisabled() {
+      return !this.grid.canRedo();
+    }
+
+    save() {
+      var graph = this.grid.graph();
+      var vertexMap = {};
+      this.gridData.nodes = graph.vertices().map(function(u, i) {
+        vertexMap[u] = i;
+        return graph.get(u);
+      });
+      this.gridData.links = graph.edges().map(function(edge) {
+        return {
+          source: vertexMap[edge[0]],
+          target: vertexMap[edge[1]]
+        };
+      });
+
+      this.$q.when(this.gridData.update())
+        .then(() => {
+          this.saved = true;
+          this.$state.go('egrid.projects.get.participants.get.grid', {}, {reload: true});
+
+          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+        }, (...reasons: any[]) => {
+          var k: string = reasons[0].status === 401
+            ? 'MESSAGES.NOT_AUTHENTICATED'
+            : 'MESSAGES.DESTINATION_IS_NOT_REACHABLE';
+
+          this.showAlert(k, 'danger');
+        })
+        ;
+    }
+
+    close() {
+      this.$state.go('egrid.projects.get.participants.get.grid');
+    }
+
+    exportSVG() {
+      //d3.select("#exportSVG")
+      //  .on("click", function() {
+      //    __this.hideNodeController();
+      //    __this.egm.exportSVG((svgText : string) => {
+      //      var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
+      //      d3.select(this).attr({
+      //        href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
+      //        download: __this.participant.project.name + ' - ' + __this.participant.name + '.svg',
+      //      });
+      //    });
+      //  });
+    }
+
+    exportJSON() {
+      //$(this.$event.currentTarget).attr({
+      //  href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
+      //  download: this.participant.project.name + ' - ' + this.participant.name + '.json',
+      //});
+    }
+
+    private openInputTextDialog(callback: (result: string) => any, initialText: string = '') {
+      var texts = this.completionTexts();
+      var m = this.$modal.open({
+        backdrop: true,
+        keyboard: true,
+        backdropClick: true,
+        templateUrl: '/partials/dialogs/input-text.html',
+        controller: ($scope, $modalInstance) => {
+          $scope.result = initialText;
+          $scope.texts = texts;
+          $scope.close = function(result) {
+            $modalInstance.close(result);
+          }
+        },
+      });
+      m.result.then(result => {
+        if (result) {
+          callback(result);
+        }
+      });
+    }
+
+    private completionTexts(): any[] {
       var texts;
       if (this.disableCompletion) {
         texts = [];
@@ -196,7 +263,8 @@ module egrid.app {
           textsDict[d.text] = obj;
           return obj;
         });
-        this.egm.nodes().forEach(node => {
+        this.grid.graph().vertices().forEach(u => {
+          var node = this.grid.graph().get(u);
           if (textsDict[node.text]) {
             textsDict[node.text].weight += 1;
           } else {
@@ -208,56 +276,7 @@ module egrid.app {
         });
         texts.sort((t1, t2) => t2.weight - t1.weight);
       }
-      var m = this.$modal.open({
-        backdrop: true,
-        keyboard: true,
-        backdropClick: true,
-        templateUrl: '/partials/input-text-dialog.html',
-        controller: ($scope, $modalInstance) => {
-          $scope.result = initialText;
-          $scope.texts = texts;
-          $scope.close = function(result) {
-            $modalInstance.close(result);
-          }
-        },
-      });
-      m.result.then(result => {
-        callback(result);
-      });
-      this.$scope.$apply();
-    }
-
-    private showNodeController(selection) {
-      if (!selection.empty()) {
-        var nodeRect = selection.node().getBoundingClientRect();
-        var controllerWidth = $("#nodeController").width();
-        d3.select("#nodeController")
-          .classed("invisible", false)
-          .style("top", nodeRect.top + nodeRect.height + 10 - 100 + "px")
-          .style("left", nodeRect.left + (nodeRect.width - controllerWidth) / 2 + "px")
-          ;
-      }
-    }
-
-    private hideNodeController() {
-      d3.select("#nodeController")
-        .classed("invisible", true);
-    }
-
-    private moveNodeController(selection) {
-      var nodeRect = selection.node().getBoundingClientRect();
-      var controllerWidth = $("#nodeController").width();
-      d3.select("#nodeController")
-        .style("top", nodeRect.top + nodeRect.height + 10 + "px")
-        .style("left", nodeRect.left + (nodeRect.width - controllerWidth) / 2 + "px")
-        ;
-    }
-
-    public exportJSON($event) {
-      $($event.currentTarget).attr({
-        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
-        download: this.participant.project.name + ' - ' + this.participant.name + '.json',
-      });
+      return texts;
     }
   }
 }

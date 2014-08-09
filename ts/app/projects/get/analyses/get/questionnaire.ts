@@ -15,51 +15,47 @@ module egrid.app {
         return model.Questionnaire.get($stateParams['projectKey'], $stateParams['analysisKey']);
       }],
     };
-    public items;
-    public egm: EGM;
+    items;
+    egm: any;
+    grid: any;
+    selection: D3.Selection
 
     constructor(
         private $q: ng.IQService,
         private project: model.Project,
         private analysis: model.Analysis,
-        private grid: model.ProjectGrid,
+        private gridData: model.ProjectGrid,
         private questionnaire: model.Questionnaire) {
-      this.egm = new EGM;
-      var options = new EgmOption;
-      options.scaleType = ScaleType.None;
-      this.egm.options(options);
+      var width = $('#display-wrapper').width();
+      var height = $('#display-wrapper').height();
+      this.egm = egrid.core.egm()
+        .vertexVisibility((item) => item.visible)
+        .size([width, height]);
+      this.grid = egrid.core.grid(gridData.nodes, gridData.links);
+      var graph = this.grid.graph();
 
-      var width = $("#sem-questionnaire-deisgn-display").width();
-      var height = $("#sem-questionnaire-deisgn-display").height();
-      d3.select("#sem-questionnaire-design-display svg")
-        .call(this.egm.display(width, height))
-        ;
-      var nodes = grid.nodes.map(d => new Node(d.text, d.weight, d.original, d.participants));
-      var links = grid.links.map(d => new Link(nodes[d.source], nodes[d.target], d.weight));
-      var questionnaireDict = {};
-      questionnaire.items.forEach(item => {
-        questionnaireDict[item] = item;
+      var questionnaireItems = d3.set(questionnaire.items);
+
+      this.items = graph.vertices().map((u) => {
+        return graph.get(u);
       });
-      nodes.forEach(node => {
-        if (questionnaireDict[node.text] === undefined) {
-          node.visible = false;
-        }
+      this.items.sort((item1, item2) => {
+        return item2.weight - item1.weight;
       });
-      this.items = nodes;
-      this.items.sort((item1, item2) => item2.weight - item1.weight);
-      this.egm
-        .nodes(nodes)
-        .links(links)
-        .draw()
-        .focusCenter()
-        ;
+      this.items.forEach((item) => {
+        item.visible = questionnaireItems.has(item.text);
+      });
+
+      this.selection = d3.select('#display')
+        .datum(graph)
+        .call(this.egm.css())
+        .call(this.egm)
+        .call(this.egm.center());
     }
 
     updateItems() {
-      this.egm
-        .draw()
-        .focusCenter()
-        ;
+      d3.select('#display')
+        .call(this.egm);
     }
 
     submit() {
