@@ -114,15 +114,6 @@ module egrid.app {
             }
           },
           {
-            icon: 'images/glyphicons_234_brush.png',
-            onClick: (d, u) => {
-              this.openColorDialog(d.color).then((color) => {
-                d.color = color;
-                this.selection.call(this.egm);
-              });
-            }
-          },
-          {
             icon: 'images/glyphicons_211_right_arrow.png',
             onClick: (d, u) => {
               this.openInputTextDialog().then((result: string) => {
@@ -196,6 +187,20 @@ module egrid.app {
       this.changed = true;
     }
 
+    paintConstructs() {
+      this.openColorDialog().then((color) => {
+        var graph = this.grid.graph();
+        this.selection
+          .selectAll('g.vertex')
+          .each((vertex) => {
+            if (vertex.selected) {
+              graph.get(vertex.key).color = color;
+            }
+          })
+          .call(this.egm.updateColor());
+      });
+    }
+
     undo() {
       this.grid.undo();
       this.selection.call(this.egm);
@@ -210,6 +215,10 @@ module egrid.app {
       var numSelected = this.selection.selectAll('g.vertex.selected').size();
       var loop = this.selection.selectAll('g.edge.upper.lower').size() > 0;
       return numSelected != 2 || loop;
+    }
+
+    paintDisabled() {
+      return this.selection.selectAll('g.vertex.selected').size() === 0;
     }
 
     undoDisabled() {
@@ -323,21 +332,24 @@ module egrid.app {
         controller: ($scope, $modalInstance) => {
           $scope.result = initialText;
           $scope.texts = texts;
-          $scope.close = (result) => {
-            $modalInstance.close(result);
-          }
+          $scope.submit = (text) => {
+            $modalInstance.close(text);
+          };
+          $scope.close = () => {
+            $modalInstance.dismiss();
+          };
         },
       }).result;
     }
 
-    private openColorDialog(initialColor) {
+    private openColorDialog() {
       return this.$modal.open({
         backdrop: true,
         keyboard: true,
         backdropClick: true,
         templateUrl: '/partials/dialogs/color.html',
         controller: ($scope, $modalInstance) => {
-          $scope.color = initialColor
+          $scope.color = '#00ff00';
           $scope.submit = (color) => {
             $modalInstance.close(color);
           };

@@ -226,7 +226,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  <h3>{{'EGM.APP.INPUT_EVALUATION_FACTOR' | translate}}</h3>\n" +
     "</div>\n" +
     "<div class=\"modal-body\">\n" +
-    "  <form class=\"form-horizontal\" ng-submit=\"close(result)\">\n" +
+    "  <form class=\"form-horizontal\" ng-submit=\"submit(result)\">\n" +
     "    <div class=\"form-group\">\n" +
     "      <div class=\"col-sm-10\">\n" +
     "        <input type=\"text\" class=\"form-control\" ng-model=\"result\" focus-me/>\n" +
@@ -237,10 +237,10 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "  </form>\n" +
     "  <table class=\"table table-hover\">\n" +
-    "    <tr ng-repeat=\"text in texts | filter:result\" ng-dblclick=\"close(text.text)\">\n" +
+    "    <tr ng-repeat=\"text in texts | filter:result\" ng-dblclick=\"submit(text.text)\">\n" +
     "      <td>{{text.text}}</td>\n" +
     "      <td>{{text.weight}}</td>\n" +
-    "      <td><button class=\"btn btn-default\" ng-click=\"close(text.text)\">{{'ACTION.SELECT' | translate}}</button></td>\n" +
+    "      <td><button class=\"btn btn-default\" ng-click=\"submit(text.text)\">{{'ACTION.SELECT' | translate}}</button></td>\n" +
     "    </li>\n" +
     "  </table>\n" +
     "</div>\n" +
@@ -546,8 +546,9 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
     "        <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
     "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
+    "        <button class=\"btn btn-default\" ng-disabled=\"grid.paintDisabled()\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</button>\n" +
     "        <div class=\"form-group\">\n" +
-    "          <input class=\"form-control\" ng-model=\"grid.searchText\">\n" +
+    "          <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
     "        </div>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
