@@ -80,12 +80,13 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
     "  <button class=\"btn btn-primary\" ng-click=\"submit(color)\">{{'ACTION.SUBMIT' | translate}}</button>\n" +
-    "  <button class=\"btn btn-primary\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
+    "  <button class=\"btn btn-default\" ng-click=\"submit(null)\">Clear</button>\n" +
+    "  <button class=\"btn btn-default\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
     "</div>\n"
   );
 
 
-  $templateCache.put('/partials/filter-participants-dialog.html',
+  $templateCache.put('/partials/dialogs/filter-participants.html',
     "<div class=\"modal-header\">\n" +
     "  <h3>{{'PARTICIPANT.FILTER' | translate}}</h3>\n" +
     "</div>\n" +
@@ -102,6 +103,97 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
     "  <button class=\"btn btn-default\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/partials/dialogs/input-text.html',
+    "<div class=\"modal-header\">\n" +
+    "  <h3>{{'EGM.APP.INPUT_EVALUATION_FACTOR' | translate}}</h3>\n" +
+    "</div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <form class=\"form-horizontal\" ng-submit=\"submit(result)\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <div class=\"col-sm-10\">\n" +
+    "        <input type=\"text\" class=\"form-control\" ng-model=\"result\" focus-me/>\n" +
+    "      </div>\n" +
+    "      <div class=\"col-sm-2\">\n" +
+    "        <input type=\"submit\" class=\"btn btn-primary\" value=\"{{'ACTION.SUBMIT' | translate}}\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "  <table class=\"table table-hover\">\n" +
+    "    <tr ng-repeat=\"text in texts | filter:result\" ng-dblclick=\"submit(text.text)\">\n" +
+    "      <td>{{text.text}}</td>\n" +
+    "      <td>{{text.weight}}</td>\n" +
+    "      <td><button class=\"btn btn-default\" ng-click=\"submit(text.text)\">{{'ACTION.SELECT' | translate}}</button></td>\n" +
+    "    </li>\n" +
+    "  </table>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button class=\"btn btn-primary\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/partials/dialogs/layout.html',
+    "<div class=\"modal-header\">\n" +
+    "  <h3>{{ 'EGM.APP.LAYOUT_SETTINGS' | translate }}</h3>\n" +
+    "</div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <form class=\"form-horizontal\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.SCALING.MAX' | translate}}</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"1\" ng-model=\"options.maxVertexScale\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.RANK_DIRECTION.RANK_DIRECTION' | translate}}</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.LR\"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.TB\"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">重要度指標</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.importance\" ng-value=\"Importance.Weight\"/>回答者数</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.importance\" ng-value=\"Importance.Centrality\"/>中心性</label>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.MINIMUM_WEIGHT' | translate}}</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"range\" min=\"0\" max=\"1\" step=\"0.05\" ng-model=\"options.minimumImportance\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">表示文字数</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"0\" ng-model=\"options.maxTextLength\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button class=\"btn btn-default\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/partials/dialogs/remove-item.html',
+    "<div class=\"modal-header\">\n" +
+    "  <h3>{{'ACTION.DIALOG.REMOVE.HEADING' | translate}}</h3>\n" +
+    "</div>\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <p>\n" +
+    "    {{'ACTION.DIALOG.REMOVE.HEADING' | translate}}\n" +
+    "  </p>\n" +
+    "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button class=\"btn btn-default\" ng-click=\"cancel()\">{{ 'ACTION.DIALOG.REMOVE.CANCEL' | translate }}</button>\n" +
+    "  <button class=\"btn btn-danger\" ng-click=\"ok()\">{{ 'ACTION.DIALOG.REMOVE.OK' | translate }}</button>\n" +
     "</div>\n"
   );
 
@@ -217,35 +309,6 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "  </ul>\n" +
     "</div>\n" +
     "</div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/partials/input-text-dialog.html',
-    "<div class=\"modal-header\">\n" +
-    "  <h3>{{'EGM.APP.INPUT_EVALUATION_FACTOR' | translate}}</h3>\n" +
-    "</div>\n" +
-    "<div class=\"modal-body\">\n" +
-    "  <form class=\"form-horizontal\" ng-submit=\"submit(result)\">\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <div class=\"col-sm-10\">\n" +
-    "        <input type=\"text\" class=\"form-control\" ng-model=\"result\" focus-me/>\n" +
-    "      </div>\n" +
-    "      <div class=\"col-sm-2\">\n" +
-    "        <input type=\"submit\" class=\"btn btn-primary\" value=\"{{'ACTION.SUBMIT' | translate}}\"/>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </form>\n" +
-    "  <table class=\"table table-hover\">\n" +
-    "    <tr ng-repeat=\"text in texts | filter:result\" ng-dblclick=\"submit(text.text)\">\n" +
-    "      <td>{{text.text}}</td>\n" +
-    "      <td>{{text.weight}}</td>\n" +
-    "      <td><button class=\"btn btn-default\" ng-click=\"submit(text.text)\">{{'ACTION.SELECT' | translate}}</button></td>\n" +
-    "    </li>\n" +
-    "  </table>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-primary\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
     "</div>\n"
   );
 
@@ -1132,84 +1195,6 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/partials/remove-item-dialog.html',
-    "<div class=\"modal-header\">\n" +
-    "  <h3>{{'ACTION.DIALOG.REMOVE.HEADING' | translate}}</h3>\n" +
-    "</div>\n" +
-    "<div class=\"modal-body\">\n" +
-    "  <p>\n" +
-    "    {{'ACTION.DIALOG.REMOVE.HEADING' | translate}}\n" +
-    "  </p>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-default\" ng-click=\"cancel()\">{{ 'ACTION.DIALOG.REMOVE.CANCEL' | translate }}</button>\n" +
-    "  <button class=\"btn btn-danger\" ng-click=\"ok()\">{{ 'ACTION.DIALOG.REMOVE.OK' | translate }}</button>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/partials/setting-dialog.html',
-    "<div class=\"modal-header\">\n" +
-    "  <h3>{{ 'EGM.APP.LAYOUT_SETTINGS' | translate }}</h3>\n" +
-    "</div>\n" +
-    "<div class=\"modal-body\">\n" +
-    "  <form class=\"form-horizontal\">\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{ 'EGM.APP.VIEWS.VIEWS' | translate }}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.viewMode\" ng-value=\"ViewMode.Normal\"/>{{'EGM.APP.VIEWS.NORMAL' | translate}}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.viewMode\" ng-value=\"ViewMode.Edge\"/>{{'EGM.APP.VIEWS.EDGE' | translate}}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.viewMode\" ng-value=\"ViewMode.EdgeAndOriginal\"/>{{'EGM.APP.VIEWS.EDGE_AND_ORIGINAL' | translate}}</label>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{ 'EGM.APP.INACTIVE_NODE.INACTIVE_NODE' | translate }}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.inactiveNode\" ng-value=\"InactiveNode.Hidden\"/>{{ 'EGM.APP.INACTIVE_NODE.HIDDEN' | translate }}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.inactiveNode\" ng-value=\"InactiveNode.Transparent\"/>{{ 'EGM.APP.INACTIVE_NODE.TRANSPARENT' | translate }}</label>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.SCALING.SCALING' | translate}}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.scaleType\" ng-value=\"ScaleType.None\"/>{{'EGM.APP.SCALING.NONE' | translate}}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.scaleType\" ng-value=\"ScaleType.Connection\"/>{{'EGM.APP.SCALING.CONNECTION' | translate}}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.scaleType\" ng-value=\"ScaleType.Weight\"/>{{'EGM.APP.SCALING.WEIGHT' | translate}}</label>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.SCALING.MAX' | translate}}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <input class=\"form-control\" type=\"number\" min=\"1\" ng-model=\"options.maxVertexScale\"/>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.LINE_UP' | translate}}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"checkbox\"><input type=\"checkbox\" ng-model=\"options.lineUpTop\"/>{{'EGM.UPPERMOST_EVALUATION_ITEM' | translate}}</label>\n" +
-    "        <label class=\"checkbox\"><input type=\"checkbox\" ng-model=\"options.lineUpBottom\"/>{{'EGM.LOWERMOST_EVALUATION_ITEM' | translate}}</label>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.RANK_DIRECTION.RANK_DIRECTION' | translate}}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.LR\"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>\n" +
-    "        <label class=\"radio\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.TB\"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.MINIMUM_WEIGHT' | translate}}</label>\n" +
-    "      <div class=\"col-sm-8\">\n" +
-    "        <input class=\"form-control\" type=\"number\" min=\"1\" ng-model=\"options.minimumWeight\"/>\n" +
-    "      </div>\n" +
-    "  </form>\n" +
-    "</div>\n" +
-    "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-default\" ng-click=\"close()\">{{ 'ACTION.CLOSE' | translate }}</button>\n" +
     "</div>\n"
   );
 

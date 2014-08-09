@@ -7,6 +7,15 @@
 /// <reference path="../../../../../controller-base.ts"/>
 
 module egrid.app {
+  var Importance = {
+    Weight: 0,
+    Centrality: 1,
+  };
+  var RankDirection = {
+    LR: 'LR',
+    TB: 'TB',
+  };
+
   export class ProjectGridEditController extends ControllerBase {
     public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'grid', 'project', 'participants'];
     public static resolve = {
@@ -24,9 +33,12 @@ module egrid.app {
     changed: boolean = false;
     saved: boolean = false;
     searchText: string = '';
-    vertexScale: any;
     layoutOptions: any = {
+      importance: Importance.Centrality,
+      maxTextLength: 10,
       maxVertexScale: 3,
+      minimumImportance: 0,
+      rankDirection: RankDirection.LR,
     };
 
     constructor(
@@ -50,15 +62,8 @@ module egrid.app {
 
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
       var graph = this.grid.graph();
-      this.vertexScale = d3.scale.linear()
-        .domain(d3.extent(graph.vertices(), (u) => {
-          var participants = graph.get(u).participants;
-          return participants === undefined ? 1 : participants.length;
-        }))
-        .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm = egrid.core.egm()
-        .maxTextLength(10)
         .edgeOpacity((u, v) => {
           if (graph.get(u).text.indexOf(this.searchText) >= 0 && graph.get(v).text.indexOf(this.searchText) >= 0) {
             return 1;
@@ -66,22 +71,11 @@ module egrid.app {
             return 0.3;
           }
         })
-        .vertexScale((d) => {
-          return this.vertexScale(d.participants === undefined ? 1 : d.participants.length);
-        })
         .vertexColor((d) => {
           return d.color;
         })
         .vertexOpacity((d) => {
           return d.text.indexOf(this.searchText) >= 0 ? 1 : 0.3;
-        })
-        .vertexVisibility((d) => {
-          if (d.participants === undefined) {
-            return true;
-          }
-          return d.participants.some((key) => {
-            return this.filter[key];
-          });
         })
         .vertexButtons([
           {
@@ -128,6 +122,7 @@ module egrid.app {
           this.$scope.$apply();
         })
         .size([$(window).width(), $(window).height() - 150]);
+      this.updateLayoutOptions();
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
         .call(this.egm.css())
@@ -278,7 +273,7 @@ module egrid.app {
         backdrop: true,
         keyboard: true,
         backdropClick: true,
-        templateUrl: '/partials/filter-participants-dialog.html',
+        templateUrl: '/partials/dialogs/filter-participants.html',
         controller: ($scope, $modalInstance) => {
           $scope.results = this.filter;
           $scope.participants = this.participants;
@@ -296,20 +291,8 @@ module egrid.app {
     }
 
     openLayoutSetting() {
-      var m = this.$modal.open({
-        backdrop: true,
-        keyboard: true,
-        backdropClick: true,
-        templateUrl: '/partials/setting-dialog.html',
-        controller: ($scope, $modalInstance) => {
-          $scope.options = this.layoutOptions;
-          $scope.close = () => {
-            $modalInstance.close($scope.options);
-          }
-        },
-      });
-      m.result.then((options) => {
-        this.vertexScale.range([1, this.layoutOptions.maxVertexScale])
+      this.openLayoutDialog().then(() => {
+        this.updateLayoutOptions();
         this.selection
           .call(this.egm)
           .call(this.egm.center());
@@ -328,7 +311,7 @@ module egrid.app {
         backdrop: true,
         keyboard: true,
         backdropClick: true,
-        templateUrl: '/partials/input-text-dialog.html',
+        templateUrl: '/partials/dialogs/input-text.html',
         controller: ($scope, $modalInstance) => {
           $scope.result = initialText;
           $scope.texts = texts;
@@ -360,6 +343,58 @@ module egrid.app {
       }).result;
     }
 
+    private openLayoutDialog() {
+      return this.$modal.open({
+        backdrop: true,
+        keyboard: true,
+        backdropClick: true,
+        templateUrl: '/partials/dialogs/layout.html',
+        controller: ($scope, $modalInstance) => {
+          $scope.options = this.layoutOptions;
+          $scope.Importance = Importance;
+          $scope.RankDirection = RankDirection;
+          $scope.close = () => {
+            $modalInstance.close($scope.options);
+          }
+        },
+      }).result;
+    }
+
+    private updateLayoutOptions() {
+      var graph = this.grid.graph();
+      var importance;
+      if (this.layoutOptions.importance === Importance.Weight) {
+        importance = (u) => graph.get(u).participants.length;
+      } else if (this.layoutOptions.importance === Importance.Centrality) {
+        var centrality = egrid.core.network.centrality.katz(graph);
+        importance = (u) => centrality[u];
+      } else {
+        importance = () => 1;
+      }
+
+      var vertexImportance = d3.scale.linear()
+        .domain(d3.extent(graph.vertices(), importance))
+        .range([0, 1]);
+      var vertexScale = d3.scale.linear()
+        .domain([this.layoutOptions.minimumImportance, 1])
+        .range([1, this.layoutOptions.maxVertexScale]);
+
+      this.egm
+        .dagreRankDir(this.layoutOptions.rankDirection)
+        .maxTextLength(this.layoutOptions.maxTextLength)
+        .vertexScale((d, u) => {
+          return vertexScale(vertexImportance(importance(u)));
+        })
+        .vertexVisibility((d, u) => {
+          if (!d.participants.some((key) => this.filter[key])) {
+            return false;
+          }
+          if (vertexImportance(importance(u)) < this.layoutOptions.minimumImportance) {
+            return false;
+          }
+          return true;
+        })
+    }
 
     public exportJSON($event) {
       $($event.currentTarget).attr({

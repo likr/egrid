@@ -228,7 +228,7 @@ module egrid.app {
         backdrop: true,
         keyboard: true,
         backdropClick: true,
-        templateUrl: '/partials/input-text-dialog.html',
+        templateUrl: '/partials/dialogs/input-text.html',
         controller: ($scope, $modalInstance) => {
           $scope.result = initialText;
           $scope.texts = texts;
