@@ -232,9 +232,12 @@ module egrid.app {
         controller: ($scope, $modalInstance) => {
           $scope.result = initialText;
           $scope.texts = texts;
-          $scope.close = function(result) {
-            $modalInstance.close(result);
-          }
+          $scope.submit = (text) => {
+            $modalInstance.close(text);
+          };
+          $scope.close = () => {
+            $modalInstance.dismiss();
+          };
         },
       });
       m.result.then(result => {
