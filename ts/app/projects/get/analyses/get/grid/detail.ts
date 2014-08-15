@@ -19,9 +19,6 @@ module egrid.app {
   export class ProjectGridEditController extends ControllerBase {
     public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'grid', 'project', 'participants'];
     public static resolve = {
-      grid: ['$q', '$stateParams', ($q, $stateParams) => {
-        return $q.when(model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']));
-      }],
       participants: ['$q', '$stateParams', ($q, $stateParams) => {
         return $q.when(model.Participant.query($stateParams['projectKey']));
       }],
@@ -397,8 +394,21 @@ module egrid.app {
     }
 
     public exportJSON($event) {
+      var graph = this.grid.graph();
+      var obj = {
+        nodes: graph.vertices().map((u) => {
+          return graph.get(u);
+        }),
+        links: graph.edges().map((edge) => {
+          return {
+            source: edge[0],
+            target: edge[1],
+          };
+        }),
+      };
+      console.log(obj);
       $($event.currentTarget).attr({
-        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
+        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)),
         download: this.project.name + '.json',
       });
     }

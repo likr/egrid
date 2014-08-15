@@ -635,7 +635,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <a ng-click=\"projectGrid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
+    "        <a ng-click=\"grid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
     "        <a class=\"btn btn-default\" id=\"exportSVG\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>SVG {{'ACTION.EXPORT' | translate}}</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
