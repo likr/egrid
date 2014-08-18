@@ -170,9 +170,13 @@ module egrid.app {
       this.grid.merge(vertices[0], vertices[1], (u, v) => {
         var uData = graph.get(u);
         var vData = graph.get(v);
+        var newParticipants = d3.set();
+        uData.participants.forEach((key) => newParticipants.add(key));
+        vData.participants.forEach((key) => newParticipants.add(key));
         return {
           text: uData.text + ', ' + vData.text,
-          participants: [].concat(uData.participants, vData.participants),
+          participants: newParticipants.values(),
+          original: uData.original || vData.original,
         };
       });
       this.selection.call(this.egm);
