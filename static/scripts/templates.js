@@ -811,7 +811,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('/partials/projects/get/collaborators/all/list.html',
     "<div>\n" +
-    "  <table class=\"table\">\n" +
+    "  <table class=\"table table-bordered\">\n" +
     "    <thead>\n" +
     "      <tr>\n" +
     "        <th>#</th>\n" +
@@ -821,7 +821,7 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "      </tr>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
-    "      <tr ng-repeat=\"collaborator in collaborators.collaborators.toArray()\">\n" +
+    "      <tr ng-repeat=\"collaborator in collaborators.collaborators\">\n" +
     "        <td>{{ $index + 1 }}</td>\n" +
     "        <td>{{collaborator.user.nickname}}</td>\n" +
     "        <td ng-if=\"collaborator.isManager\">{{'COLLABORATOR.ROLE.MANAGER' | translate}}</td>\n" +

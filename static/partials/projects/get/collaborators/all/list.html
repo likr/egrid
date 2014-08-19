@@ -1,5 +1,5 @@
 <div>
-  <table class="table">
+  <table class="table table-bordered">
     <thead>
       <tr>
         <th>#</th>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="collaborator in collaborators.collaborators.toArray()">
+      <tr ng-repeat="collaborator in collaborators.collaborators">
         <td>{{ $index + 1 }}</td>
         <td>{{collaborator.user.nickname}}</td>
         <td ng-if="collaborator.isManager">{{'COLLABORATOR.ROLE.MANAGER' | translate}}</td>

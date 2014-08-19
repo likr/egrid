@@ -12,7 +12,7 @@ module egrid.app {
     constructor(private $q, $rootScope, $stateParams, private $state, $timeout, $filter, alertLifeSpan) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
-      this.projectKey = $stateParams.projectId;
+      this.projectKey = $stateParams.projectKey;
       this.data = new model.Collaborator({ projectKey: this.projectKey });
     }
 
