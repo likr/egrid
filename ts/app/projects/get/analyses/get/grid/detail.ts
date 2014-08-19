@@ -80,6 +80,7 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderUp(u, result);
+                this.updateLayoutOptions();
                 this.selection.call(this.egm);
                 this.changed = true;
               });
@@ -89,6 +90,7 @@ module egrid.app {
             icon: 'images/glyphicons_207_remove_2.png',
             onClick: (d, u) => {
               this.grid.removeConstruct(u);
+              this.updateLayoutOptions();
               this.selection.call(this.egm);
               this.$scope.$apply();
               this.changed = true;
@@ -109,6 +111,7 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderDown(u, result);
+                this.updateLayoutOptions();
                 this.selection.call(this.egm);
                 this.changed = true;
               });
@@ -150,7 +153,9 @@ module egrid.app {
 
     addConstruct() {
       this.openInputTextDialog().then((result: string) => {
-        this.grid.addConstruct(result);
+        var u = this.grid.addConstruct(result);
+        this.grid.graph().get(u).participants = [];
+        this.updateLayoutOptions();
         this.selection.call(this.egm);
         this.changed = true;
       });
@@ -179,6 +184,7 @@ module egrid.app {
           original: uData.original || vData.original,
         };
       });
+      this.updateLayoutOptions();
       this.selection.call(this.egm);
       this.changed = true;
     }
@@ -199,11 +205,13 @@ module egrid.app {
 
     undo() {
       this.grid.undo();
+      this.updateLayoutOptions();
       this.selection.call(this.egm);
     }
 
     redo() {
       this.grid.redo();
+      this.updateLayoutOptions();
       this.selection.call(this.egm);
     }
 
