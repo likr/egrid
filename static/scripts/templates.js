@@ -174,6 +174,13 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        <input class=\"form-control\" type=\"number\" min=\"0\" ng-model=\"options.maxTextLength\"/>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Filter</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.filter\" ng-value=\"Filter.Invisible\"/>Invisible</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.filter\" ng-value=\"Filter.Transparent\"/>Transparent</label>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </form>\n" +
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +

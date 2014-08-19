@@ -35,6 +35,13 @@
         <input class="form-control" type="number" min="0" ng-model="options.maxTextLength"/>
       </div>
     </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Filter</label>
+      <div class="col-sm-8">
+        <label class="radio-inline"><input type="radio" ng-model="options.filter" ng-value="Filter.Invisible"/>Invisible</label>
+        <label class="radio-inline"><input type="radio" ng-model="options.filter" ng-value="Filter.Transparent"/>Transparent</label>
+      </div>
+    </div>
   </form>
 </div>
 <div class="modal-footer">

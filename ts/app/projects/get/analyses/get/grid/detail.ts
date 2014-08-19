@@ -7,14 +7,33 @@
 /// <reference path="../../../../../controller-base.ts"/>
 
 module egrid.app {
-  var Importance = {
-    Weight: 0,
-    Centrality: 1,
-  };
-  var RankDirection = {
-    LR: 'LR',
-    TB: 'TB',
-  };
+  enum Importance {
+    Weight,
+    Centrality
+  }
+
+
+  enum RankDirection {
+    LR,
+    TB
+  }
+
+
+  enum Filter {
+    Invisible,
+    Transparent
+  }
+
+
+  interface LayoutOptions {
+    importance: Importance;
+    maxTextLength: number;
+    maxVertexScale: number;
+    minimumImportance: number;
+    rankDirection: RankDirection;
+    filter: Filter;
+  }
+
 
   export class ProjectGridEditController extends ControllerBase {
     public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'grid', 'project', 'participants'];
@@ -30,12 +49,13 @@ module egrid.app {
     changed: boolean = false;
     saved: boolean = false;
     searchText: string = '';
-    layoutOptions: any = {
+    private layoutOptions: LayoutOptions = {
       importance: Importance.Centrality,
       maxTextLength: 10,
       maxVertexScale: 3,
       minimumImportance: 0,
       rankDirection: RankDirection.LR,
+      filter: Filter.Transparent
     };
 
     constructor(
@@ -70,9 +90,6 @@ module egrid.app {
         })
         .vertexColor((d) => {
           return d.color;
-        })
-        .vertexOpacity((d) => {
-          return d.text.indexOf(this.searchText) >= 0 ? 1 : 0.3;
         })
         .vertexButtons([
           {
@@ -362,6 +379,7 @@ module egrid.app {
           $scope.options = this.layoutOptions;
           $scope.Importance = Importance;
           $scope.RankDirection = RankDirection;
+          $scope.Filter = Filter;
           $scope.close = () => {
             $modalInstance.close($scope.options);
           }
@@ -389,14 +407,28 @@ module egrid.app {
         .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm
-        .dagreRankDir(this.layoutOptions.rankDirection)
+        .dagreRankDir(this.layoutOptions.rankDirection === RankDirection.TB ? 'TB' : 'LR')
         .maxTextLength(this.layoutOptions.maxTextLength)
         .vertexScale((d, u) => {
           return vertexScale(vertexImportance(importance(u)));
         })
+        .vertexOpacity((d) => {
+          var opacity = 1;
+          if (this.layoutOptions.filter === Filter.Transparent) {
+            if (!d.participants.some((key) => this.filter[key])) {
+              opacity *= 0.3;
+            }
+          }
+          if (d.text.indexOf(this.searchText) < 0) {
+            opacity *= 0.3;
+          }
+          return opacity;
+        })
         .vertexVisibility((d, u) => {
-          if (!d.participants.some((key) => this.filter[key])) {
-            return false;
+          if (this.layoutOptions.filter === Filter.Invisible) {
+            if (!d.participants.some((key) => this.filter[key])) {
+              return false;
+            }
           }
           if (vertexImportance(importance(u)) < this.layoutOptions.minimumImportance) {
             return false;
