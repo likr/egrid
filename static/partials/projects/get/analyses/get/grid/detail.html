@@ -8,7 +8,12 @@
         <button class="btn btn-default" ng-disabled="grid.mergeDisabled()" ng-click="grid.mergeConstructs()">結合</button>
         <button class="btn btn-default" ng-disabled="grid.paintDisabled()" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</button>
         <div class="form-group">
-          <input class="form-control" ng-model="grid.searchText" placeholder="Search">
+          <div class="input-group">
+            <input class="form-control" ng-model="grid.searchText" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default" ng-click="grid.searchText = ''"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+          </div>
         </div>
       </form>
       <form class="navbar-form navbar-right">

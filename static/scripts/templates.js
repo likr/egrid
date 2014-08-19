@@ -618,7 +618,12 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
     "        <button class=\"btn btn-default\" ng-disabled=\"grid.paintDisabled()\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</button>\n" +
     "        <div class=\"form-group\">\n" +
-    "          <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
+    "          <div class=\"input-group\">\n" +
+    "            <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
+    "            <div class=\"input-group-btn\">\n" +
+    "              <button class=\"btn btn-default\" ng-click=\"grid.searchText = ''\"><span class=\"glyphicon glyphicon-remove\"></span></button>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
