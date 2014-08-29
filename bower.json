@@ -22,6 +22,7 @@
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "<1",
     "angular-ui-router": "~0.2.10",
-    "egrid-core": "~1.0.10"
+    "egrid-core": "~1.0.21",
+    "nvd3": "~1.1.15-beta"
   }
 }
