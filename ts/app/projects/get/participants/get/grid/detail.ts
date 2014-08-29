@@ -56,7 +56,9 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog((result: string) => {
                 this.grid.ladderUp(u, result);
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               });
             }
@@ -65,7 +67,9 @@ module egrid.app {
             icon: 'images/glyphicons_207_remove_2.png',
             onClick: (d, u) => {
               this.grid.removeConstruct(u);
-              this.selection.call(this.egm);
+              this.selection
+                .transition()
+                .call(this.egm);
               this.$scope.$apply();
               this.changed = true;
             }
@@ -75,7 +79,9 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog((result: string) => {
                 this.grid.updateConstruct(u, 'text', result);
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               }, d.text);
             }
@@ -85,7 +91,9 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog((result: string) => {
                 this.grid.ladderDown(u, result);
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               });
             }
@@ -105,6 +113,7 @@ module egrid.app {
       d3.select(window)
         .on('resize', () => {
           this.selection
+            .transition()
             .call(this.egm.resize($(window).width(), $(window).height() - 150));
         })
         ;
@@ -123,7 +132,9 @@ module egrid.app {
     addConstruct() {
       this.openInputTextDialog((result: string) => {
         this.grid.addConstruct(result);
-        this.selection.call(this.egm);
+        this.selection
+          .transition()
+          .call(this.egm);
         this.changed = true;
       });
     }
@@ -139,18 +150,24 @@ module egrid.app {
           return vertex.key;
         });
       this.grid.merge(vertices[0], vertices[1]);
-      this.selection.call(this.egm);
+      this.selection
+          .transition()
+          .call(this.egm);
       this.changed = true;
     }
 
     undo() {
       this.grid.undo();
-      this.selection.call(this.egm);
+      this.selection
+        .transition()
+        .call(this.egm);
     }
 
     redo() {
       this.grid.redo();
-      this.selection.call(this.egm);
+      this.selection
+        .transition()
+        .call(this.egm);
     }
 
     mergeDisabled() {

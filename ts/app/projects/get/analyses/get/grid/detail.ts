@@ -98,7 +98,9 @@ module egrid.app {
               this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderUp(u, result);
                 this.updateLayoutOptions();
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               });
             }
@@ -108,7 +110,9 @@ module egrid.app {
             onClick: (d, u) => {
               this.grid.removeConstruct(u);
               this.updateLayoutOptions();
-              this.selection.call(this.egm);
+              this.selection
+                .transition()
+                .call(this.egm);
               this.$scope.$apply();
               this.changed = true;
             }
@@ -118,7 +122,9 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog(d.text).then((result: string) => {
                 this.grid.updateConstruct(u, 'text', result);
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               });
             }
@@ -129,7 +135,9 @@ module egrid.app {
               this.openInputTextDialog().then((result: string) => {
                 this.grid.ladderDown(u, result);
                 this.updateLayoutOptions();
-                this.selection.call(this.egm);
+                this.selection
+                  .transition()
+                  .call(this.egm);
                 this.changed = true;
               });
             }
@@ -163,7 +171,9 @@ module egrid.app {
 
       $scope.$watch('grid.searchText', (oldValue, newValue) => {
         if (oldValue != newValue) {
-          this.selection.call(this.egm.updateColor());
+          this.selection
+            .transition()
+            .call(this.egm.updateColor());
         }
       });
     }
@@ -173,7 +183,9 @@ module egrid.app {
         var u = this.grid.addConstruct(result);
         this.grid.graph().get(u).participants = [];
         this.updateLayoutOptions();
-        this.selection.call(this.egm);
+        this.selection
+          .transition()
+          .call(this.egm);
         this.changed = true;
       });
     }
@@ -202,7 +214,9 @@ module egrid.app {
         };
       });
       this.updateLayoutOptions();
-      this.selection.call(this.egm);
+      this.selection
+        .transition()
+        .call(this.egm);
       this.changed = true;
     }
 
@@ -216,6 +230,7 @@ module egrid.app {
               graph.get(vertex.key).color = color;
             }
           })
+          .transition()
           .call(this.egm.updateColor());
       });
     }
@@ -223,13 +238,17 @@ module egrid.app {
     undo() {
       this.grid.undo();
       this.updateLayoutOptions();
-      this.selection.call(this.egm);
+      this.selection
+        .transition()
+        .call(this.egm);
     }
 
     redo() {
       this.grid.redo();
       this.updateLayoutOptions();
-      this.selection.call(this.egm);
+      this.selection
+        .transition()
+        .call(this.egm);
     }
 
     mergeDisabled() {
@@ -311,6 +330,7 @@ module egrid.app {
       });
       m.result.then(() => {
         this.selection
+          .transition()
           .call(this.egm)
           .call(this.egm.center());
       });
@@ -320,6 +340,7 @@ module egrid.app {
       this.openLayoutDialog().then(() => {
         this.updateLayoutOptions();
         this.selection
+          .transition()
           .call(this.egm)
           .call(this.egm.center());
       });
