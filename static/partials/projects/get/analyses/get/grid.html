@@ -21,4 +21,16 @@
       <td>{{grid.numLinks()}}</td>
     </tr>
   </table>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>回答者数分布</h3>
+        <distribution-chart data="grid.vertices" key="grid.respondentsKey"></distribution-chart>
+      </div>
+      <div class="col-sm-6">
+        <h3>次数分布</h3>
+        <distribution-chart data="grid.vertices" key="grid.degreeKey"></distribution-chart>
+      </div>
+    </div>
+  </div>
 </div>

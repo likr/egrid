@@ -15,6 +15,9 @@ module egrid.app {
       }]
     };
     grid: any;
+    vertices: number[];
+    respondentsKey: (u: number) => number;
+    degreeKey: (u: number) => number;
 
     constructor($window, $rootScope, $state, $scope, $timeout, $filter, alertLifeSpan, grid) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
@@ -30,6 +33,17 @@ module egrid.app {
         .call(egm.css())
         .call(egm)
         .call(egm.center());
+
+      this.vertices = this.grid.graph().vertices();
+
+      this.respondentsKey = (u) => {
+        return this.grid.graph().get(u).participants.length;
+      };
+
+      this.degreeKey = (u) => {
+        var graph = this.grid.graph();
+        return graph.inDegree(u) + graph.outDegree(u);
+      };
     }
 
     numConstructs(): number {
@@ -41,4 +55,3 @@ module egrid.app {
     }
   }
 }
-

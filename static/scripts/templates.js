@@ -1,4 +1,4 @@
-angular.module('collaboegm').run(['$templateCache', function($templateCache) {
+angular.module('egrid').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('/partials/about.html',
@@ -603,6 +603,18 @@ angular.module('collaboegm').run(['$templateCache', function($templateCache) {
     "      <td>{{grid.numLinks()}}</td>\n" +
     "    </tr>\n" +
     "  </table>\n" +
+    "  <div class=\"col-sm-12\">\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"col-sm-6\">\n" +
+    "        <h3>回答者数分布</h3>\n" +
+    "        <distribution-chart data=\"grid.vertices\" key=\"grid.respondentsKey\"></distribution-chart>\n" +
+    "      </div>\n" +
+    "      <div class=\"col-sm-6\">\n" +
+    "        <h3>次数分布</h3>\n" +
+    "        <distribution-chart data=\"grid.vertices\" key=\"grid.degreeKey\"></distribution-chart>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 

@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       },
     },
     ngtemplates: {
-      collaboegm: {
+      egrid: {
         cwd: 'static',
         dest: 'static/scripts/templates.js',
         options: {
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     },
     typescript: {
       base: {
-        src: ['ts/app/app.ts'],
+        src: ['ts/app/main.ts'],
         dest: 'static/scripts/collaboegm.js',
         options: {
           sourceMap: false,
