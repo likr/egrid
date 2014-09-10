@@ -96,7 +96,8 @@ module egrid.app {
             icon: 'images/glyphicons_210_left_arrow.png',
             onClick: (d, u) => {
               this.openInputTextDialog().then((result: string) => {
-                this.grid.ladderUp(u, result);
+                var v = this.grid.ladderUp(u, result);
+                this.grid.graph().get(v).participants = [];
                 this.updateLayoutOptions();
                 this.selection
                   .transition()
@@ -133,7 +134,8 @@ module egrid.app {
             icon: 'images/glyphicons_211_right_arrow.png',
             onClick: (d, u) => {
               this.openInputTextDialog().then((result: string) => {
-                this.grid.ladderDown(u, result);
+                var v = this.grid.ladderDown(u, result);
+                this.grid.graph().get(v).participants = [];
                 this.updateLayoutOptions();
                 this.selection
                   .transition()
@@ -436,7 +438,7 @@ module egrid.app {
         .vertexOpacity((d) => {
           var opacity = 1;
           if (this.layoutOptions.filter === Filter.Transparent) {
-            if (!d.participants.some((key) => this.filter[key])) {
+            if (d.participants.length > 0 && !d.participants.some((key) => this.filter[key])) {
               opacity *= 0.3;
             }
           }
