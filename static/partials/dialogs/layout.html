@@ -12,8 +12,8 @@
     <div class="form-group">
       <label class="col-sm-4 control-label">{{'EGM.APP.RANK_DIRECTION.RANK_DIRECTION' | translate}}</label>
       <div class="col-sm-8">
-        <label class="radio-inline"><input type="radio" ng-model="options.rankDirection" ng-value="RankDirection.LR"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>
-        <label class="radio-inline"><input type="radio" ng-model="options.rankDirection" ng-value="RankDirection.TB"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>
+        <label class="radio-inline"><input type="radio" ng-model="options.dagreRankDirection" ng-value="RankDirection.LR"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>
+        <label class="radio-inline"><input type="radio" ng-model="options.dagreRankDirection" ng-value="RankDirection.TB"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>
       </div>
     </div>
     <div class="form-group">
@@ -40,6 +40,24 @@
       <div class="col-sm-8">
         <label class="radio-inline"><input type="radio" ng-model="options.filter" ng-value="Filter.Invisible"/>Invisible</label>
         <label class="radio-inline"><input type="radio" ng-model="options.filter" ng-value="Filter.Transparent"/>Transparent</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Edge Sep</label>
+      <div class="col-sm-8">
+        <input class="form-control" type="number" min="0" step="10" ng-model="options.dagreEdgeSep"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Node Sep</label>
+      <div class="col-sm-8">
+        <input class="form-control" type="number" min="0" step="10" ng-model="options.dagreNodeSep"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Rank Sep</label>
+      <div class="col-sm-8">
+        <input class="form-control" type="number" min="0" step="10" ng-model="options.dagreRankSep"/>
       </div>
     </div>
   </form>

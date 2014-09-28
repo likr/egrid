@@ -26,12 +26,15 @@ module egrid.app {
 
 
   interface LayoutOptions {
+    dagreEdgeSep: number;
+    dagreNodeSep: number;
+    dagreRankDirection: RankDirection;
+    dagreRankSep: number;
+    filter: Filter;
     importance: Importance;
     maxTextLength: number;
     maxVertexScale: number;
     minimumImportance: number;
-    rankDirection: RankDirection;
-    filter: Filter;
   }
 
 
@@ -50,12 +53,15 @@ module egrid.app {
     saved: boolean = false;
     searchText: string = '';
     private layoutOptions: LayoutOptions = {
+      dagreEdgeSep: 10,
+      dagreNodeSep: 20,
+      dagreRankDirection: RankDirection.LR,
+      dagreRankSep: 30,
+      filter: Filter.Transparent,
       importance: Importance.Centrality,
       maxTextLength: 10,
       maxVertexScale: 3,
       minimumImportance: 0,
-      rankDirection: RankDirection.LR,
-      filter: Filter.Transparent
     };
 
     constructor(
@@ -81,6 +87,8 @@ module egrid.app {
       var graph = this.grid.graph();
 
       this.egm = egrid.core.egm()
+        .contentsMargin(10)
+        .contentsScaleMax(2)
         .edgeOpacity((u, v) => {
           if (graph.get(u).text.indexOf(this.searchText) >= 0 && graph.get(v).text.indexOf(this.searchText) >= 0) {
             return 1;
@@ -430,7 +438,10 @@ module egrid.app {
         .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm
-        .dagreRankDir(this.layoutOptions.rankDirection === RankDirection.TB ? 'TB' : 'LR')
+        .dagreEdgeSep(this.layoutOptions.dagreEdgeSep)
+        .dagreNodeSep(this.layoutOptions.dagreNodeSep)
+        .dagreRankDir(this.layoutOptions.dagreRankDirection === RankDirection.TB ? 'TB' : 'LR')
+        .dagreRankSep(this.layoutOptions.dagreRankSep)
         .maxTextLength(this.layoutOptions.maxTextLength)
         .vertexScale((d, u) => {
           return vertexScale(vertexImportance(importance(u)));

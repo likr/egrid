@@ -151,8 +151,8 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "    <div class=\"form-group\">\n" +
     "      <label class=\"col-sm-4 control-label\">{{'EGM.APP.RANK_DIRECTION.RANK_DIRECTION' | translate}}</label>\n" +
     "      <div class=\"col-sm-8\">\n" +
-    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.LR\"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>\n" +
-    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.rankDirection\" ng-value=\"RankDirection.TB\"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.dagreRankDirection\" ng-value=\"RankDirection.LR\"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.dagreRankDirection\" ng-value=\"RankDirection.TB\"/>{{'EGM.APP.RANK_DIRECTION.TB' | translate}}</label>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"form-group\">\n" +
@@ -179,6 +179,24 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "      <div class=\"col-sm-8\">\n" +
     "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.filter\" ng-value=\"Filter.Invisible\"/>Invisible</label>\n" +
     "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.filter\" ng-value=\"Filter.Transparent\"/>Transparent</label>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Edge Sep</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"0\" step=\"10\" ng-model=\"options.dagreEdgeSep\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Node Sep</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"0\" step=\"10\" ng-model=\"options.dagreNodeSep\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Rank Sep</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"number\" min=\"0\" step=\"10\" ng-model=\"options.dagreRankSep\"/>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </form>\n" +
