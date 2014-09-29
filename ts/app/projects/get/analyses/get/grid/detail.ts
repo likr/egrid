@@ -26,15 +26,20 @@ module egrid.app {
 
 
   interface LayoutOptions {
+    backgroundColor: any;
     dagreEdgeSep: number;
     dagreNodeSep: number;
     dagreRankDirection: RankDirection;
     dagreRankSep: number;
     filter: Filter;
     importance: Importance;
+    lowerStrokeColor: any;
     maxTextLength: number;
     maxVertexScale: number;
     minimumImportance: number;
+    selectedStrokeColor: any;
+    strokeColor: any;
+    upperStrokeColor: any;
   }
 
 
@@ -53,15 +58,20 @@ module egrid.app {
     saved: boolean = false;
     searchText: string = '';
     private layoutOptions: LayoutOptions = {
+      backgroundColor: '#f5f5f5',
       dagreEdgeSep: 10,
       dagreNodeSep: 20,
       dagreRankDirection: RankDirection.LR,
       dagreRankSep: 30,
       filter: Filter.Transparent,
       importance: Importance.Centrality,
+      lowerStrokeColor: '#ff0000',
       maxTextLength: 10,
       maxVertexScale: 3,
       minimumImportance: 0,
+      selectedStrokeColor: '#ff00ff',
+      strokeColor: '#000000',
+      upperStrokeColor: '#0000ff',
     };
 
     constructor(
@@ -438,6 +448,11 @@ module egrid.app {
         .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm
+        .backgroundColor(this.layoutOptions.backgroundColor)
+        .strokeColor(this.layoutOptions.strokeColor)
+        .upperStrokeColor(this.layoutOptions.upperStrokeColor)
+        .lowerStrokeColor(this.layoutOptions.lowerStrokeColor)
+        .selectedStrokeColor(this.layoutOptions.selectedStrokeColor)
         .dagreEdgeSep(this.layoutOptions.dagreEdgeSep)
         .dagreNodeSep(this.layoutOptions.dagreNodeSep)
         .dagreRankDir(this.layoutOptions.dagreRankDirection === RankDirection.TB ? 'TB' : 'LR')

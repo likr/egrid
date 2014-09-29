@@ -199,6 +199,36 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "        <input class=\"form-control\" type=\"number\" min=\"0\" step=\"10\" ng-model=\"options.dagreRankSep\"/>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Background color</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"color\" ng-model=\"options.backgroundColor\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Stroke color</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"color\" ng-model=\"options.strokeColor\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Stroke color (upper)</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"color\" ng-model=\"options.upperStrokeColor\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Stroke color (lower)</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"color\" ng-model=\"options.lowerStrokeColor\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Stroke color (selected)</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <input class=\"form-control\" type=\"color\" ng-model=\"options.selectedStrokeColor\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </form>\n" +
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
