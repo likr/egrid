@@ -20,7 +20,8 @@ class ProjectHandler(webapp2.RequestHandler):
         else:
             collaborators = Collaborator.all()\
                 .filter('user =', current_user)
-            projects = [c.project for c in collaborators if c.project.deleted_at is None]
+            projects = [c.project for c in collaborators
+                        if c.project.deleted_at is None]
             projects.sort(key=lambda a: a.updated_at)
             content = json.dumps([p.to_dict() for p in projects])
             self.response.write(content)

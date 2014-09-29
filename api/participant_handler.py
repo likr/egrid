@@ -11,13 +11,16 @@ class ParticipantHandler(webapp2.RequestHandler):
             participant = Participant.get(participant_id)
             if participant.deleted_at is not None:
                 self.error(404)
+                return
             self.response.write(json.dumps(participant.to_dict()))
         else:
             project = Project.get(project_id)
             participants = Participant.all()\
                 .filter('project =', project)\
+                .filter('deleted_at =', None)\
                 .order('created_at')
-            self.response.write(json.dumps([p.to_dict() for p in participants]))
+            self.response.write(
+                json.dumps([p.to_dict() for p in participants]))
 
     def post(self, project_id):
         data = json.loads(self.request.body)

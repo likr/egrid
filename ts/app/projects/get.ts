@@ -21,7 +21,7 @@ module egrid.app {
           }
 
           if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('projects.all.list');
+            this.$state.go('egrid.projects.all.list');
 
             this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
           }
@@ -30,7 +30,7 @@ module egrid.app {
 
     public confirm() {
       var modalInstance = this.$modal.open({
-        templateUrl: '/partials/remove-item-dialog.html',
+        templateUrl: '/partials/dialogs/remove-item.html',
         controller: ($scope, $modalInstance) => {
           $scope.ok = () => {
             $modalInstance.close();
@@ -41,20 +41,22 @@ module egrid.app {
         }
       });
 
-      modalInstance.result.then(() => { this.remove(); });
+      modalInstance.result.then(() => {
+        this.remove();
+      });
     }
 
     private remove() {
       this.$q.when(this.project.remove())
         .then(() => {
-          this.$state.go('projects.all.list');
+          this.$state.go('egrid.projects.all.list', null, {reload: true});
         }, (reason) => {
           if (reason.status === 401) {
             this.$window.location.href = this.$rootScope.logoutUrl;
           }
 
           if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('projects.all.list');
+            this.$state.go('egrid.projects.all.list');
 
             this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
           }
