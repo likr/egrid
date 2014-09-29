@@ -485,25 +485,5 @@ module egrid.app {
           return true;
         })
     }
-
-    public exportJSON($event) {
-      var graph = this.grid.graph();
-      var obj = {
-        nodes: graph.vertices().map((u) => {
-          return graph.get(u);
-        }),
-        links: graph.edges().map((edge) => {
-          return {
-            source: edge[0],
-            target: edge[1],
-          };
-        }),
-      };
-      console.log(obj);
-      $($event.currentTarget).attr({
-        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)),
-        download: this.project.name + '.json',
-      });
-    }
   }
 }

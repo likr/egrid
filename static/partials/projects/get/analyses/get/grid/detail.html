@@ -1,12 +1,31 @@
 <div>
   <div class="navbar navbar-default navbar-fixed-top" style="top: 50px;">
-    <div class="container">
+    <div class="container-fluid">
       <form class="navbar-form navbar-left">
-        <button class="btn btn-default" ng-click="grid.openFilterSetting()">{{'ACTION.FILTER' | translate}}</button>
-        <button class="btn btn-default" ng-click="grid.openLayoutSetting()">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>
-        <button class="btn btn-default" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</button>
-        <button class="btn btn-default" ng-disabled="grid.mergeDisabled()" ng-click="grid.mergeConstructs()">結合</button>
-        <button class="btn btn-default" ng-disabled="grid.paintDisabled()" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</button>
+        <div class="btn-group">
+          <button class="btn btn-default" ng-disabled="grid.undoDisabled()" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</button>
+          <button class="btn btn-default" ng-disabled="grid.redoDisabled()" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-default" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</button>
+          <button class="btn btn-default" ng-disabled="grid.mergeDisabled()" ng-click="grid.mergeConstructs()">結合</button>
+          <button class="btn btn-default" ng-disabled="grid.paintDisabled()" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</button>
+        </div>
+      </form>
+      <form class="navbar-form navbar-right">
+        <div class="btn-group">
+          <button class="btn btn-default" ng-click="grid.save()"><i class="glyphicon glyphicon-share"></i>{{'ACTION.SAVE' | translate}}</button>
+          <a class="btn btn-default" ng-click="grid.close()">閉じる</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; top: 100px; overflow: hidden;">
+    <svg id="display" style="display: block;"></svg>
+  </div>
+  <div class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+      <form class="navbar-form navbar-right">
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" ng-model="grid.searchText" placeholder="Search">
@@ -15,30 +34,10 @@
             </div>
           </div>
         </div>
-      </form>
-      <form class="navbar-form navbar-right">
-        <button class="btn btn-default" ng-click="grid.save()"><i class="glyphicon glyphicon-share"></i>{{'ACTION.SAVE' | translate}}</button>
-        <a class="btn btn-default" ng-click="grid.close()">閉じる</a>
-      </form>
-    </div>
-  </div>
-  <div style="position: absolute; left: 0; top: 100px; overflow: hidden;">
-    <svg id="display" style="display: block;"></svg>
-    <div id="nodeController" class="btn-group invisible" style="position: absolute; top: 0; left: 0;">
-      <button id="removeNodeButton" class="btn btn-default" title="{{'ACTION.REMOVE' | translate}}"><span class="glyphicon glyphicon-remove"></i></button>
-      <button id="mergeNodeButton" class="btn btn-default" title="{{'ACTION.MERGE' | translate}}"><span class="glyphicon glyphicon-plus"></i></button>
-      <button id="editNodeButton" class="btn btn-default" title="{{'ACTION.EDIT' | translate}}"><span class="glyphicon glyphicon-pencil"></span></button>
-    </div>
-  </div>
-  <div class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
-      <form class="navbar-form navbar-left">
-        <button class="btn btn-default" ng-disabled="grid.undoDisabled()" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</button>
-        <button class="btn btn-default" ng-disabled="grid.redoDisabled()" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</button>
-      </form>
-      <form class="navbar-form navbar-right">
-        <a ng-click="grid.exportJSON($event)" class="btn btn-default" id="exportJSON" target="_blank"><i class="glyphicon glyphicon-floppy-save"></i>JSON {{'ACTION.EXPORT' | translate}}</a>
-        <a class="btn btn-default" id="exportSVG" target="_blank"><i class="glyphicon glyphicon-floppy-save"></i>SVG {{'ACTION.EXPORT' | translate}}</a>
+        <div class="btn-group">
+          <button class="btn btn-default" ng-click="grid.openFilterSetting()">{{'ACTION.FILTER' | translate}}</button>
+          <button class="btn btn-default" ng-click="grid.openLayoutSetting()">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>
+        </div>
       </form>
     </div>
   </div>

@@ -8,7 +8,7 @@
 
 module egrid.app {
   export class ProjectGridController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$rootScope', '$state', '$scope', '$timeout', '$filter', 'alertLifeSpan', 'grid'];
+    public static $inject : string[] = ['$window', '$rootScope', '$state', '$scope', '$timeout', '$filter', 'alertLifeSpan', 'project', 'grid'];
     public static resolve = {
       grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']));
@@ -19,7 +19,16 @@ module egrid.app {
     respondentsKey: (u: number) => number;
     degreeKey: (u: number) => number;
 
-    constructor($window, $rootScope, $state, $scope, $timeout, $filter, alertLifeSpan, grid) {
+    constructor(
+        $window,
+        $rootScope,
+        $state,
+        $scope,
+        $timeout,
+        $filter,
+        alertLifeSpan,
+        private project,
+        grid) {
       super($rootScope, $timeout, $filter, alertLifeSpan);
 
       this.grid = egrid.core.grid(grid.nodes, grid.links);
@@ -52,6 +61,28 @@ module egrid.app {
 
     numLinks(): number {
       return this.grid.graph().numEdges();
+    }
+
+    exportSVG() {
+    }
+
+    exportJSON($event) {
+      var graph = this.grid.graph();
+      var obj = {
+        nodes: graph.vertices().map((u) => {
+          return graph.get(u);
+        }),
+        links: graph.edges().map((edge) => {
+          return {
+            source: edge[0],
+            target: edge[1],
+          };
+        }),
+      };
+      $($event.currentTarget).attr({
+        href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)),
+        download: this.project.name + '.json',
+      });
     }
   }
 }

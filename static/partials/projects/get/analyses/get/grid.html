@@ -3,7 +3,9 @@
   <div class="navbar navbar-default">
     <div class="navbar-collapse">
       <form class="navbar-form">
-        <a ui-sref="egrid.projects.get.analyses.get.grid.detail" class="btn btn-primary">{{'ACTION.EDIT' | translate}}</a>
+        <a class="btn btn-primary" ui-sref="egrid.projects.get.analyses.get.grid.detail">{{'ACTION.EDIT' | translate}}</a>
+        <a class="btn btn-default" ng-click="grid.exportJSON($event)" target="_blank">JSON {{'ACTION.EXPORT' | translate}}</a>
+        <a class="btn btn-default" target="_blank">SVG {{'ACTION.EXPORT' | translate}}</a>
       </form>
     </div>
   </div>

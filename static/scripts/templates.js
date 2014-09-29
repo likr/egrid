@@ -633,7 +633,9 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "  <div class=\"navbar navbar-default\">\n" +
     "    <div class=\"navbar-collapse\">\n" +
     "      <form class=\"navbar-form\">\n" +
-    "        <a ui-sref=\"egrid.projects.get.analyses.get.grid.detail\" class=\"btn btn-primary\">{{'ACTION.EDIT' | translate}}</a>\n" +
+    "        <a class=\"btn btn-primary\" ui-sref=\"egrid.projects.get.analyses.get.grid.detail\">{{'ACTION.EDIT' | translate}}</a>\n" +
+    "        <a class=\"btn btn-default\" ng-click=\"grid.exportJSON($event)\" target=\"_blank\">JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
+    "        <a class=\"btn btn-default\" target=\"_blank\">SVG {{'ACTION.EXPORT' | translate}}</a>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -670,13 +672,32 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
   $templateCache.put('/partials/projects/get/analyses/get/grid/detail.html',
     "<div>\n" +
     "  <div class=\"navbar navbar-default navbar-fixed-top\" style=\"top: 50px;\">\n" +
-    "    <div class=\"container\">\n" +
+    "    <div class=\"container-fluid\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"grid.openFilterSetting()\">{{'ACTION.FILTER' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"grid.paintDisabled()\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</button>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "          <button class=\"btn btn-default\" ng-disabled=\"grid.undoDisabled()\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
+    "          <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
+    "          <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
+    "          <button class=\"btn btn-default\" ng-disabled=\"grid.paintDisabled()\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</button>\n" +
+    "        </div>\n" +
+    "      </form>\n" +
+    "      <form class=\"navbar-form navbar-right\">\n" +
+    "        <div class=\"btn-group\">\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
+    "          <a class=\"btn btn-default\" ng-click=\"grid.close()\">閉じる</a>\n" +
+    "        </div>\n" +
+    "      </form>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <div style=\"position: absolute; left: 0; top: 100px; overflow: hidden;\">\n" +
+    "    <svg id=\"display\" style=\"display: block;\"></svg>\n" +
+    "  </div>\n" +
+    "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
+    "    <div class=\"container-fluid\">\n" +
+    "      <form class=\"navbar-form navbar-right\">\n" +
     "        <div class=\"form-group\">\n" +
     "          <div class=\"input-group\">\n" +
     "            <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
@@ -685,30 +706,10 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </div>\n" +
     "        </div>\n" +
-    "      </form>\n" +
-    "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <button class=\"btn btn-default\" ng-click=\"grid.save()\"><i class=\"glyphicon glyphicon-share\"></i>{{'ACTION.SAVE' | translate}}</button>\n" +
-    "        <a class=\"btn btn-default\" ng-click=\"grid.close()\">閉じる</a>\n" +
-    "      </form>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "  <div style=\"position: absolute; left: 0; top: 100px; overflow: hidden;\">\n" +
-    "    <svg id=\"display\" style=\"display: block;\"></svg>\n" +
-    "    <div id=\"nodeController\" class=\"btn-group invisible\" style=\"position: absolute; top: 0; left: 0;\">\n" +
-    "      <button id=\"removeNodeButton\" class=\"btn btn-default\" title=\"{{'ACTION.REMOVE' | translate}}\"><span class=\"glyphicon glyphicon-remove\"></i></button>\n" +
-    "      <button id=\"mergeNodeButton\" class=\"btn btn-default\" title=\"{{'ACTION.MERGE' | translate}}\"><span class=\"glyphicon glyphicon-plus\"></i></button>\n" +
-    "      <button id=\"editNodeButton\" class=\"btn btn-default\" title=\"{{'ACTION.EDIT' | translate}}\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
-    "    <div class=\"container\">\n" +
-    "      <form class=\"navbar-form navbar-left\">\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"grid.undoDisabled()\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
-    "        <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
-    "      </form>\n" +
-    "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <a ng-click=\"grid.exportJSON($event)\" class=\"btn btn-default\" id=\"exportJSON\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>JSON {{'ACTION.EXPORT' | translate}}</a>\n" +
-    "        <a class=\"btn btn-default\" id=\"exportSVG\" target=\"_blank\"><i class=\"glyphicon glyphicon-floppy-save\"></i>SVG {{'ACTION.EXPORT' | translate}}</a>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.openFilterSetting()\">{{'ACTION.FILTER' | translate}}</button>\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
+    "        </div>\n" +
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
