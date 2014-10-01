@@ -1,5 +1,6 @@
 import webapp2
 from webapp2 import Route
+from api.admin_handler import AdminHandler
 from api.collaborator_handler import CollaboratorHandler
 from api.participant_handler import ParticipantHandler
 from api.participant_handler import ParticipantGridHandler
@@ -14,6 +15,7 @@ from api.user_handler import UserAuthUrlHandler
 
 
 app = webapp2.WSGIApplication([
+    Route('/api/admin', AdminHandler),
     Route('/api/projects', ProjectHandler),
     Route('/api/projects/<project_id:[\w\-]+>', ProjectHandler),
     Route('/api/projects/<project_id:[\w\-]+>'

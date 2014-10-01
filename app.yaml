@@ -48,6 +48,10 @@ handlers:
 - url: /api/public/.*
   script: main.app
 
+- url: /api/admin
+  script: main.app
+  login: admin
+
 - url: /api/.*
   script: main.app
   login: required
