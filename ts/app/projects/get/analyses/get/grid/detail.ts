@@ -439,12 +439,13 @@ module egrid.app {
       } else {
         importance = () => 1;
       }
+      var ranks = createRanks();
 
       var vertexImportance = d3.scale.linear()
         .domain(d3.extent(graph.vertices(), importance))
         .range([0, 1]);
       var vertexScale = d3.scale.linear()
-        .domain([this.layoutOptions.minimumImportance, 1])
+        .domain([0, 1])
         .range([1, this.layoutOptions.maxVertexScale]);
 
       this.egm
@@ -479,11 +480,35 @@ module egrid.app {
               return false;
             }
           }
-          if (vertexImportance(importance(u)) < this.layoutOptions.minimumImportance) {
+          if (ranks[u] < this.layoutOptions.minimumImportance) {
             return false;
           }
           return true;
         })
+
+      function createRanks() {
+        var ranks = {};
+        var vertices = graph.vertices().map(u => u);
+        vertices.sort((u, v) => {
+          return d3.ascending(importance(u), importance(v));
+        });
+        var n = vertices.length;
+        var rank, value;
+        vertices.forEach((u, i) => {
+          if (importance(u) !== value) {
+            rank = i
+            value = importance(u);
+          }
+          ranks[u] = rank;
+        });
+        var scale = d3.scale.linear()
+          .domain([0, rank])
+          .range([0, 1]);
+        vertices.forEach((u) => {
+          ranks[u] = scale(ranks[u]);
+        });
+        return ranks;
+      }
     }
   }
 }
