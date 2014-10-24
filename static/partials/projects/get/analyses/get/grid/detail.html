@@ -1,15 +1,16 @@
 <div>
-  <div class="navbar navbar-default navbar-fixed-top" style="top: 50px;">
+  <div style="position: absolute; left: 0; top: 50px; overflow: hidden;">
+    <svg id="display" style="display: block;"></svg>
+  </div>
+  <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container-fluid">
       <form class="navbar-form navbar-left">
         <div class="btn-group">
-          <button class="btn btn-default" ng-disabled="grid.undoDisabled()" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</button>
-          <button class="btn btn-default" ng-disabled="grid.redoDisabled()" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</button>
+          <button class="btn btn-default" ng-click="grid.toggleControl()">Menu</button>
         </div>
         <div class="btn-group">
-          <button class="btn btn-default" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</button>
-          <button class="btn btn-default" ng-disabled="grid.mergeDisabled()" ng-click="grid.mergeConstructs()">結合</button>
-          <button class="btn btn-default" ng-disabled="grid.paintDisabled()" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</button>
+          <button class="btn btn-default" ng-click="grid.openFilterSetting()">{{'ACTION.FILTER' | translate}}</button>
+          <button class="btn btn-default" ng-click="grid.openLayoutSetting()">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>
         </div>
       </form>
       <form class="navbar-form navbar-right">
@@ -20,25 +21,30 @@
       </form>
     </div>
   </div>
-  <div style="position: absolute; left: 0; top: 100px; overflow: hidden;">
-    <svg id="display" style="display: block;"></svg>
+</div>
+<div class="egrid-control" data-drag="true" jqyoui-draggable data-jqyoui-options="{handle: '.egrid-control-header'}" ng-show="grid.showControl">
+  <div class="egrid-control-header">
+    <span class="title">Menu</span>
+    <button type="button" class="close" ng-click="grid.toggleControl()">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
   </div>
-  <div class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container-fluid">
-      <form class="navbar-form navbar-right">
-        <div class="form-group">
-          <div class="input-group">
-            <input class="form-control" ng-model="grid.searchText" placeholder="Search">
-            <div class="input-group-btn">
-              <button class="btn btn-default" ng-click="grid.searchText = ''"><span class="glyphicon glyphicon-remove"></span></button>
-            </div>
-          </div>
+  <div class="egrid-control-body">
+    <div class="egrid-control-contents">
+      <div class="list-group">
+        <a class="list-group-item" ng-class="{disabled: grid.undoDisabled()}" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</a>
+        <a class="list-group-item" ng-class="{disabled: grid.redoDisabled()}" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</a>
+        <a class="list-group-item" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</a>
+        <a class="list-group-item" ng-class="{disabled: grid.mergeDisabled()}" ng-click="grid.mergeConstructs()">結合</a>
+        <a class="list-group-item" ng-class="{disabled: grid.paintDisabled()}" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</a>
+      </div>
+      <div class="input-group">
+        <input class="form-control" ng-model="grid.searchText" placeholder="Search">
+        <div class="input-group-btn">
+          <button class="btn btn-default" ng-click="grid.searchText = ''"><span class="glyphicon glyphicon-remove"></span></button>
         </div>
-        <div class="btn-group">
-          <button class="btn btn-default" ng-click="grid.openFilterSetting()">{{'ACTION.FILTER' | translate}}</button>
-          <button class="btn btn-default" ng-click="grid.openLayoutSetting()">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

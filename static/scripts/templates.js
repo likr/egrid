@@ -671,17 +671,18 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('/partials/projects/get/analyses/get/grid/detail.html',
     "<div>\n" +
-    "  <div class=\"navbar navbar-default navbar-fixed-top\" style=\"top: 50px;\">\n" +
+    "  <div style=\"position: absolute; left: 0; top: 50px; overflow: hidden;\">\n" +
+    "    <svg id=\"display\" style=\"display: block;\"></svg>\n" +
+    "  </div>\n" +
+    "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
     "    <div class=\"container-fluid\">\n" +
     "      <form class=\"navbar-form navbar-left\">\n" +
     "        <div class=\"btn-group\">\n" +
-    "          <button class=\"btn btn-default\" ng-disabled=\"grid.undoDisabled()\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</button>\n" +
-    "          <button class=\"btn btn-default\" ng-disabled=\"grid.redoDisabled()\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</button>\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.toggleControl()\">Menu</button>\n" +
     "        </div>\n" +
     "        <div class=\"btn-group\">\n" +
-    "          <button class=\"btn btn-default\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</button>\n" +
-    "          <button class=\"btn btn-default\" ng-disabled=\"grid.mergeDisabled()\" ng-click=\"grid.mergeConstructs()\">結合</button>\n" +
-    "          <button class=\"btn btn-default\" ng-disabled=\"grid.paintDisabled()\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</button>\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.openFilterSetting()\">{{'ACTION.FILTER' | translate}}</button>\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
     "        </div>\n" +
     "      </form>\n" +
     "      <form class=\"navbar-form navbar-right\">\n" +
@@ -692,25 +693,30 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "      </form>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <div style=\"position: absolute; left: 0; top: 100px; overflow: hidden;\">\n" +
-    "    <svg id=\"display\" style=\"display: block;\"></svg>\n" +
+    "</div>\n" +
+    "<div class=\"egrid-control\" data-drag=\"true\" jqyoui-draggable data-jqyoui-options=\"{handle: '.egrid-control-header'}\" ng-show=\"grid.showControl\">\n" +
+    "  <div class=\"egrid-control-header\">\n" +
+    "    <span class=\"title\">Menu</span>\n" +
+    "    <button type=\"button\" class=\"close\" ng-click=\"grid.toggleControl()\">\n" +
+    "      <span aria-hidden=\"true\">&times;</span>\n" +
+    "      <span class=\"sr-only\">Close</span>\n" +
+    "    </button>\n" +
     "  </div>\n" +
-    "  <div class=\"navbar navbar-default navbar-fixed-bottom\">\n" +
-    "    <div class=\"container-fluid\">\n" +
-    "      <form class=\"navbar-form navbar-right\">\n" +
-    "        <div class=\"form-group\">\n" +
-    "          <div class=\"input-group\">\n" +
-    "            <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
-    "            <div class=\"input-group-btn\">\n" +
-    "              <button class=\"btn btn-default\" ng-click=\"grid.searchText = ''\"><span class=\"glyphicon glyphicon-remove\"></span></button>\n" +
-    "            </div>\n" +
-    "          </div>\n" +
+    "  <div class=\"egrid-control-body\">\n" +
+    "    <div class=\"egrid-control-contents\">\n" +
+    "      <div class=\"list-group\">\n" +
+    "        <a class=\"list-group-item\" ng-class=\"{disabled: grid.undoDisabled()}\" ng-click=\"grid.undo()\"><i class=\"glyphicon glyphicon-arrow-left\"></i>{{'ACTION.UNDO' | translate}}</a>\n" +
+    "        <a class=\"list-group-item\" ng-class=\"{disabled: grid.redoDisabled()}\" ng-click=\"grid.redo()\"><i class=\"glyphicon glyphicon-arrow-right\"></i>{{'ACTION.REDO' | translate}}</a>\n" +
+    "        <a class=\"list-group-item\" ng-click=\"grid.addConstruct()\"><i class=\"glyphicon glyphicon-pencil\"></i>{{'ACTION.APPEND' | translate}}</a>\n" +
+    "        <a class=\"list-group-item\" ng-class=\"{disabled: grid.mergeDisabled()}\" ng-click=\"grid.mergeConstructs()\">結合</a>\n" +
+    "        <a class=\"list-group-item\" ng-class=\"{disabled: grid.paintDisabled()}\" ng-click=\"grid.paintConstructs()\"><i class=\"glyphicon glyphicon-tint\"></i>ペイント</a>\n" +
+    "      </div>\n" +
+    "      <div class=\"input-group\">\n" +
+    "        <input class=\"form-control\" ng-model=\"grid.searchText\" placeholder=\"Search\">\n" +
+    "        <div class=\"input-group-btn\">\n" +
+    "          <button class=\"btn btn-default\" ng-click=\"grid.searchText = ''\"><span class=\"glyphicon glyphicon-remove\"></span></button>\n" +
     "        </div>\n" +
-    "        <div class=\"btn-group\">\n" +
-    "          <button class=\"btn btn-default\" ng-click=\"grid.openFilterSetting()\">{{'ACTION.FILTER' | translate}}</button>\n" +
-    "          <button class=\"btn btn-default\" ng-click=\"grid.openLayoutSetting()\">{{'EGM.APP.LAYOUT_SETTINGS' | translate}}</button>\n" +
-    "        </div>\n" +
-    "      </form>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"

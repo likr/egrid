@@ -57,6 +57,7 @@ module egrid.app {
     changed: boolean = false;
     saved: boolean = false;
     searchText: string = '';
+    showControl: boolean = true;
     private layoutOptions: LayoutOptions = {
       backgroundColor: '#f5f5f5',
       dagreEdgeSep: 10,
@@ -166,7 +167,7 @@ module egrid.app {
         .onClickVertex(() => {
           this.$scope.$apply();
         })
-        .size([$(window).width(), $(window).height() - 150]);
+        .size([$(window).width(), $(window).height() - 100]);
       this.updateLayoutOptions();
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
@@ -177,7 +178,7 @@ module egrid.app {
       d3.select(window)
         .on('resize', () => {
           this.selection
-            .call(this.egm.resize($(window).width(), $(window).height() - 150));
+            .call(this.egm.resize($(window).width(), $(window).height() - 100));
         })
         ;
 
@@ -509,6 +510,10 @@ module egrid.app {
         });
         return ranks;
       }
+    }
+
+    toggleControl() {
+      this.showControl = !this.showControl;
     }
   }
 }

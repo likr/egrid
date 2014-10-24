@@ -83,3 +83,41 @@ body {
 .search-control {
   margin-bottom: 20px;
 }
+
+.egrid-control {
+  top: 70px;
+  left: 20px;
+  background-color: #080808;
+  width: 200px;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.egrid-control>.egrid-control-header {
+  cursor: move;
+  height: 34;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 16px;
+}
+
+.egrid-control>.egrid-control-header>.title {
+  color: #999;
+}
+
+.egrid-control>.egrid-control-header>.close {
+  color: #999;
+  opacity: 1;
+  line-height: 18px;
+  text-shadow: unset;
+}
+
+.egrid-control>.egrid-control-body {
+  background-color: #fff;
+  padding: 4px;
+}
+.egrid-control>.egrid-control-body>.egrid-control-contents {
+}
