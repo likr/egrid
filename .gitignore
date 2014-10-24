@@ -1,5 +1,6 @@
 doc
 node_modules
+static/bower_components
 static/scripts/collaboegm.js
 static/scripts/collaboegm.min.js
 static/scripts/collaboegm.js.map
