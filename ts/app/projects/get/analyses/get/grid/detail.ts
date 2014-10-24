@@ -25,6 +25,13 @@ module egrid.app {
   }
 
 
+  enum Paint {
+    None,
+    UserDefined,
+    Community
+  }
+
+
   interface LayoutOptions {
     backgroundColor: any;
     dagreEdgeSep: number;
@@ -37,6 +44,7 @@ module egrid.app {
     maxTextLength: number;
     maxVertexScale: number;
     minimumImportance: number;
+    paint: Paint;
     selectedStrokeColor: any;
     strokeColor: any;
     upperStrokeColor: any;
@@ -70,7 +78,8 @@ module egrid.app {
       maxTextLength: 10,
       maxVertexScale: 3,
       minimumImportance: 0,
-      selectedStrokeColor: '#ff00ff',
+      paint: Paint.UserDefined,
+      selectedStrokeColor: '#800080',
       strokeColor: '#000000',
       upperStrokeColor: '#0000ff',
     };
@@ -96,10 +105,29 @@ module egrid.app {
 
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
       var graph = this.grid.graph();
+      egrid.core.network.community.newman(graph).forEach((community, i) => {
+        community.forEach(u => {
+          graph.get(u).community = i;
+        });
+      });
 
+      var communityColor = d3.scale.category20();
       this.egm = egrid.core.egm()
         .contentsMargin(10)
         .contentsScaleMax(2)
+        .edgeInterpolate('cardinal')
+        .edgeTension(0.95)
+        .edgeWidth(() => 3)
+        .edgeColor((u, v) => {
+          if (this.layoutOptions.paint === Paint.Community) {
+            if (graph.get(u).community === graph.get(v).community) {
+              return communityColor(graph.get(u).community);
+            } else {
+              return '#ccc';
+            }
+          }
+          return '#000';
+        })
         .edgeOpacity((u, v) => {
           if (graph.get(u).text.indexOf(this.searchText) >= 0 && graph.get(v).text.indexOf(this.searchText) >= 0) {
             return 1;
@@ -108,7 +136,12 @@ module egrid.app {
           }
         })
         .vertexColor((d) => {
-          return d.color;
+          if (this.layoutOptions.paint === Paint.UserDefined) {
+            return d.color;
+          } else if (this.layoutOptions.paint === Paint.Community) {
+            return communityColor(d.community);
+          }
+          return null;
         })
         .vertexButtons([
           {
@@ -171,7 +204,6 @@ module egrid.app {
       this.updateLayoutOptions();
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
-        .call(this.egm.css())
         .call(this.egm)
         .call(this.egm.center());
 
@@ -279,7 +311,13 @@ module egrid.app {
     }
 
     paintDisabled() {
-      return this.selection.selectAll('g.vertex.selected').size() === 0;
+      if (this.layoutOptions.paint !== Paint.UserDefined) {
+        return false;
+      }
+      if (this.selection.selectAll('g.vertex.selected').size() > 0) {
+        return false;
+      }
+      return true;
     }
 
     undoDisabled() {
@@ -422,6 +460,7 @@ module egrid.app {
           $scope.Importance = Importance;
           $scope.RankDirection = RankDirection;
           $scope.Filter = Filter;
+          $scope.Paint = Paint;
           $scope.close = () => {
             $modalInstance.close($scope.options);
           }

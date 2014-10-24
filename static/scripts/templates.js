@@ -182,6 +182,14 @@ angular.module('egrid').run(['$templateCache', function($templateCache) {
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"form-group\">\n" +
+    "      <label class=\"col-sm-4 control-label\">Paint</label>\n" +
+    "      <div class=\"col-sm-8\">\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.paint\" ng-value=\"Paint.None\"/>None</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.paint\" ng-value=\"Paint.UserDefined\"/>UserDefined</label>\n" +
+    "        <label class=\"radio-inline\"><input type=\"radio\" ng-model=\"options.paint\" ng-value=\"Paint.Community\"/>Community</label>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
     "      <label class=\"col-sm-4 control-label\">Edge Sep</label>\n" +
     "      <div class=\"col-sm-8\">\n" +
     "        <input class=\"form-control\" type=\"number\" min=\"0\" step=\"10\" ng-model=\"options.dagreEdgeSep\"/>\n" +
