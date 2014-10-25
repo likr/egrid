@@ -13,7 +13,7 @@ body {
   left: 50%;
   margin-left: -470px; /* width / 2 */
   position: absolute;
-  top: 40px;
+  top: 50px;
   width: 940px; /* width - (margin-left + margin-right) */
   z-index: 999999;
 }

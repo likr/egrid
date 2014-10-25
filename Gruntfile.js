@@ -28,9 +28,9 @@ module.exports = function(grunt) {
         },
         src: [
           'locations/*.json',
-          'partials/*.html',
+          'partials/**/*.html',
           'scripts/**/*.js',
-          'styles/*.css',
+          'styles/**/*.css',
         ],
       },
     },
