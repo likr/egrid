@@ -312,12 +312,12 @@ module egrid.app {
 
     paintDisabled() {
       if (this.layoutOptions.paint !== Paint.UserDefined) {
-        return false;
+        return true;
       }
-      if (this.selection.selectAll('g.vertex.selected').size() > 0) {
-        return false;
+      if (this.selection.selectAll('g.vertex.selected').size() === 0) {
+        return true;
       }
-      return true;
+      return false;
     }
 
     undoDisabled() {
