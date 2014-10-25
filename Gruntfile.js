@@ -1,27 +1,32 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    bower: {
+      install: {
+        options: {
+          targetDir: 'app/static',
+          layout: function(type) {
+            var renamedType = type;
+            if (type === 'js' || type === 'map') {
+              renamedType = 'scripts';
+            } else if (type === 'css') {
+              renamedType = 'styles';
+            }
+            return renamedType;
+          }
+        }
+      }
+    },
     manifest: {
       generate: {
-        dest: 'static/files.appcache',
+        dest: 'app/static/files.appcache',
         options: {
-          basePath: 'static',
+          basePath: 'app/static',
           hash: true,
-          master: ['static/index.html'],
+          master: ['index.html'],
           timestamp: true,
         },
         src: [
-          'bower_components/angular/angular.min.js',
-          'bower_components/angular-ui-router/release/angular-ui-router.min.js',
-          'bower_components/jquery/dist/jquery.min.js',
-          'bower_components/bootstrap/dist/css/bootstrap.min.css',
-          'bower_components/bootstrap/dist/js/bootstrap.min.js',
-          'bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.*',
-          'bower_components/angular-ui-bootstrap-bower/ui-bootstrap.min.js',
-          'bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
-          'bower_components/angular-translate/angular-translate.min.js',
-          'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js',
-          'bower_components/d3/d3.min.js',
           'locations/*.json',
           'partials/*.html',
           'scripts/**/*.js',
@@ -31,8 +36,8 @@ module.exports = function(grunt) {
     },
     ngtemplates: {
       egrid: {
-        cwd: 'static',
-        dest: 'static/scripts/templates.js',
+        cwd: 'app/static',
+        dest: 'app/static/scripts/templates.js',
         options: {
           prefix: '/',
         },
@@ -42,7 +47,7 @@ module.exports = function(grunt) {
     typescript: {
       base: {
         src: ['ts/app/main.ts'],
-        dest: 'static/scripts/collaboegm.js',
+        dest: 'app/static/scripts/collaboegm.js',
         options: {
           sourceMap: false,
           target: 'es5',
@@ -55,21 +60,22 @@ module.exports = function(grunt) {
         tasks: ['typescript', 'manifest'],
       },
       templates: {
-        files: ['static/index.html', 'static/partials/**/*.html'],
+        files: ['app/static/index.html', 'app/static/partials/**/*.html'],
         tasks: ['ngtemplates','manifest'],
       },
       statics: {
-        files: ['static/scripts/**/*.js', 'static/styles/*.css'],
+        files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css'],
         tasks: ['manifest']
       }
     },
   });
 
   grunt.loadNpmTasks('grunt-angular-templates');
+  grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-manifest');
   grunt.loadNpmTasks('grunt-typescript');
 
-  grunt.registerTask('default', ['watch']);
-  grunt.registerTask('compile', ['ngtemplates', 'typescript', 'manifest']);
+  grunt.registerTask('default', ['build']);
+  grunt.registerTask('build', ['ngtemplates', 'typescript', 'manifest']);
 };

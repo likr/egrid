@@ -33,6 +33,9 @@ handlers:
 - url: /styles
   static_dir: static/styles
 
+- url: /fonts
+  static_dir: static/fonts
+
 - url: /images
   static_dir: static/images
 

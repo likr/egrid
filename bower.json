@@ -17,7 +17,7 @@
     "jquery": "~2.1.0",
     "bootstrap": "~3.2.0",
     "angular": "~1.2.0",
-    "d3": "~3.3.0",
+    "d3": "~3.4.13",
     "angular-translate": "~2.0.0",
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "<1",
@@ -25,5 +25,39 @@
     "egrid-core": "~1.1.3",
     "nvd3": "~1.1.15-beta",
     "angular-dragdrop": "~1.0.8"
+  },
+  "exportsOverride": {
+    "angular-dragdrop": {
+      "js": "src/*.js"
+    },
+    "angular-ui-router": {
+      "js": "release/*.js"
+    },
+    "bootstrap": {
+      "js": "dist/js/*.js",
+      "css": "dist/css/*.css",
+      "fonts": "dist/fonts/*"
+    },
+    "dagre": {
+    },
+    "jquery": {
+      "js": "dist/*.js",
+      "map": "dist/*.map"
+    },
+    "jquery-ui": {
+      "js": "jquery-ui.*"
+    },
+    "nvd3": {
+      "js": "nv*.js",
+      "css": "nv*.css"
+    },
+    "*": {
+      "js": "**/*.js",
+      "css": "**/*.css",
+      "map": "**/*.map"
+    }
+  },
+  "resolutions": {
+    "d3": "~3.4.13"
   }
 }

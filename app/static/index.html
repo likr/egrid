@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html manifest="/files.appcache" ng-app="egrid">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <title>E-Grid</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css"/>
+    <link rel="stylesheet" href="styles/nv.d3.min.css"></script>
+    <link rel="stylesheet" href="styles/egm.css"/>
+    <link rel="apple-touch-icon" href="images/icon/apple-touch-icon.png"/>
+  </head>
+  <body>
+    <header class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/#">E-Grid</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a ui-sref="egrid.help">Help</a></li>
+            <li><a ui-sref="egrid.about">About</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                {{user.nickname}}さん<b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href ng-click="changeLanguage('ja')">Japanese</a></li>
+                <li><a href ng-click="changeLanguage('en')">English</a></li>
+                <li class="divider"></li>
+                <li><a href="{{logoutUrl}}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div ui-view="base"></div>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/jquery-ui.min.js"></script>
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/angular-ui-router.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/ui-bootstrap.min.js"></script>
+    <script src="scripts/ui-bootstrap-tpls.min.js"></script>
+    <script src="scripts/angular-translate.min.js"></script>
+    <script src="scripts/angular-translate-loader-static-files.min.js"></script>
+    <script src="scripts/angular-dragdrop.min.js"></script>
+    <script src="scripts/d3.min.js"></script>
+    <script src="scripts/nv.d3.min.js"></script>
+    <script src="scripts/egrid-core.js"></script>
+    <script src="scripts/dagre.min.js"></script>
+    <script src="scripts/sem.js"></script>
+    <script src="scripts/egrid-client.js"></script>
+    <script src="scripts/collaboegm.js"></script>
+    <script src="scripts/templates.js"></script>
+  </body>
+</html>
