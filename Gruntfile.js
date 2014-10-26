@@ -31,6 +31,7 @@ module.exports = function(grunt) {
           'partials/**/*.html',
           'scripts/**/*.js',
           'styles/**/*.css',
+          'fonts/**'
         ],
       },
     },
@@ -46,7 +47,12 @@ module.exports = function(grunt) {
     },
     typescript: {
       base: {
-        src: ['ts/app/main.ts'],
+        src: [
+          'ts/app/main.ts',
+          'ts/app/services/*.ts',
+          'ts/app/projects/get/participants/get.ts',
+          'ts/app/projects/get/participants/get/detail.ts'
+        ],
         dest: 'app/static/scripts/collaboegm.js',
         options: {
           sourceMap: false,

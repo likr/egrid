@@ -16,6 +16,15 @@
     </li>
   </ol>
 
+  <div class="col-sm-12 egrid-pager">
+    <div class="pull-left">
+      <a ng-if="ctrl.prevParticipant" ui-sref="{participantKey: ctrl.prevParticipant.key}">&lt;&lt; {{'ACTION.PREVIOUS' | translate}}</a>
+    </div>
+    <div class="pull-right">
+      <a ng-if="ctrl.nextParticipant" ui-sref="{participantKey: ctrl.nextParticipant.key}">{{'ACTION.NEXT' | translate}} &gt;&gt;</a>
+    </div>
+  </div>
+
   <ul class="nav nav-tabs">
     <li ui-sref-active="active">
       <a data-target="ui-sref" data-toggle="tab" ui-sref="egrid.projects.get.participants.get.detail">{{'ACTION.DETAIL' | translate}}</a>

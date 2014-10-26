@@ -4,79 +4,56 @@
 /// <reference path="../../../controller-base.ts"/>
 
 module egrid.app {
-  export class ParticipantController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'participant'];
-    public static resolve = {
-      participant: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.Participant.get($stateParams['projectKey'], $stateParams['participantKey']));
-      }],
-    };
+  class ParticipantController {
+    public static $inject: string[] = ['participant', 'participants'];
+    public prevParticipant: egrid.model.Participant;
+    public nextParticipant: egrid.model.Participant;
 
-    constructor(
-        private $window,
-        private $q,
-        $rootScope,
-        private $state,
-        private $scope,
-        private $modal,
-        $timeout,
-        $filter,
-        alertLifeSpan,
-        private participant) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
-    }
-
-    public update() {
-      this.$q.when(this.participant.save())
-        .then((participant: model.Participant) => {
-          this.participant.name = participant.name;
-          this.participant.note = participant.note;
-        }, (reason) => {
-          if (reason.status === 401) {
-            this.$window.location.href = this.$rootScope.logoutUrl;
-          }
-
-          if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.get.participants.all.list');
-
-            this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
-          }
-        });
-    }
-
-    public confirm() {
-      var modalInstance = this.$modal.open({
-        templateUrl: '/partials/dialogs/remove-item.html',
-        controller: ($scope, $modalInstance) => {
-          $scope.ok = () => {
-            $modalInstance.close();
-          },
-          $scope.cancel = () => {
-            $modalInstance.dismiss();
-          }
+    constructor(private participant, private participants) {
+      var index = -1;
+      var i, n;
+      for (i = 0, n = participants.length; i < n; ++i) {
+        if (participants[i].key === participant.key){
+          index = i;
+          break;
         }
-      });
+      }
 
-      modalInstance.result.then(() => {
-        this.remove();
-      });
-    }
-
-    private remove() {
-      this.$q.when(this.participant.remove())
-        .then(() => {
-          this.$state.go('egrid.projects.get.participants.all.list', null, {reload: true});
-        }, (reason) => {
-          if (reason.status === 401) {
-            this.$window.location.href = this.$rootScope.logoutUrl;
-          }
-
-          if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.get.participants.all.list');
-
-            this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
-          }
-        });
+      this.prevParticipant = index === 0
+        ? null
+        : participants[index - 1];
+      this.nextParticipant = index === participants.length - 1
+        ? null
+        : participants[index + 1];
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.participants.get', {
+          abstract: true,
+          resolve: {
+            participant: ['$q', '$stateParams',
+                          ($q: ng.IQService,
+                           $stateParams: ng.ui.IStateParamsService) => {
+              return $q.when(model.Participant.get($stateParams['projectKey'],
+                                                   $stateParams['participantKey']));
+            }],
+            participants: ['$q', '$stateParams',
+                           ($q: ng.IQService,
+                            $stateParams: ng.ui.IStateParamsService) => {
+              return $q.when(model.Participant.query($stateParams['projectKey']));
+            }]
+          },
+          url: '/{participantKey}',
+          views: {
+            'content@egrid': {
+              controller: 'ParticipantController as ctrl',
+              templateUrl: 'partials/projects/get/participants/get.html',
+            },
+          },
+        })
+    }])
+    .controller('ParticipantController', ParticipantController);
 }

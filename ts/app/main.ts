@@ -14,7 +14,6 @@
 /// <reference path="projects/get/collaborators/all/new.ts"/>
 /// <reference path="projects/get/participants/all/list.ts"/>
 /// <reference path="projects/get/participants/all/new.ts"/>
-/// <reference path="projects/get/participants/get.ts"/>
 /// <reference path="projects/get/participants/get/grid.ts"/>
 /// <reference path="projects/get/participants/get/grid/detail.ts"/>
 /// <reference path="directives/directives.ts"/>
@@ -256,25 +255,6 @@ module egrid.app {
         ;
 
       $stateProvider
-        .state('egrid.projects.get.participants.get', {
-          abstract: true,
-          resolve: ParticipantController.resolve,
-          url: '/{participantKey}',
-          views: {
-            'content@egrid': {
-              controller: 'ParticipantController as ctrl',
-              templateUrl: '/partials/projects/get/participants/get.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.participants.get.detail', {
-          url: '/detail',
-          views: {
-            'tab-content@egrid.projects.get.participants.get': {
-              templateUrl: '/partials/projects/get/participants/get/detail.html',
-            },
-          },
-        })
         .state('egrid.projects.get.participants.get.grid', {
           resolve: ParticipantGridController.resolve,
           url: '/grid',
@@ -428,7 +408,6 @@ module egrid.app {
     .controller('AnalysisListController', AnalysisListController)
     .controller('CollaboratorCreateController', CollaboratorCreateController)
     .controller('CollaboratorListController', CollaboratorListController)
-    .controller('ParticipantController', ParticipantController)
     .controller('ParticipantCreateController', ParticipantCreateController)
     .controller('ParticipantGridController', ParticipantGridController)
     .controller('ParticipantGridEditController', ParticipantGridEditController)
