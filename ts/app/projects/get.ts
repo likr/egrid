@@ -2,9 +2,24 @@
 
 module egrid.app {
   export class ProjectController {
-    public static $inject : string[] = ['$window', '$q', '$state', '$modal', 'showAlert', 'authorization', 'project'];
+    public static $inject : string[] = [
+      '$window',
+      '$q',
+      '$state',
+      'showAlert',
+      'showConfirmDialog',
+      'authorization',
+      'project'
+    ];
 
-    constructor(private $window, private $q, private $state, private $modal, private showAlert, private authorization, public project : model.Project) {
+    constructor(
+        private $window,
+        private $q,
+        private $state,
+        private showAlert,
+        private showConfirmDialog,
+        private authorization,
+        public project: model.Project) {
     }
 
     public update() {
@@ -28,21 +43,11 @@ module egrid.app {
     }
 
     public confirm() {
-      var modalInstance = this.$modal.open({
-        templateUrl: '/partials/dialogs/remove-item.html',
-        controller: ($scope, $modalInstance) => {
-          $scope.ok = () => {
-            $modalInstance.close();
-          },
-          $scope.cancel = () => {
-            $modalInstance.dismiss();
-          }
-        }
-      });
-
-      modalInstance.result.then(() => {
-        this.remove();
-      });
+      this.showConfirmDialog('MESSAGES.CONFIRM_REMOVE')
+        .result
+        .then(() => {
+          this.remove();
+        });
     }
 
     private remove() {

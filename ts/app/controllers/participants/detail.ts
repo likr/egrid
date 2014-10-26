@@ -8,8 +8,8 @@ module egrid.app {
       '$window',
       '$q',
       '$state',
-      '$modal',
       'showAlert',
+      'showConfirmDialog',
       'authorization',
       'participant'
     ];
@@ -18,8 +18,8 @@ module egrid.app {
         private $window,
         private $q,
         private $state,
-        private $modal,
         private showAlert,
+        private showConfirmDialog,
         private authorization,
         private participant) {
     }
@@ -43,18 +43,7 @@ module egrid.app {
     }
 
     confirm() {
-      this.$modal
-        .open({
-          templateUrl: 'partials/dialogs/remove-item.html',
-          controller: ($scope, $modalInstance) => {
-            $scope.ok = () => {
-              $modalInstance.close();
-            },
-            $scope.cancel = () => {
-              $modalInstance.dismiss();
-            }
-          }
-        })
+      this.showConfirmDialog('MESSAGES.CONFIRM_REMOVE')
         .result
         .then(() => {
           this.$q.when(this.participant.remove())

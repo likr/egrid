@@ -4,7 +4,15 @@
 
 module egrid.app {
   export class CollaboratorListController {
-    public static $inject :string[] = ['$window', '$http', '$state', '$modal', 'showAlert', 'authorization', 'collaborators'];
+    public static $inject :string[] = [
+      '$window',
+      '$http',
+      '$state',
+      'showAlert',
+      'showConfirmDialog',
+      'authorization',
+      'collaborators'
+    ];
     public static resolve = {
       collaborators: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.Collaborator.query($stateParams['projectKey']));
@@ -15,28 +23,18 @@ module egrid.app {
         private $window,
         private $http,
         private $state,
-        private $modal,
         private showAlert,
+        private showConfirmDialog,
         private authorization,
         private collaborators) {
     }
 
     public confirm(index: number) {
-      var modalInstance = this.$modal.open({
-        templateUrl: 'partials/dialogs/remove-item.html',
-        controller: ($scope, $modalInstance) => {
-          $scope.ok = () => {
-            $modalInstance.close();
-          },
-          $scope.cancel = () => {
-            $modalInstance.dismiss();
-          }
-        }
-      });
-
-      modalInstance.result.then(() => {
-        this.remove(this.collaborators[index]);
-      });
+      this.showConfirmDialog('MESSAGES.CONFIRM_REMOVE')
+        .result
+        .then(() => {
+          this.remove(this.collaborators[index]);
+        });
     }
 
     private remove(collaborator) {
