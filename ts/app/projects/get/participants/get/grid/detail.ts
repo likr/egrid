@@ -4,11 +4,10 @@
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-core.d.ts"/>
-/// <reference path="../../../../../controller-base.ts"/>
 
 module egrid.app {
-  export class ParticipantGridEditController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'participant', 'grid', 'projectGrid'];
+  export class ParticipantGridEditController {
+    public static $inject : string[] = ['$q', '$stateParams', '$state', '$scope', '$modal', 'showAlert', 'participant', 'grid', 'projectGrid'];
     public static resolve = {
       participant: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.Participant.get($stateParams['projectKey'], $stateParams['participantKey']));
@@ -30,20 +29,15 @@ module egrid.app {
     saved: boolean = false;
 
     constructor(
-        $window,
         private $q,
-        $rootScope,
         $stateParams,
         private $state,
         private $scope,
         private $modal,
-        $timeout, $filter,
-        alertLifeSpan,
+        private showAlert,
         private participant,
         private gridData,
         projectGrid) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
-
       if ($stateParams.disableCompletion) {
         this.disableCompletion = true;
       }

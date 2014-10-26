@@ -4,11 +4,10 @@
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../lib/egrid-core.d.ts"/>
-/// <reference path="../../../../controller-base.ts"/>
 
 module egrid.app {
-  export class ParticipantGridController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$rootScope', '$state', '$scope', '$timeout', '$filter', 'alertLifeSpan', 'grid'];
+  export class ParticipantGridController {
+    public static $inject : string[] = ['grid'];
     public static resolve = {
       grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
@@ -16,9 +15,7 @@ module egrid.app {
     };
     grid: any;
 
-    constructor($window, $rootScope, $state, $scope, $timeout, $filter, alertLifeSpan, grid) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
-
+    constructor(grid) {
       this.grid = egrid.core.grid(grid.nodes, grid.links);
       var egm = egrid.core.egm()
         .maxTextLength(10)

@@ -1,19 +1,15 @@
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
-/// <reference path="../../../../controller-base.ts"/>
 
 module egrid.app {
-  export class ParticipantCreateController extends ControllerBase implements model.ParticipantData {
-    public static $inject : string[] = ['$q', '$rootScope', '$stateParams', '$state', '$timeout', '$filter', 'alertLifeSpan'];
+  export class ParticipantCreateController implements model.ParticipantData {
+    public static $inject : string[] = ['$q', '$stateParams', '$state', 'showAlert'];
     projectKey : string;
     name : string;
     note : string;
 
-
-    constructor(private $q, $rootScope, $stateParams, private $state, $timeout, $filter, alertLifeSpan) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
-
+    constructor(private $q, $stateParams, private $state, private showAlert) {
       this.projectKey = $stateParams['projectKey'];
     }
 

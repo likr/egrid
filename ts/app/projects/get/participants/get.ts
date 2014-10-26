@@ -1,7 +1,6 @@
 /// <reference path="../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../lib/egrid-client.d.ts"/>
-/// <reference path="../../../controller-base.ts"/>
 
 module egrid.app {
   class ParticipantController {

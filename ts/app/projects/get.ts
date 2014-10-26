@@ -1,12 +1,10 @@
 /// <reference path="../../lib/egrid-client.d.ts"/>
-/// <reference path="../controller-base.ts"/>
 
 module egrid.app {
-  export class ProjectController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'project'];
+  export class ProjectController {
+    public static $inject : string[] = ['$window', '$q', '$state', '$modal', 'showAlert', 'authorization', 'project'];
 
-    constructor(private $window, private $q, $rootScope, private $state, private $modal, $timeout, $filter, alertLifeSpan, public project : model.Project) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
+    constructor(private $window, private $q, private $state, private $modal, private showAlert, private authorization, public project : model.Project) {
     }
 
     public update() {
@@ -17,7 +15,7 @@ module egrid.app {
           this.project.note = project.note;
         }, (reason) => {
           if (reason.status === 401) {
-            this.$window.location.href = this.$rootScope.logoutUrl;
+            this.$window.location.href = this.authorization.logoutUrl;
           }
 
           if (reason.status === 404 || reason.status === 500) {
@@ -52,7 +50,7 @@ module egrid.app {
           this.$state.go('egrid.projects.all.list', null, {reload: true});
         }, (reason) => {
           if (reason.status === 401) {
-            this.$window.location.href = this.$rootScope.logoutUrl;
+            this.$window.location.href = this.authorization.logoutUrl;
           }
 
           if (reason.status === 404 || reason.status === 500) {

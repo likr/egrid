@@ -1,16 +1,14 @@
 /// <reference path="../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../lib/egrid-client.d.ts"/>
-/// <reference path="../../controller-base.ts"/>
 
 module egrid.app {
-  export class ProjectCreateController extends ControllerBase implements model.ProjectData {
-    public static $inject : string[] = ['$q', '$rootScope', '$state', '$timeout', '$filter', 'alertLifeSpan'];
+  export class ProjectCreateController implements model.ProjectData {
+    public static $inject : string[] = ['$q', '$timeout', '$state', 'showAlert'];
     name : string;
     note : string;
 
-    constructor(private $q, $rootScope, private $state, $timeout, $filter, alertLifeSpan) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
+    constructor(private $q, private $timeout, private $state, private showAlert) {
     }
 
     submit() {

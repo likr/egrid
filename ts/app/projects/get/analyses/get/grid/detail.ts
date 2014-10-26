@@ -4,7 +4,6 @@
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-core.d.ts"/>
-/// <reference path="../../../../../controller-base.ts"/>
 
 module egrid.app {
   enum Importance {
@@ -51,8 +50,8 @@ module egrid.app {
   }
 
 
-  export class ProjectGridEditController extends ControllerBase {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$state', '$scope', '$modal', '$timeout', '$filter', 'alertLifeSpan', 'grid', 'project', 'participants'];
+  export class ProjectGridEditController {
+    public static $inject : string[] = ['$q', '$state', '$scope', '$modal', 'showAlert', 'grid', 'project', 'participants'];
     public static resolve = {
       participants: ['$q', '$stateParams', ($q, $stateParams) => {
         return $q.when(model.Participant.query($stateParams['projectKey']));
@@ -85,19 +84,14 @@ module egrid.app {
     };
 
     constructor(
-        $window,
         private $q,
-        $rootScope,
         private $state,
         private $scope,
         private $modal,
-        $timeout,
-        $filter,
-        alertLifeSpan,
+        private showAlert,
         private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
-      super($rootScope, $timeout, $filter, alertLifeSpan);
 
       this.participants.forEach(participant => {
         this.filter[participant.key] = true;
