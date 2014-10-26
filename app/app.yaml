@@ -39,9 +39,6 @@ handlers:
 - url: /images
   static_dir: static/images
 
-- url: /partials
-  static_dir: static/partials
-
 - url: /bower_components
   static_dir: static/bower_components
 

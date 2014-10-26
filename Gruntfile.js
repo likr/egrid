@@ -28,7 +28,6 @@ module.exports = function(grunt) {
         },
         src: [
           'locations/*.json',
-          'partials/**/*.html',
           'scripts/**/*.js',
           'styles/**/*.css',
           'fonts/*'
@@ -37,7 +36,7 @@ module.exports = function(grunt) {
     },
     ngtemplates: {
       egrid: {
-        cwd: 'app/static',
+        cwd: '.',
         dest: 'app/static/scripts/templates.js',
         options: {
           prefix: '/',
@@ -67,7 +66,7 @@ module.exports = function(grunt) {
         tasks: ['typescript', 'manifest'],
       },
       templates: {
-        files: ['app/static/index.html', 'app/static/partials/**/*.html'],
+        files: ['app/static/index.html', 'partials/**/*.html'],
         tasks: ['ngtemplates','manifest'],
       },
       statics: {
