@@ -2,7 +2,9 @@
   "ACTION": {
     "ACTION": "Action",
     "APPEND": "Append",
+    "CANCEL": "Cancel",
     "CLOSE": "Close",
+    "CONFIRM": "Confirm",
     "DETAIL": "Detail",
     "EDIT": "Edit",
     "EXPORT": "Export",
@@ -11,6 +13,7 @@
     "MERGE": "Merge",
     "NEW": "New",
     "NEXT":"Next",
+    "OK": "OK",
     "PREVIOUS": "Previous",
     "QUIT": "Quit",
     "REDO": "Redo",
@@ -62,6 +65,7 @@
     "OVERALL_EVALUATION_STRUCTURE": "Overall Evaluation Structure"
   },
   "MESSAGES": {
+    "CONFIRM_REMOVE": "削除しますか",
     "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
     "NOT_AUTHENTICATED": "認証しなければ続行できません",
     "ITEM_NOT_FOUND": "アイテムが存在しません",

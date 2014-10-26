@@ -2,7 +2,9 @@
   "ACTION": {
     "ACTION": "操作",
     "APPEND": "追加",
+    "CANCEL": "キャンセル",
     "CLOSE": "閉じる",
+    "CONFIRM": "確認",
     "DETAIL": "詳細",
     "EDIT": "編集",
     "EXPORT": "エクスポート",
@@ -11,6 +13,7 @@
     "MERGE": "結合",
     "NEW": "新規",
     "NEXT":"次へ",
+    "OK": "OK",
     "PREVIOUS": "戻る",
     "QUIT": "閉じる",
     "REDO": "やり直し",
@@ -21,14 +24,7 @@
     "SHOW": "表示",
     "SUBMIT": "送信",
     "UNDO": "元に戻す",
-    "UPDATE": "更新",
-    "DIALOG": {
-      "REMOVE": {
-        "CANCEL": "いいえ",
-        "HEADING": "削除しますか",
-        "OK": "はい"
-      }
-    }
+    "UPDATE": "更新"
   },
   "COLLABORATOR": {
     "ATTRIBUTES": {
@@ -84,6 +80,7 @@
     "UPPERMOST_EVALUATION_ITEM": "最上位評価項目"
   },
   "MESSAGES": {
+    "CONFIRM_REMOVE": "削除しますか",
     "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
     "NOT_AUTHENTICATED": "認証しなければ続行できません",
     "ITEM_NOT_FOUND": "アイテムが存在しません",

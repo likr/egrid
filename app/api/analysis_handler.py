@@ -13,12 +13,24 @@ class AnalysisHandler(webapp2.RequestHandler):
             self.error(404)
         self.response.write(json.dumps(analysis.to_dict()))
 
+    def put(self, project_id, analysis_id):
+        data = json.loads(self.request.body)
+        analysis = Analysis.get(analysis_id)
+        analysis.name = data.get('name')
+        analysis.put()
+        self.response.write(json.dumps(analysis.to_dict()))
+
+    def delete(self, project_id, analysis_id):
+        analysis = Analysis.get(analysis_id)
+        analysis.remove()
+
 
 class AnalysisListHandler(webapp2.RequestHandler):
     def get(self, project_id):
         project = Project.get(project_id)
         analyses = Analysis.all()\
             .filter('project =', project)\
+            .filter('deleted_at =', None)\
             .order('created_at')
         self.response.write(json.dumps([p.to_dict() for p in analyses]))
 

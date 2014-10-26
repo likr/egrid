@@ -5,7 +5,6 @@
 /// <reference path="projects/get.ts"/>
 /// <reference path="projects/get/analyses/all/list.ts"/>
 /// <reference path="projects/get/analyses/all/new.ts"/>
-/// <reference path="projects/get/analyses/get.ts"/>
 /// <reference path="projects/get/analyses/get/grid.ts"/>
 /// <reference path="projects/get/analyses/get/grid/detail.ts"/>
 /// <reference path="projects/get/analyses/get/sem.ts"/>
@@ -271,24 +270,6 @@ module egrid.app {
         ;
 
       $stateProvider
-        .state('egrid.projects.get.analyses.get', {
-          resolve: AnalysisController.resolve,
-          url: '/{analysisKey}',
-          views: {
-            'content@egrid': {
-              controller: 'AnalysisController as analysis',
-              templateUrl: '/partials/projects/get/analyses/get.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.analyses.get.detail', {
-          url: '/detail',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              templateUrl: '/partials/projects/get/analyses/get/detail.html',
-            },
-          },
-        })
         .state('egrid.projects.get.analyses.get.grid', {
           resolve: ProjectGridController.resolve,
           url: '/grid',
@@ -393,7 +374,6 @@ module egrid.app {
         .preferredLanguage("ja");
     }])
     .value('alertLifeSpan', 3200)
-    .controller('AnalysisController', AnalysisController)
     .controller('AnalysisCreateController', AnalysisCreateController)
     .controller('AnalysisListController', AnalysisListController)
     .controller('CollaboratorCreateController', CollaboratorCreateController)
