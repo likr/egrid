@@ -15,7 +15,7 @@ module egrid.app {
       var project = new model.Project(this);
       this.$q.when(project.save())
         .then((project) => {
-          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+          this.showAlert('MESSAGES.SAVED');
           this.$state.go('egrid.projects.get.detail',
                          {projectKey: project.key},
                          {reload: true});

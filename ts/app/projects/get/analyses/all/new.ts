@@ -4,11 +4,11 @@
 
 module egrid.app {
   export class AnalysisCreateController {
-    public static $inject : string[] = ['$window', '$q', '$rootScope', '$stateParams', '$state'];
-    projectKey : string;
-    data : model.Analysis;
+    public static $inject: string[] = ['$q', '$stateParams', '$state', 'showAlert'];
+    projectKey: string;
+    data: model.Analysis;
 
-    constructor($window, private $q, $rootScope, $stateParams, private $state) {
+    constructor(private $q, $stateParams, private $state, private showAlert) {
       this.projectKey = $stateParams.projectKey;
 
       this.data = new model.Analysis({
@@ -19,7 +19,9 @@ module egrid.app {
     submit() {
       this.$q.when(this.data.save())
         .then((analysis : model.Analysis) => {
-          this.$state.go('egrid.projects.get.analyses.get.detail', {analysisKey: analysis.key});
+          this.showAlert('MESSAGES.SAVED');
+          this.$state.go('egrid.projects.get.analyses.get.detail',
+                         {analysisKey: analysis.key});
         })
         ;
     }

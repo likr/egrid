@@ -65,7 +65,9 @@
     "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
     "NOT_AUTHENTICATED": "認証しなければ続行できません",
     "ITEM_NOT_FOUND": "アイテムが存在しません",
-    "OPERATION_SUCCESSFULLY_COMPLETED": "保存しました"
+    "REMOVED": "削除しました",
+    "SAVED": "保存しました",
+    "UPDATED": "保存しました"
   },
   "PARTICIPANT": {
     "PARTICIPANTS": "Participants",

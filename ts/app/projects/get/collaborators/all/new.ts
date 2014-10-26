@@ -16,7 +16,7 @@ module egrid.app {
     submit() {
       this.$q.when(this.data.save())
         .then(() => {
-          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+          this.showAlert('MESSAGES.SAVED');
           this.$state.go('egrid.projects.get.collaborators.all.list',
                          null, {reload: true});
         }, (...reasons: any[]) => {

@@ -21,7 +21,7 @@ module egrid.app {
             projectKey: this.projectKey,
             participantKey: p.key
           });
-          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+          this.showAlert('MESSAGES.SAVED');
         }, (...reasons: any[]) => {
           var k: string = reasons[0].status === 401
             ? 'MESSAGES.NOT_AUTHENTICATED'

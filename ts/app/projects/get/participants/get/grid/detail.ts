@@ -197,7 +197,7 @@ module egrid.app {
           this.saved = true;
           this.$state.go('egrid.projects.get.participants.get.grid', {}, {reload: true});
 
-          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+          this.showAlert('MESSAGES.UPDATED');
         }, (...reasons: any[]) => {
           var k: string = reasons[0].status === 401
             ? 'MESSAGES.NOT_AUTHENTICATED'

@@ -13,6 +13,7 @@ module egrid.app {
           // バインドしてるから要らない気はする
           this.project.name = project.name;
           this.project.note = project.note;
+          this.showAlert('MESSAGES.UPDATED');
         }, (reason) => {
           if (reason.status === 401) {
             this.$window.location.href = this.authorization.logoutUrl;
@@ -47,6 +48,7 @@ module egrid.app {
     private remove() {
       this.$q.when(this.project.remove())
         .then(() => {
+          this.showAlert('MESSAGES.REMOVED');
           this.$state.go('egrid.projects.all.list', null, {reload: true});
         }, (reason) => {
           if (reason.status === 401) {
