@@ -16,7 +16,6 @@
 /// <reference path="projects/get/participants/all/new.ts"/>
 /// <reference path="projects/get/participants/get/grid.ts"/>
 /// <reference path="projects/get/participants/get/grid/detail.ts"/>
-/// <reference path="directives/directives.ts"/>
 
 module egrid.app {
   class AuthorizationError {
@@ -34,15 +33,6 @@ module egrid.app {
 
 
   angular.module('egrid')
-    .directive('focusMe', ['$timeout', function($timeout: ng.ITimeoutService) {
-      return {
-        link: (scope: any, element: any) => {
-          $timeout(function () {
-            element[0].focus();
-          }, 10);
-        }
-      };
-    }])
     .config(['$compileProvider', $compileProvider => {
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|data):/);
     }])

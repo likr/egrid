@@ -50,6 +50,7 @@ module.exports = function(grunt) {
         src: [
           'ts/app/main.ts',
           'ts/app/services/*.ts',
+          'ts/app/directives/*.ts',
           'ts/app/projects/get/participants/get.ts',
           'ts/app/projects/get/participants/get/detail.ts'
         ],
