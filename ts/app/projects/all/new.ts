@@ -4,27 +4,25 @@
 
 module egrid.app {
   export class ProjectCreateController implements model.ProjectData {
-    public static $inject : string[] = ['$q', '$timeout', '$state', 'showAlert'];
+    public static $inject : string[] = ['$q', '$state', 'showAlert'];
     name : string;
     note : string;
 
-    constructor(private $q, private $timeout, private $state, private showAlert) {
+    constructor(private $q, private $state, private showAlert) {
     }
 
     submit() {
       var project = new model.Project(this);
       this.$q.when(project.save())
-        .then(() => {
-          this.$timeout(() => {
-            this.$state.go('egrid.projects.get.detail', {projectKey: project.key}, {reload: true});
-
-            this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
-          }, 200); // なぜか即時反映されない
+        .then((project) => {
+          this.showAlert('MESSAGES.OPERATION_SUCCESSFULLY_COMPLETED');
+          this.$state.go('egrid.projects.get.detail',
+                         {projectKey: project.key},
+                         {reload: true});
         }, (...reasons: any[]) => {
           var k: string = reasons[0].status === 401
             ? 'MESSAGES.NOT_AUTHENTICATED'
             : 'MESSAGES.DESTINATION_IS_NOT_REACHABLE';
-
           this.showAlert(k, 'danger');
         })
         ;
