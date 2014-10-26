@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           'partials/**/*.html',
           'scripts/**/*.js',
           'styles/**/*.css',
-          'fonts/**'
+          'fonts/*'
         ],
       },
     },
