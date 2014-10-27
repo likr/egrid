@@ -25,7 +25,7 @@ angular.module('egrid')
         views: {
           'content@egrid': {
             controller: 'AnalysisController as analysis',
-            templateUrl: 'partials/projects/get/analyses/get.html',
+            templateUrl: '/partials/projects/get/analyses/get.html',
           },
         },
       })

@@ -72,7 +72,7 @@ angular.module('egrid')
         views: {
           'tab-content@egrid.projects.get.analyses.get': {
             controller: 'AnalysisDetailController as detail',
-            templateUrl: 'partials/projects/get/analyses/get/detail.html',
+            templateUrl: '/partials/projects/get/analyses/get/detail.html',
           },
         },
       });

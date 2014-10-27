@@ -19,7 +19,7 @@ angular.module('egrid')
         resolve: {
           message: () => message
         },
-        templateUrl: 'partials/dialogs/confirm.html'
+        templateUrl: '/partials/dialogs/confirm.html'
       });
     };
   }]);

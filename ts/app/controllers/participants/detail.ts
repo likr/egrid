@@ -73,7 +73,7 @@ module egrid.app {
         views: {
           'tab-content@egrid.projects.get.participants.get': {
             controller: 'ParticipantDetailController as detail',
-            templateUrl: 'partials/projects/get/participants/get/detail.html',
+            templateUrl: '/partials/projects/get/participants/get/detail.html',
           },
         },
       });

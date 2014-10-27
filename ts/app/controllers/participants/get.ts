@@ -49,7 +49,7 @@ module egrid.app {
           views: {
             'content@egrid': {
               controller: 'ParticipantController as ctrl',
-              templateUrl: 'partials/projects/get/participants/get.html',
+              templateUrl: '/partials/projects/get/participants/get.html',
             },
           },
         })
