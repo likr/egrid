@@ -70,7 +70,7 @@ module.exports = function(grunt) {
         tasks: ['ngtemplates','manifest'],
       },
       statics: {
-        files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css'],
+        files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],
         tasks: ['manifest']
       }
     },

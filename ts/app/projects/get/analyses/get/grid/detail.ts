@@ -42,6 +42,7 @@ module egrid.app {
     lowerStrokeColor: any;
     maxTextLength: number;
     maxVertexScale: number;
+    minVertexScale: number;
     minimumImportance: number;
     paint: Paint;
     selectedStrokeColor: any;
@@ -76,6 +77,7 @@ module egrid.app {
       lowerStrokeColor: '#ff0000',
       maxTextLength: 10,
       maxVertexScale: 3,
+      minVertexScale: 1,
       minimumImportance: 0,
       paint: Paint.UserDefined,
       selectedStrokeColor: '#800080',
@@ -480,7 +482,7 @@ module egrid.app {
         .range([0, 1]);
       var vertexScale = d3.scale.linear()
         .domain([0, 1])
-        .range([1, this.layoutOptions.maxVertexScale]);
+        .range([this.layoutOptions.minVertexScale, this.layoutOptions.maxVertexScale]);
 
       this.egm
         .backgroundColor(this.layoutOptions.backgroundColor)

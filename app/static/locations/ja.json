@@ -60,6 +60,7 @@
       },
       "SCALING": {
         "CONNECTION": "接続数",
+        "MIN": "最小拡大率",
         "MAX": "最大拡大率",
         "NONE": "なし",
         "SCALING": "評価項目の拡大",
