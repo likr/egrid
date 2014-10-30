@@ -6,6 +6,7 @@
     "CLOSE": "Close",
     "CONFIRM": "Confirm",
     "DETAIL": "Detail",
+    "DUPLICATE": "Duplicate",
     "EDIT": "Edit",
     "EXPORT": "Export",
     "FILTER": "Filter",
@@ -65,8 +66,10 @@
     "OVERALL_EVALUATION_STRUCTURE": "Overall Evaluation Structure"
   },
   "MESSAGES": {
+    "CONFIRM_DUPLICATE": "複製しますか",
     "CONFIRM_REMOVE": "削除しますか",
     "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
+    "DUPLICATED": "複製しました",
     "NOT_AUTHENTICATED": "認証しなければ続行できません",
     "ITEM_NOT_FOUND": "アイテムが存在しません",
     "REMOVED": "削除しました",

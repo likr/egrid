@@ -38,7 +38,10 @@ class AnalysisListHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         project = Project.get(project_id)
         participants = Participant.all().filter('project =', project)
-        grid = merge_grids(participants)
+        if data.get('grid'):
+            grid = data.get('grid')
+        else:
+            grid = merge_grids(participants)
         questionnaire = [node['text'] for node in grid['nodes']]
         analysis = Analysis(
             name=data.get('name'),

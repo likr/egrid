@@ -6,6 +6,7 @@
     "CLOSE": "閉じる",
     "CONFIRM": "確認",
     "DETAIL": "詳細",
+    "DUPLICATE": "複製",
     "EDIT": "編集",
     "EXPORT": "エクスポート",
     "FILTER": "フィルター",
@@ -81,8 +82,10 @@
     "UPPERMOST_EVALUATION_ITEM": "最上位評価項目"
   },
   "MESSAGES": {
+    "CONFIRM_DUPLICATE": "複製しますか",
     "CONFIRM_REMOVE": "削除しますか",
     "DESTINATION_IS_NOT_REACHABLE": "失敗しました。オンラインになったとき再度送信します",
+    "DUPLICATED": "複製しました",
     "NOT_AUTHENTICATED": "認証しなければ続行できません",
     "ITEM_NOT_FOUND": "アイテムが存在しません",
     "REMOVED": "削除しました",

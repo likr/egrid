@@ -62,6 +62,32 @@ class AnalysisDetailController {
           });
       });
   }
+
+  duplicate() {
+    this.showConfirmDialog('MESSAGES.CONFIRM_DUPLICATE')
+      .result
+      .then(() => egrid.model.ProjectGrid.get(this.analysis.projectKey, this.analysis.key))
+      .then(grid => {
+        var analysis: any = new egrid.model.Analysis(this.analysis);
+        analysis.grid = grid;
+        this.$q.when(analysis.save())
+          .then(() =>{
+            this.showAlert('MESSAGES.DUPLICATED');
+            this.$state.go('egrid.projects.get.analyses.all.list', null, {
+              reload: true
+            });
+          }, (reason) =>{
+            if (reason.status === 401) {
+              this.$window.location.href = this.authorization.logoutUrl;
+            }
+
+            if (reason.status === 404 || reason.status === 500) {
+              this.$state.go('egrid.projects.get.analyses.all.list');
+              this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
+            }
+          });
+      });
+  }
 }
 
 angular.module('egrid')
