@@ -122,7 +122,7 @@ module egrid.app {
               return '#ccc';
             }
           }
-          return '#000';
+          return null;
         })
         .edgeOpacity((u, v) => {
           if (graph.get(u).text.indexOf(this.searchText) >= 0 && graph.get(v).text.indexOf(this.searchText) >= 0) {
