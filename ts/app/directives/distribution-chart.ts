@@ -26,6 +26,12 @@ angular.module('egrid')
             var k = scope.key(d);
             data[k] = (data[k] || 0) + 1;
           });
+          var extent = d3.extent(Object.keys(data), (k) => +k);
+          for (var i = extent[0], n = extent[1]; i < n; ++i) {
+            if (data[i] === undefined) {
+              data[i] = 0;
+            }
+          }
           return Object.keys(data).map((k) => {
             return {
               label: k,
