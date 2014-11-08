@@ -13,11 +13,11 @@ p {
 }
 
 .title>h1 {
-  font-size: 100px;
+  font-size: 80px;
 }
 
 .title>h2 {
-  font-size: 32px;
+  font-size: 24px;
   margin-top: 0;
 }
 
@@ -36,7 +36,7 @@ div.main {
 div.main>div.container {
   min-height: 100%;
   background-color: rgba(224, 224, 224, 0.8);
-  padding-bottom: 50px;
+  padding-bottom: 70px;
 }
 
 .contents>.egrid-link {
