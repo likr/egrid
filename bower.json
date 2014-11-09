@@ -22,7 +22,7 @@
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "0.10",
     "angular-ui-router": "~0.2.11",
-    "egrid-core": "~1.1.3",
+    "egrid-core": "~1.1.4",
     "nvd3": "~1.1.15-beta",
     "angular-dragdrop": "~1.0.8"
   },
@@ -38,13 +38,21 @@
       "css": "dist/css/*.css",
       "fonts": "dist/fonts/*"
     },
-    "dagre": {},
+    "dagre": {
+      "js": "dist/*.js"
+    },
+    "graphlib": {
+      "js": "dist/*.js"
+    },
     "jquery": {
       "js": "dist/*.js",
       "map": "dist/*.map"
     },
     "jquery-ui": {
       "js": "jquery-ui.*"
+    },
+    "lodash": {
+      "js": "dist/*.js"
     },
     "nvd3": {
       "js": "nv*.js",
