@@ -37,6 +37,7 @@ module egrid.app {
     dagreNodeSep: number;
     dagreRankDirection: RankDirection;
     dagreRankSep: number;
+    edgeWidth: number;
     filter: Filter;
     importance: Importance;
     lowerStrokeColor: any;
@@ -72,6 +73,7 @@ module egrid.app {
       dagreNodeSep: 20,
       dagreRankDirection: RankDirection.LR,
       dagreRankSep: 30,
+      edgeWidth: 1,
       filter: Filter.Transparent,
       importance: Importance.Centrality,
       lowerStrokeColor: '#ff0000',
@@ -113,7 +115,6 @@ module egrid.app {
         .contentsScaleMax(2)
         .edgeInterpolate('cardinal')
         .edgeTension(0.95)
-        .edgeWidth(() => 3)
         .edgeColor((u, v) => {
           if (this.layoutOptions.paint === Paint.Community) {
             if (graph.get(u).community === graph.get(v).community) {
@@ -494,10 +495,12 @@ module egrid.app {
         .dagreNodeSep(this.layoutOptions.dagreNodeSep)
         .dagreRankDir(this.layoutOptions.dagreRankDirection === RankDirection.TB ? 'TB' : 'LR')
         .dagreRankSep(this.layoutOptions.dagreRankSep)
+        .edgeWidth(() => this.layoutOptions.edgeWidth)
         .maxTextLength(this.layoutOptions.maxTextLength)
         .vertexScale((d, u) => {
           return vertexScale(vertexImportance(importance(u)));
         })
+        .vertexStrokeWidth(() => this.layoutOptions.edgeWidth)
         .vertexOpacity((d) => {
           var opacity = 1;
           if (this.layoutOptions.filter === Filter.Transparent) {

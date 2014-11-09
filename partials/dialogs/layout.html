@@ -16,6 +16,12 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="col-sm-4 control-label">Edge Width</label>
+      <div class="col-sm-8">
+        <input class="form-control" type="number" min="0" ng-model="options.edgeWidth"/>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-sm-4 control-label">{{'EGM.APP.RANK_DIRECTION.RANK_DIRECTION' | translate}}</label>
       <div class="col-sm-8">
         <label class="radio-inline"><input type="radio" ng-model="options.dagreRankDirection" ng-value="RankDirection.LR"/>{{'EGM.APP.RANK_DIRECTION.LR' | translate}}</label>
