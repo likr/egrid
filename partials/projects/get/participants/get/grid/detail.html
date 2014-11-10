@@ -27,10 +27,6 @@
         <button class="btn btn-default" ng-disabled="grid.undoDisabled()" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</button>
         <button class="btn btn-default" ng-disabled="grid.redoDisabled()" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</button>
       </form>
-      <form class="navbar-form navbar-right">
-        <a ng-click="grid.exportJSON($event)" class="btn btn-default" id="exportJSON" target="_blank"><i class="glyphicon glyphicon-floppy-save"></i>JSON {{'ACTION.EXPORT' | translate}}</a>
-        <a class="btn btn-default" id="exportSVG" target="_blank"><i class="glyphicon glyphicon-floppy-save"></i>SVG {{'ACTION.EXPORT' | translate}}</a>
-      </form>
     </div>
   </div>
 </div>

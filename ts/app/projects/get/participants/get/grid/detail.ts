@@ -2,19 +2,14 @@
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
+/// <reference path="../../../../../../lib/d3-downloadable.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-core.d.ts"/>
 
 module egrid.app {
   export class ParticipantGridEditController {
-    public static $inject : string[] = ['$q', '$stateParams', '$state', '$scope', '$modal', 'showAlert', 'participant', 'grid', 'projectGrid'];
+    public static $inject : string[] = ['$q', '$stateParams', '$state', '$scope', '$modal', 'showAlert', 'project', 'participant', 'gridData', 'projectGrid'];
     public static resolve = {
-      participant: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.Participant.get($stateParams['projectKey'], $stateParams['participantKey']));
-      }],
-      grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
-      }],
       projectGrid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.ProjectGrid.get($stateParams['projectKey'], 'current'));
       }],
@@ -35,6 +30,7 @@ module egrid.app {
         private $scope,
         private $modal,
         private showAlert,
+        private project,
         private participant,
         private gridData,
         projectGrid) {
@@ -42,6 +38,8 @@ module egrid.app {
         this.disableCompletion = true;
       }
 
+      var width = $(window).width();
+      var height = $(window).height() - 150;
       this.egm = egrid.core.egm()
         .maxTextLength(10)
         .vertexButtons([
@@ -96,21 +94,30 @@ module egrid.app {
         .onClickVertex(() => {
           this.$scope.$apply();
         })
-        .size([$(window).width(), $(window).height() - 150]);
+        .size([width, height]);
+      var downloadable = d3.downloadable({
+        filename: this.project.name + ' - ' + this.participant.name,
+        width: width,
+        height: height
+      });
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
-        .call(this.egm.css())
         .call(this.egm)
-        .call(this.egm.center());
+        .call(this.egm.center())
+        .call(downloadable);
 
       d3.select(window)
         .on('resize', () => {
+          var width = $(window).width();
+          var height = $(window).height() - 150;
+          downloadable
+            .width(width)
+            .height(height);
           this.selection
             .transition()
-            .call(this.egm.resize($(window).width(), $(window).height() - 150));
-        })
-        ;
+            .call(this.egm.resize(width, height));
+        });
 
       $scope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
         if (!this.saved && this.changed) {
@@ -210,27 +217,6 @@ module egrid.app {
 
     close() {
       this.$state.go('egrid.projects.get.participants.get.grid');
-    }
-
-    exportSVG() {
-      //d3.select("#exportSVG")
-      //  .on("click", function() {
-      //    __this.hideNodeController();
-      //    __this.egm.exportSVG((svgText : string) => {
-      //      var base64svgText = btoa(unescape(encodeURIComponent(svgText)));
-      //      d3.select(this).attr({
-      //        href: "data:image/svg+xml;charset=utf-8;base64," + base64svgText,
-      //        download: __this.participant.project.name + ' - ' + __this.participant.name + '.svg',
-      //      });
-      //    });
-      //  });
-    }
-
-    exportJSON() {
-      //$(this.$event.currentTarget).attr({
-      //  href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.egm.grid().toJSON())),
-      //  download: this.participant.project.name + ' - ' + this.participant.name + '.json',
-      //});
     }
 
     private openInputTextDialog(callback: (result: string) => any, initialText: string = '') {

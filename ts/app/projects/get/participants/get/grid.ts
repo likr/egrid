@@ -2,39 +2,60 @@
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts"/>
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../../../lib/d3-downloadable.d.ts"/>
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../lib/egrid-core.d.ts"/>
 
 module egrid.app {
   export class ParticipantGridController {
-    public static $inject : string[] = ['grid'];
+    public static $inject : string[] = ['$window', 'project', 'participant', 'gridData'];
     public static resolve = {
-      grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+      gridData: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
       }]
     };
     grid: any;
+    graph: any;
 
-    constructor(grid) {
-      this.grid = egrid.core.grid(grid.nodes, grid.links);
+    constructor($window, public project, public participant, gridData) {
+      this.grid = egrid.core.grid(gridData.nodes, gridData.links);
+      this.graph = this.grid.graph();
+
+      var width = $('#display-wrapper').width();
+      var height = 500;
       var egm = egrid.core.egm()
         .maxTextLength(10)
         .enableZoom(false)
-        .size([$('#display-wrapper').width(), 500]);
+        .size([width, height]);
+      var downloadable = d3.downloadable({
+        filename: this.project.name + ' - ' + this.participant.name,
+        width: width,
+        height: height
+      });
 
-      d3.select('#display')
-        .datum(this.grid.graph())
-        .call(egm.css())
+      var selection = d3.select('#display')
+        .datum(this.graph)
         .call(egm)
-        .call(egm.center());
+        .call(egm.center())
+        .call(downloadable);
+
+      $window.onresize = () => {
+        var width = $('#display-wrapper').width();
+        var height = 500;
+        downloadable
+          .width(width)
+          .height(height);
+        selection
+          .call(egm.resize(width, height));
+      };
     }
 
     numConstructs(): number {
-      return this.grid.graph().numVertices();
+      return this.graph.numVertices();
     }
 
     numLinks(): number {
-      return this.grid.graph().numEdges();
+      return this.graph.numEdges();
     }
   }
 }
