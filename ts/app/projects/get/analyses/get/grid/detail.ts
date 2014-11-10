@@ -356,7 +356,7 @@ module egrid.app {
       this.$q.when(this.gridData.save())
         .then(() => {
           this.saved = true;
-          this.$state.go('egrid.projects.get.analyses.get.grid', {projectKey: this.grid.projectKey});
+          this.$state.go('egrid.projects.get.analyses.get.grid');
 
           this.showAlert('MESSAGES.UPDATED');
         }, (...reasons: any[]) => {
