@@ -10,7 +10,7 @@ class ExportCsvButtonController {
   private graph: any;
   private filename: string;
 
-  constructor($scope) {
+  constructor($scope: IExportCsvButtonScope) {
     this.graph = $scope.graph;
     this.filename = $scope.filename;
   }
@@ -22,8 +22,8 @@ class ExportCsvButtonController {
         v = edge[1];
       csvRows.push(this.graph.get(u).text + ',' + this.graph.get(v).text);
     });
-    var utf8Array = Encoding.stringToCode(csvRows.join('\r\n'));
-    var sjisArray = Encoding.convert(utf8Array, 'SJIS', 'UNICODE');
+    var unicodeArray = Encoding.stringToCode(csvRows.join('\r\n'));
+    var sjisArray = Encoding.convert(unicodeArray, 'SJIS', 'UNICODE');
     $($event.currentTarget).attr({
       href: "data:text/comma-separated-values;charset=sjis," + Encoding.urlEncode(sjisArray),
       download: this.filename + '.csv',
