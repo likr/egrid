@@ -5,6 +5,8 @@
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../lib/egrid-core.d.ts"/>
 
+declare var Encoding: any;
+
 module egrid.app {
   export class ProjectGridController {
     public static $inject : string[] = ['$state', 'project', 'grid'];
@@ -74,6 +76,22 @@ module egrid.app {
       $($event.currentTarget).attr({
         href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)),
         download: this.project.name + '.json',
+      });
+    }
+
+    exportCSV($event) {
+      var graph = this.grid.graph();
+      var csvRows = ['上位項目,下位項目'];
+      graph.edges().forEach((edge) => {
+        var u = edge[0],
+          v = edge[1];
+        csvRows.push(graph.get(u).text + ',' + graph.get(v).text);
+      });
+      var utf8Array = Encoding.stringToCode(csvRows.join('\r\n'));
+      var sjisArray = Encoding.convert(utf8Array, 'SJIS', 'UNICODE');
+      $($event.currentTarget).attr({
+        href: "data:text/comma-separated-values;charset=sjis," + Encoding.urlEncode(sjisArray),
+        download: this.project.name + '.csv',
       });
     }
   }
