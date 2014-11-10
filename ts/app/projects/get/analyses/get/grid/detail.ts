@@ -2,6 +2,7 @@
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
 /// <reference path="../../../../../../ts-definitions/DefinitelyTyped/core/lib.extend.d.ts"/>
+/// <reference path="../../../../../../lib/d3-downloadable.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../../lib/egrid-core.d.ts"/>
 
@@ -59,7 +60,7 @@ module egrid.app {
         return $q.when(model.Participant.query($stateParams['projectKey']));
       }],
     };
-    egm : any;
+    egm: any;
     grid: any;
     selection: D3.Selection;
     filter: {} = {};
@@ -109,6 +110,8 @@ module egrid.app {
         });
       });
 
+      var width = $(window).width();
+      var height = $(window).height() - 100;
       var communityColor = d3.scale.category20();
       this.egm = egrid.core.egm()
         .contentsMargin(10)
@@ -197,17 +200,28 @@ module egrid.app {
         .onClickVertex(() => {
           this.$scope.$apply();
         })
-        .size([$(window).width(), $(window).height() - 100]);
+        .size([width, height]);
+      var downloadable = d3.downloadable({
+        filename: this.project.name,
+        width: width,
+        height: height
+      });
       this.updateLayoutOptions();
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
         .call(this.egm)
-        .call(this.egm.center());
+        .call(this.egm.center())
+        .call(downloadable);
 
       d3.select(window)
         .on('resize', () => {
+          var width = $(window).width();
+          var height = $(window).height() - 100;
+          downloadable
+            .width(width)
+            .height(height);
           this.selection
-            .call(this.egm.resize($(window).width(), $(window).height() - 100));
+            .call(this.egm.resize(width, height));
         })
         ;
 

@@ -6,12 +6,14 @@
         <a class="btn btn-primary" ui-sref="egrid.projects.get.analyses.get.grid.detail">{{'ACTION.EDIT' | translate}}</a>
         <a class="btn btn-default" ng-click="grid.exportCSV($event)" target="_blank">CSV {{'ACTION.EXPORT' | translate}}</a>
         <a class="btn btn-default" ng-click="grid.exportJSON($event)" target="_blank">JSON {{'ACTION.EXPORT' | translate}}</a>
-        <a class="btn btn-default" target="_blank">SVG {{'ACTION.EXPORT' | translate}}</a>
       </form>
     </div>
   </div>
-  <div class="thumbnail" id="display-wrapper" style="height: 510px;">
-    <svg id="display"></svg>
+  <div>
+    <span class="help-block">Right click to export diagram as .svg/.png/.jpg</span>
+    <div class="thumbnail" id="display-wrapper" style="height: 510px;">
+      <svg id="display"></svg>
+    </div>
   </div>
   <h3>サマリー</h3>
   <table class="table table-bordered">
