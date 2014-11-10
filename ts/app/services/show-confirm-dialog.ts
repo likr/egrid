@@ -1,5 +1,4 @@
 /// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 
 angular.module('egrid')
   .factory('showConfirmDialog', ['$modal', ($modal) => {
