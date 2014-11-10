@@ -6,8 +6,6 @@
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../lib/egrid-core.d.ts"/>
 
-declare var Encoding: any;
-
 module egrid.app {
   export class ProjectGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'grid'];
@@ -17,6 +15,7 @@ module egrid.app {
       }]
     };
     grid: any;
+    graph: any;
     vertices: number[];
     respondentsKey: (u: number) => number;
     degreeKey: (u: number) => number;
@@ -28,6 +27,7 @@ module egrid.app {
         grid) {
 
       this.grid = egrid.core.grid(grid.nodes, grid.links);
+      this.graph = this.grid.graph();
       var width = $('#display-wrapper').width();
       var height = 500;
       var egm = egrid.core.egm()
@@ -41,20 +41,19 @@ module egrid.app {
       });
 
       var selection = d3.select('#display')
-        .datum(this.grid.graph())
+        .datum(this.graph)
         .call(egm)
         .call(egm.center())
         .call(downloadable);
 
-      this.vertices = this.grid.graph().vertices();
+      this.vertices = this.graph.vertices();
 
       this.respondentsKey = (u) => {
-        return this.grid.graph().get(u).participants.length;
+        return this.graph.get(u).participants.length;
       };
 
       this.degreeKey = (u) => {
-        var graph = this.grid.graph();
-        return graph.inDegree(u) + graph.outDegree(u);
+        return this.graph.inDegree(u) + this.graph.outDegree(u);
       };
 
       $window.onresize = function() {
@@ -68,15 +67,15 @@ module egrid.app {
     }
 
     numConstructs(): number {
-      return this.grid.graph().numVertices();
+      return this.graph.numVertices();
     }
 
     numLinks(): number {
-      return this.grid.graph().numEdges();
+      return this.graph.numEdges();
     }
 
     exportJSON($event) {
-      var graph = this.grid.graph();
+      var graph = this.graph;
       var obj = {
         nodes: graph.vertices().map((u) => {
           return graph.get(u);
@@ -91,22 +90,6 @@ module egrid.app {
       $($event.currentTarget).attr({
         href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)),
         download: this.project.name + '.json',
-      });
-    }
-
-    exportCSV($event) {
-      var graph = this.grid.graph();
-      var csvRows = ['上位項目,下位項目'];
-      graph.edges().forEach((edge) => {
-        var u = edge[0],
-          v = edge[1];
-        csvRows.push(graph.get(u).text + ',' + graph.get(v).text);
-      });
-      var utf8Array = Encoding.stringToCode(csvRows.join('\r\n'));
-      var sjisArray = Encoding.convert(utf8Array, 'SJIS', 'UNICODE');
-      $($event.currentTarget).attr({
-        href: "data:text/comma-separated-values;charset=sjis," + Encoding.urlEncode(sjisArray),
-        download: this.project.name + '.csv',
       });
     }
   }
