@@ -5,7 +5,7 @@
       <form class="navbar-form">
         <a class="btn btn-primary" ui-sref="egrid.projects.get.analyses.get.grid.detail">{{'ACTION.EDIT' | translate}}</a>
         <export-csv-button graph="grid.graph" filename="grid.project.name"></export-csv-button>
-        <a class="btn btn-default" ng-click="grid.exportJSON($event)" target="_blank">JSON {{'ACTION.EXPORT' | translate}}</a>
+        <export-json-button graph="grid.graph" filename="grid.project.name"></export-json-button>
       </form>
     </div>
   </div>
