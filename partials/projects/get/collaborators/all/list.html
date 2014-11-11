@@ -1,21 +1,23 @@
 <div>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>{{'COLLABORATOR.ATTRIBUTES.USER' | translate}}</th>
-        <th>{{'COLLABORATOR.ROLE.ROLE' | translate}}</th>
-        <th>{{'ACTION.ACTION' | translate}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="collaborator in collaborators.collaborators">
-        <td>{{ $index + 1 }}</td>
-        <td>{{collaborator.user.nickname}}</td>
-        <td ng-if="collaborator.isManager">{{'COLLABORATOR.ROLE.MANAGER' | translate}}</td>
-        <td ng-if="!collaborator.isManager">{{'COLLABORATOR.ROLE.USER' | translate}}</td>
-        <td><a href ng-click="collaborators.confirm(collaborator.key)">{{'ACTION.REMOVE' | translate}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{'COLLABORATOR.ATTRIBUTES.USER' | translate}}</th>
+          <th>{{'COLLABORATOR.ROLE.ROLE' | translate}}</th>
+          <th>{{'ACTION.ACTION' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="collaborator in collaborators.collaborators">
+          <td>{{ $index + 1 }}</td>
+          <td>{{collaborator.user.nickname}}</td>
+          <td ng-if="collaborator.isManager">{{'COLLABORATOR.ROLE.MANAGER' | translate}}</td>
+          <td ng-if="!collaborator.isManager">{{'COLLABORATOR.ROLE.USER' | translate}}</td>
+          <td><a href ng-click="collaborators.confirm(collaborator.key)">{{'ACTION.REMOVE' | translate}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

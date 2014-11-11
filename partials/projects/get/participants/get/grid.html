@@ -13,14 +13,16 @@
     <svg id="display"></svg>
   </div>
   <h3>サマリー</h3>
-  <table class="table table-bordered">
-    <tr>
-      <th class="col-xs-6">評価項目数</th>
-      <td class="col-xs-6">{{grid.numConstructs()}}</td>
-    </tr>
-    <tr>
-      <th>接続数</th>
-      <td>{{grid.numLinks()}}</td>
-    </tr>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th class="col-xs-6">評価項目数</th>
+        <td class="col-xs-6">{{grid.numConstructs()}}</td>
+      </tr>
+      <tr>
+        <th>接続数</th>
+        <td>{{grid.numLinks()}}</td>
+      </tr>
+    </table>
+  </div>
 </div>
