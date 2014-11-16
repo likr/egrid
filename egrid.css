@@ -57,8 +57,22 @@ div.footer>div.container {
   background-color: rgba(32, 32, 32, 0.9);
 }
 
+div.footer>div.container>div.share {
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+}
+
+.twitter-share-button {
+  margin-left: 10px;
+}
+
+.fb-like {
+  height: 25px;
+}
+
 div.footer>div.container>p {
-  margin-top: 10px;
 }
 
 div.footer>div.container>p, div.footer>div.container>p>a {
