@@ -10,6 +10,7 @@
     "EDIT": "Edit",
     "EXPORT": "Export",
     "FILTER": "Filter",
+    "IMPORT": "Import",
     "LIST": "List",
     "MERGE": "Merge",
     "NEW": "New",
@@ -22,6 +23,7 @@
     "SAVE": "Save",
     "SEARCH": "Search",
     "SELECT": "Select",
+    "SELECT_FILE": "Select File",
     "SHOW": "Show",
     "SUBMIT": "Submit",
     "UNDO": "Undo",
@@ -74,7 +76,8 @@
     "ITEM_NOT_FOUND": "アイテムが存在しません",
     "REMOVED": "削除しました",
     "SAVED": "保存しました",
-    "UPDATED": "保存しました"
+    "UPDATED": "保存しました",
+    "WARN_REPLACE": "現在のデータは上書きされます"
   },
   "PARTICIPANT": {
     "PARTICIPANTS": "Participants",

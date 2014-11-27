@@ -10,6 +10,7 @@
     "EDIT": "編集",
     "EXPORT": "エクスポート",
     "FILTER": "フィルター",
+    "IMPORT": "インポート",
     "LIST": "一覧",
     "MERGE": "結合",
     "NEW": "新規",
@@ -22,6 +23,7 @@
     "SAVE": "保存",
     "SEARCH": "検索",
     "SELECT": "選択",
+    "SELECT_FILE": "ファイル選択",
     "SHOW": "表示",
     "SUBMIT": "送信",
     "UNDO": "元に戻す",
@@ -90,7 +92,8 @@
     "ITEM_NOT_FOUND": "アイテムが存在しません",
     "REMOVED": "削除しました",
     "SAVED": "保存しました",
-    "UPDATED": "保存しました"
+    "UPDATED": "保存しました",
+    "WARN_REPLACE": "現在のデータは上書きされます"
   },
   "PARTICIPANT": {
     "PARTICIPANTS": "実験参加者",

@@ -8,7 +8,7 @@
 
 module egrid.app {
   export class ParticipantGridController {
-    public static $inject : string[] = ['$window', 'project', 'participant', 'gridData'];
+    public static $inject : string[] = ['$window', '$state', 'project', 'participant', 'gridData'];
     public static resolve = {
       gridData: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
@@ -16,8 +16,9 @@ module egrid.app {
     };
     grid: any;
     graph: any;
+    updateGrid: any;
 
-    constructor($window, public project, public participant, gridData) {
+    constructor($window, private $state, public project, public participant, private gridData) {
       this.grid = egrid.core.grid(gridData.nodes, gridData.links);
       this.graph = this.grid.graph();
 
@@ -48,6 +49,15 @@ module egrid.app {
         selection
           .call(egm.resize(width, height));
       };
+
+      this.updateGrid = (grid) => {
+        this.gridData.nodes = grid.nodes;
+        this.gridData.links = grid.links;
+        this.gridData.update()
+          .then(() => {
+            this.$state.go('egrid.projects.get.participants.get.grid', null, {reload: true});
+          });
+      }
     }
 
     numConstructs(): number {

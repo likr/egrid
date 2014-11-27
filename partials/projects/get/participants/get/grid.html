@@ -6,6 +6,7 @@
         <a ui-sref="egrid.projects.get.participants.get.grid.detail" class="btn btn-primary">{{'ACTION.EDIT' | translate}}</a>
         <export-csv-button graph="grid.graph" filename="grid.project.name + ' - ' + grid.participant.name"></export-csv-button>
         <export-json-button graph="grid.graph" filename="grid.project.name + ' - ' + grid.participant.name"></export-json-button>
+        <import-json-button onimport="grid.updateGrid"></import-json-button>
       </form>
     </div>
   </div>

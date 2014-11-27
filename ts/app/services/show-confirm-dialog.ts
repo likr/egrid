@@ -9,11 +9,11 @@ angular.module('egrid')
 
           $scope.ok = () => {
             $modalInstance.close();
-          },
+          };
 
           $scope.cancel = () => {
             $modalInstance.dismiss();
-          }
+          };
         },
         resolve: {
           message: () => message
