@@ -36,7 +36,6 @@ class ImportJsonButtonController {
           this.onimport(JSON.parse(e.target.result));
         };
         reader.readAsText(jsonFile);
-
       });
   }
 }
