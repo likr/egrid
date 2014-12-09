@@ -128,3 +128,27 @@ a:link, a:visited, a:active, a:hover {
 }
 .egrid-control>.egrid-control-body>.egrid-control-contents {
 }
+
+.egrid-construct {
+  background-color: #ddd;
+  float: left;
+  margin: 5px;
+  padding: 5px;
+}
+
+.egrid-construct.active {
+  background-color: #d00;
+}
+
+.egrid-constructs {
+  background-color: #f5f5f5;
+}
+
+.egrid-construct-group {
+  min-height: 80px;
+  background-color: #f5f5f5;
+}
+
+.egrid-construct-groups {
+  margin-top: 20px;
+}

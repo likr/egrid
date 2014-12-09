@@ -271,7 +271,6 @@ module egrid.app {
 
       $stateProvider
         .state('egrid.projects.get.analyses.get.grid', {
-          resolve: ProjectGridController.resolve,
           url: '/grid',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {

@@ -9,11 +9,6 @@
 module egrid.app {
   export class ProjectGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'grid'];
-    public static resolve = {
-      grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']));
-      }]
-    };
     grid: any;
     graph: any;
     vertices: number[];

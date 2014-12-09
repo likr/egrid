@@ -1,0 +1,38 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-primary pull-right" ng-click="synonym.save()">Save</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="form-group">
+        <label>Search</label>
+        <input class="form-control" ng-model="synonym.search">
+      </div>
+      <div class="egrid-constructs" data-drop="true" jqyoui-droppable="{onDrop: 'synonym.onDrop(null)'}" ng-model="target">
+        <div class="egrid-construct" ng-class="{active: synonym.search && construct.node.text.indexOf(synonym.search) >= 0}" ng-repeat="construct in synonym.constructs | filter:synonym.unsorted" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable ng-model="construct.index">
+          {{construct.node.text}}
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <button class="btn btn-default" ng-click="synonym.addGroup()">Add Group</button>
+      <div class="egrid-construct-groups">
+        <div ng-repeat="group in synonym.groups | orderBy:'-index'">
+          <div class="form-group">
+            <label>Label</label>
+            <input class="form-control" ng-model="group.label">
+          </div>
+          <div class="egrid-construct-group" data-drop="true" jqyoui-droppable="{onDrop: 'synonym.onDrop(group.index)'}" ng-model="target">
+            <div class="egrid-construct" ng-repeat="construct in group.constructs" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable ng-model="construct.index">
+              {{construct.node.text}}
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

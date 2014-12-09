@@ -20,6 +20,12 @@ angular.module('egrid')
             return $q.when(egrid.model.Analysis.get($stateParams['projectKey'],
                                                     $stateParams['analysisKey']));
           }],
+          grid: ['$q', '$stateParams',
+                 ($q: ng.IQService,
+                  $stateParams: ng.ui.IStateParamsService) => {
+            return $q.when(egrid.model.ProjectGrid.get($stateParams['projectKey'],
+                                                       $stateParams['analysisKey']));
+          }]
         },
         url: '/{analysisKey}',
         views: {
