@@ -57,6 +57,8 @@ handlers:
   login: required
   auth_fail_action: unauthorized
 
+- url: /_ah/spi/.*
+  script: api.v2.main.application
 
 - url: .*
   static_dir: static
@@ -65,5 +67,5 @@ handlers:
 libraries:
 - name: webapp2
   version: "2.5.2"
-- name: jinja2
-  version: latest
+- name: endpoints
+  version: 1.0
