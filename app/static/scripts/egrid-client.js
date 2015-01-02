@@ -785,10 +785,8 @@ var egrid;
                 return model.storage.get('Questionnaire', projectKey, key).then(function (data) {
                     var questionnaire = new Questionnaire;
                     questionnaire.key_ = data.key;
-                    questionnaire.createdAt_ = new Date(data.createdAt);
-                    questionnaire.updatedAt_ = new Date(data.updatedAt);
                     questionnaire.projectKey = data.projectKey;
-                    questionnaire.items = data.items;
+                    questionnaire.formUrl = data.formUrl;
                     return questionnaire;
                 });
             };
