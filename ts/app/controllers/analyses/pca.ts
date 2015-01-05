@@ -37,7 +37,12 @@ class AnalysisPcaController {
               values: d
             };
           }))
-          .call(pca);
+          .call(pca)
+          .call(d3.downloadable({
+            filename: 'pca',
+            width: 1000,
+            height: 800
+          }));
       })
       .error(() => {
         console.log(arguments);
