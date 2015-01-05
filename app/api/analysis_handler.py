@@ -74,8 +74,9 @@ class AnalysisQuestionnaireHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(analysis.get_questionnaire()))
 
     def put(self, project_id, analysis_id):
-        items = json.loads(self.request.body)['items']
+        data = json.loads(self.request.body)
         analysis = Analysis.get(analysis_id)
-        analysis.questionnaire = json.dumps(items)
+        analysis.form_url = data.get('formUrl')
+        analysis.sheet_url = data.get('sheetUrl')
         analysis.put()
         self.response.write(json.dumps(analysis.to_dict()))

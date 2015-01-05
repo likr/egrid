@@ -191,7 +191,8 @@ declare module egrid.model {
 declare module egrid.model {
     class Questionnaire extends Entity {
         public projectKey: string;
-        public items: string[];
+        public formUrl: string;
+        public sheetUrl: string;
         public save(): JQueryPromise<void>;
         static get(projectKey: string, key: string): JQueryPromise<Questionnaire>;
     }
