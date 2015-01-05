@@ -13,7 +13,7 @@
     <div class="navbar navbar-default">
       <div class="navbar-collapse">
         <form class="navbar-form">
-          <a class="btn btn-primary" ng-click="questionnaire.createQuestionnaire()">{{'ACTION.SAVE' | translate}}</a>
+          <button type="button" class="btn btn-primary" ng-click="questionnaire.createQuestionnaire()" ng-disabled="waiting">{{'ACTION.SAVE' | translate}}</button>
         </form>
       </div>
     </div>

@@ -9,17 +9,24 @@
 class AnalysisPcaController {
   public static $inject: string[] = [
     '$http',
+    '$sce',
+    'showMessageDialog',
+    'waiting',
     'questionnaire'
   ];
   private sheetUrl: string;
 
   constructor(
       private $http,
+      private $sce,
+      private showMessageDialog,
+      private waiting,
       questionnaire) {
     this.sheetUrl = questionnaire.sheetUrl;
   }
 
   openSpreadsheet() {
+    this.waiting(true);
     var url = 'https://script.google.com/macros/s/AKfycbz3lF61Cylnn_2UCUouO6wqh_Fmtv0M5WODnY7Mmf27jfmKSEVX/exec';
     this.$http
       .jsonp(url, {
@@ -43,9 +50,12 @@ class AnalysisPcaController {
             width: 1000,
             height: 800
           }));
+        this.waiting(false);
       })
       .error(() => {
-        console.log(arguments);
+        var message = '<a href="' + url + '" target="_blank">Authorize from this link</a>';
+        this.showMessageDialog(this.$sce.trustAsHtml(message));
+        this.waiting(false);
       });
   }
 }

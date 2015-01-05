@@ -4,7 +4,7 @@
       <label>Spreadsheet URL</label>
       <input class="form-control" ng-model="pca.sheetUrl">
     </div>
-    <button class="btn btn-default" ng-click="pca.openSpreadsheet()">OK</button>
+    <button type="button" class="btn btn-default" ng-click="pca.openSpreadsheet()" ng-disabled="waiting">OK</button>
   </form>
   <div>
     <svg id="display"></svg>

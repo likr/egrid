@@ -6,7 +6,18 @@
 
 module egrid.app {
   export class SemProjectQuestionnaireEditController {
-    public static $inject : string[] = ['$q', '$http', 'showConfirmDialog', 'project', 'analysis', 'grid', 'questionnaire'];
+    public static $inject : string[] = [
+      '$q',
+      '$http',
+      '$sce',
+      'showConfirmDialog',
+      'showMessageDialog',
+      'waiting',
+      'project',
+      'analysis',
+      'grid',
+      'questionnaire'
+    ];
     public static resolve = {
       grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
         return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
@@ -24,7 +35,10 @@ module egrid.app {
     constructor(
         private $q: ng.IQService,
         private $http: ng.IHttpService,
+        private $sce: ng.ISCEService,
         private showConfirmDialog: any,
+        private showMessageDialog,
+        private waiting,
         private project: model.Project,
         private analysis: model.Analysis,
         private gridData: model.ProjectGrid,
@@ -61,6 +75,7 @@ module egrid.app {
     }
 
     createQuestionnaire() {
+      this.waiting(true);
       var url = 'https://script.google.com/macros/s/AKfycbyle0FkPUdzJx4uLEpHRe3fuVZmPT6uhkRPfY-3DplX75hCWRA/exec';
       this.$http
         .jsonp(url, {
@@ -77,9 +92,12 @@ module egrid.app {
             .then(() => {
               this.formUrl = data.formUrl;
             });
+          this.waiting(false);
         })
         .error(() => {
-          console.log(arguments);
+          var message = '<a href="' + url + '" target="_blank">Authorize from this link</a>';
+          this.showMessageDialog(this.$sce.trustAsHtml(message));
+          this.waiting(false);
         })
     }
 

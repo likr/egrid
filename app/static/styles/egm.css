@@ -152,3 +152,7 @@ a:link, a:visited, a:active, a:hover {
 .egrid-construct-groups {
   margin-top: 20px;
 }
+
+body.waiting {
+  cursor: progress;
+}
