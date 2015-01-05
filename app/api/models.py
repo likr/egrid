@@ -65,6 +65,7 @@ class Analysis(EgridModel):
     note = db.TextProperty()
     grid = db.TextProperty(required=True)
     form_url = db.StringProperty()
+    sheet_url = db.StringProperty()
     project = db.ReferenceProperty(Project)
 
     def get_grid(self):
@@ -81,6 +82,7 @@ class Analysis(EgridModel):
             'key': str(self.key()),
             'projectKey': str(self.project.key()),
             'formUrl': self.form_url,
+            'sheetUrl': self.sheet_url,
         }
 
     def to_dict(self):

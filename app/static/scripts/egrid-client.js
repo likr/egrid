@@ -787,6 +787,7 @@ var egrid;
                     questionnaire.key_ = data.key;
                     questionnaire.projectKey = data.projectKey;
                     questionnaire.formUrl = data.formUrl;
+                    questionnaire.sheetUrl = data.sheetUrl;
                     return questionnaire;
                 });
             };

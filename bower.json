@@ -26,7 +26,8 @@
     "nvd3": "~1.1.15-beta",
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
-    "d3-downloadable": "*"
+    "d3-downloadable": "*",
+    "numericjs": "~1.2.6"
   },
   "exportsOverride": {
     "angular-dragdrop": {

@@ -72,6 +72,7 @@ module egrid.app {
         })
         .success((data) => {
           this.questionnaire.formUrl = data.formUrl;
+          this.questionnaire.sheetUrl = data.sheetUrl;
           this.$q.when(this.questionnaire.save())
             .then(() => {
               this.formUrl = data.formUrl;

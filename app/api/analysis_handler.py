@@ -77,5 +77,6 @@ class AnalysisQuestionnaireHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         analysis = Analysis.get(analysis_id)
         analysis.form_url = data.get('formUrl')
+        analysis.sheet_url = data.get('sheetUrl')
         analysis.put()
         self.response.write(json.dumps(analysis.to_dict()))
