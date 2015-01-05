@@ -67,7 +67,7 @@ module egrid.app {
           params: {
             callback: 'JSON_CALLBACK',
             title: this.analysis.name,
-            items: this.items.map(item => item.text)
+            items: this.items.filter(item => item.visible).map(item => item.text)
           }
         })
         .success((data) => {
