@@ -56,7 +56,9 @@ class ProjectHandler(webapp2.RequestHandler):
 class ProjectGridCurrentHandler(webapp2.RequestHandler):
     def get(self, project_id):
         project = Project.get(project_id)
-        participants = Participant.all().filter('project =', project)
+        participants = Participant.all()\
+            .filter('project =', project)\
+            .filter('deleted_at =', None)
         self.response.write(json.dumps(merge_grids(participants)))
 
 

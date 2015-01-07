@@ -37,7 +37,9 @@ class AnalysisListHandler(webapp2.RequestHandler):
     def post(self, project_id):
         data = json.loads(self.request.body)
         project = Project.get(project_id)
-        participants = Participant.all().filter('project =', project)
+        participants = Participant.all()\
+            .filter('project =', project)\
+            .filter('deleted_at =', None)
         if data.get('grid'):
             grid = data.get('grid')
         else:
