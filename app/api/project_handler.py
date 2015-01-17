@@ -64,10 +64,11 @@ class ProjectGridCurrentHandler(webapp2.RequestHandler):
 
 def merge_grids(participants):
     all_nodes = []
-    all_links = []
+    all_links = {}
     index_offset = 0
     node_texts = {}
     for participant in participants:
+        participant_key = str(participant.key())
         grid = json.loads(participant.json)
         nodes = grid['nodes']
         links = grid['links']
@@ -75,23 +76,32 @@ def merge_grids(participants):
         for i, node in enumerate(nodes):
             text = node['text']
             if text in node_texts:
-                all_nodes[node_texts[text]]['weight'] += 1
-                all_nodes[node_texts[text]]['participants']\
-                    .append(str(participant.key()))
-                index_map.append(node_texts[text])
+                label = node_texts[text]
+                all_nodes[label]['participants'].add(participant_key)
+                index_map.append(label)
             else:
                 node_texts[text] = index_offset
                 index_map.append(index_offset)
-                node['participants'] = [str(participant.key())]
-                node['weight'] = 1
+                node['participants'] = {participant_key}
                 all_nodes.append(node)
                 index_offset += 1
         for link in links:
-            all_links.append({
-                'source': index_map[link['source']],
-                'target': index_map[link['target']],
-            })
+            s = index_map[link['source']]
+            t = index_map[link['target']]
+            if (s, t) in all_links:
+                all_links[(s, t)]['participants'].add(participant_key)
+            else:
+                all_links[(s, t)] = {
+                    'source': s,
+                    'target': t,
+                    'participants': {participant_key}
+                }
+    for node in all_nodes:
+        node['participants'] = list(node['participants'])
+    for link in all_links.values():
+        link['participants'] = list(link['participants'])
     return {
         'nodes': all_nodes,
-        'links': all_links,
+        'links': all_links.values(),
+        'groups': []
     }

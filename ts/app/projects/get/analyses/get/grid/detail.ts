@@ -104,6 +104,12 @@ module egrid.app {
 
       this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
       var graph = this.grid.graph();
+      this.gridData.groups.forEach((group: any) => {
+        this.grid.group(group.children, {
+          text: group.label || group.children.map(u => graph.get(u).text).join(', '),
+          participants: d3.set([].concat(group.children.map(u => graph.get(u).participants))).values()
+        });
+      });
       egrid.core.network.community.newman(graph).forEach((community, i) => {
         community.forEach(u => {
           graph.get(u).community = i;
@@ -145,20 +151,6 @@ module egrid.app {
         })
         .vertexButtons([
           {
-            icon: 'images/glyphicons_210_left_arrow.png',
-            onClick: (d, u) => {
-              this.openInputTextDialog().then((result: string) => {
-                var v = this.grid.ladderUp(u, result);
-                this.grid.graph().get(v).participants = [];
-                this.updateLayoutOptions();
-                this.selection
-                  .transition()
-                  .call(this.egm);
-                this.changed = true;
-              });
-            }
-          },
-          {
             icon: 'images/glyphicons_207_remove_2.png',
             onClick: (d, u) => {
               this.grid.removeConstruct(u);
@@ -175,20 +167,6 @@ module egrid.app {
             onClick: (d, u) => {
               this.openInputTextDialog(d.text).then((result: string) => {
                 this.grid.updateConstruct(u, 'text', result);
-                this.selection
-                  .transition()
-                  .call(this.egm);
-                this.changed = true;
-              });
-            }
-          },
-          {
-            icon: 'images/glyphicons_211_right_arrow.png',
-            onClick: (d, u) => {
-              this.openInputTextDialog().then((result: string) => {
-                var v = this.grid.ladderDown(u, result);
-                this.grid.graph().get(v).participants = [];
-                this.updateLayoutOptions();
                 this.selection
                   .transition()
                   .call(this.egm);
@@ -265,17 +243,9 @@ module egrid.app {
         .map((vertex) => {
           return vertex.key;
         });
-      this.grid.merge(vertices[0], vertices[1], (u, v) => {
-        var uData = graph.get(u);
-        var vData = graph.get(v);
-        var newParticipants = d3.set();
-        uData.participants.forEach((key) => newParticipants.add(key));
-        vData.participants.forEach((key) => newParticipants.add(key));
-        return {
-          text: uData.text + ', ' + vData.text,
-          participants: newParticipants.values(),
-          original: uData.original || vData.original,
-        };
+      this.grid.group(vertices, {
+        text: vertices.map(u => graph.get(u).text).join(', '),
+        participants: d3.set([].concat(vertices.map(u => graph.get(u).participants))).values()
       });
       this.updateLayoutOptions();
       this.selection
@@ -316,9 +286,7 @@ module egrid.app {
     }
 
     mergeDisabled() {
-      var numSelected = this.selection.selectAll('g.vertex.selected').size();
-      var loop = this.selection.selectAll('g.edge.upper.lower').size() > 0;
-      return numSelected != 2 || loop;
+      return this.selection.selectAll('g.vertex.selected').size() < 2;
     }
 
     paintDisabled() {
@@ -340,7 +308,21 @@ module egrid.app {
     }
 
     save() {
-      var graph = this.grid.graph();
+      var grid = this.grid;
+      var graph = grid.graph();
+      this.gridData.groups = graph.vertices()
+        .filter(u => graph.get(u).children)
+        .map(u => {
+          return {
+            label: graph.get(u).text,
+            children: groupedVertices(u)
+          };
+        });
+      graph.vertices()
+        .filter(u => graph.get(u).children)
+        .forEach(u => {
+          ungroup(u);
+        });
       var vertexMap = {};
       this.gridData.nodes = graph.vertices().map((u, i) => {
         vertexMap[u] = i;
@@ -367,6 +349,32 @@ module egrid.app {
           this.showAlert(k, 'danger');
         })
         ;
+
+      function ungroup(u) {
+        var vs = grid.graph().get(u).children.map(child => child.key);
+        grid.ungroup(u);
+        vs.forEach(v => {
+          if (grid.graph().get(v).children) {
+            ungroup(v);
+          }
+        });
+      }
+
+      function groupedVertices(u) {
+        var result = [];
+        rec(graph.get(u));
+        return result;
+
+        function rec(node) {
+          node.children.forEach(child => {
+            if (child.node.children) {
+              rec(child.node);
+            } else {
+              result.push(child.key);
+            }
+          });
+        }
+      }
     }
 
     close() {
