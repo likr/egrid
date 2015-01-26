@@ -1,9 +1,9 @@
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../../../ts-definitions/DefinitelyTyped/semjs/sem.d.ts"/>
 /// <reference path="../../../../../lib/egrid-client.d.ts"/>
 /// <reference path="../../../../../lib/egrid-core.d.ts"/>
-/// <reference path="../../../../../lib/sem.d.ts"/>
 
 module egrid.app {
 export class SemProjectAnalysisController {
