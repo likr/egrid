@@ -311,9 +311,18 @@ module egrid.app {
     }
 
     mergeDisabled() {
-      var numSelected = this.selection.selectAll('g.vertex.selected').size();
-      var loop = this.selection.selectAll('g.edge.upper.lower').size() > 0;
-      return numSelected != 2 || loop;
+      var selectedVertices = this.selection.selectAll('g.vertex.selected');
+      if (selectedVertices.size() !== 2) {
+        return true;
+      }
+      var graph = this.grid.graph();
+      var nodes = selectedVertices.data();
+      var u = nodes[0].key;
+      var v = nodes[1].key;
+      if (graph.edge(u, v) || graph.edge(v, u)) {
+        return false;
+      }
+      return this.selection.selectAll('g.edge.upper.lower').size() > 0;
     }
 
     paintDisabled() {
