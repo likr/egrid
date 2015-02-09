@@ -22,7 +22,7 @@
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "0.10",
     "angular-ui-router": "~0.2.11",
-    "egrid-core": "~1.2.0",
+    "egrid-core": "~1.2.1",
     "nvd3": "~1.1.15-beta",
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
