@@ -111,8 +111,6 @@ module egrid.app {
       this.egm = egrid.core.egm()
         .contentsMargin(10)
         .contentsScaleMax(2)
-        .edgeInterpolate('cardinal')
-        .edgeTension(0.95)
         .edgeColor((u, v) => {
           if (this.layoutOptions.paint === Paint.Community) {
             if (graph.get(u).community === graph.get(v).community) {
