@@ -22,7 +22,7 @@
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "0.10",
     "angular-ui-router": "~0.2.11",
-    "egrid-core": "~1.1.5",
+    "egrid-core": "~1.2.0",
     "nvd3": "~1.1.15-beta",
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
@@ -75,6 +75,7 @@
   },
   "resolutions": {
     "d3": "~3.5.2",
-    "angular-ui-bootstrap-bower": "0.10"
+    "angular-ui-bootstrap-bower": "0.10",
+    "egrid-core": "~1.2.0"
   }
 }
