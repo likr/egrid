@@ -1,8 +1,8 @@
 /// <reference path="../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
 /// <reference path="../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../ts-definitions/DefinitelyTyped/egrid-core/egrid-core.d.ts"/>
 /// <reference path="../../../lib/egrid-client.d.ts"/>
-/// <reference path="../../../lib/egrid-core.d.ts"/>
 
 class AnalysisSynonymController {
   public static $inject: string[] = [
