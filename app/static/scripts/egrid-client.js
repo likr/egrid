@@ -727,7 +727,6 @@ var egrid;
                 this.projectKey = obj.projectKey;
                 this.nodes = obj.nodes;
                 this.links = obj.links;
-                this.groups = obj.groups;
                 this.name = obj.name;
                 this.note = obj.note;
             }
@@ -741,7 +740,6 @@ var egrid;
                 this.projectKey = obj.projectKey;
                 this.nodes = obj.nodes;
                 this.links = obj.links;
-                this.groups = obj.groups;
                 this.key_ = obj.key;
                 this.createdAt_ = new Date(obj.createdAt);
                 this.updatedAt_ = new Date(obj.updatedAt);

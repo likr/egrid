@@ -75,7 +75,6 @@ class Analysis(EgridModel):
             'projectKey': str(self.project.key()),
             'nodes': data['nodes'],
             'links': data['links'],
-            'groups': data['groups']
         }
 
     def get_questionnaire(self):

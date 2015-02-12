@@ -23,21 +23,7 @@ class AnalysisSynonymController {
         node: node
       };
     });
-
-    this.groups = (gridData.groups || []).map((group, i) => {
-      return {
-        index: i,
-        label: group.label,
-        constructs: group.children.map(u => {
-          this.constructs[u].group = i;
-          return this.constructs[u];
-        })
-      };
-    });
-
-    if (this.groups.length === 0) {
-      this.addGroup();
-    }
+    this.addGroup();
 
     this.unsorted = (construct: any) : boolean => {
       return construct.group === null;
@@ -71,11 +57,43 @@ class AnalysisSynonymController {
   }
 
   save() : void {
-    this.gridData.groups = this.groups.map(group => {
-      return {
-        label: group.label,
-        children: group.constructs.map(construct => construct.index)
-      };
+    var grid = egrid.core.grid();
+    var graph = grid.graph();
+    this.gridData.nodes.forEach(node => {
+      graph.addVertex(node);
+    });
+    this.gridData.links.forEach(link => {
+      graph.addEdge(link.source, link.target);
+    });
+    this.groups.forEach(group => {
+      var i, n;
+      var u = group.constructs[0].index;
+      for (i = 1, n = group.constructs.length; i < n; ++i) {
+        u = grid.merge(u, group.constructs[i].index);
+      }
+      var node = graph.get(u);
+      if (group.label) {
+        node.text = group.label;
+      }
+      node.texts = group.constructs.map(construct => construct.node.text);
+      var participants = d3.set();
+      group.constructs.forEach(construct => {
+        construct.node.participants.forEach(participant => {
+          participants.add(participant);
+        });
+      });
+      node.participants = participants.values();
+    });
+    var obj = egrid.core.graph.dumpJSON(graph);
+    this.gridData.nodes = obj.nodes;
+    this.gridData.links = obj.links;
+    var newIndices = {};
+    graph.vertices().forEach((u, i) =>{
+      newIndices[u] = i;
+    });
+    this.gridData.links.forEach(link => {
+      link.source = newIndices[link.source];
+      link.target = newIndices[link.target];
     });
     this.$q.when(this.gridData.save())
       .then(() => {

@@ -1,4 +1,4 @@
-/// <reference path="../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts"/>
+/// <reference path="../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts" />
 declare module egrid.model {
     interface StorableData {
         key: string;
@@ -166,16 +166,10 @@ declare module egrid.model {
     }
 }
 declare module egrid.model {
-    interface ProjectGridGroupData {
-        children: any[];
-    }
-}
-declare module egrid.model {
     interface ProjectGridData {
         projectKey: string;
         nodes?: ProjectGridNodeData[];
         links?: ProjectGridLinkData[];
-        groups?: ProjectGridGroupData[];
         name?: string;
         note?: string;
     }
@@ -185,7 +179,6 @@ declare module egrid.model {
         public projectKey: string;
         public nodes: ProjectGridNodeData[];
         public links: ProjectGridLinkData[];
-        public groups: ProjectGridGroupData[];
         static type: string;
         constructor(obj: ProjectGridData);
         public save(): JQueryPromise<void>;
