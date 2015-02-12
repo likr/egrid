@@ -16,7 +16,7 @@
       <form class="navbar-form navbar-right">
         <div class="btn-group">
           <button class="btn btn-default" ng-click="grid.save()"><i class="glyphicon glyphicon-share"></i>{{'ACTION.SAVE' | translate}}</button>
-          <a class="btn btn-default" ng-click="grid.close()">閉じる</a>
+          <a class="btn btn-default" ng-click="grid.close()">{{'ACTION.CLOSE' | translate}}</a>
         </div>
       </form>
     </div>
@@ -36,8 +36,8 @@
         <a class="list-group-item" ng-class="{disabled: grid.undoDisabled()}" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</a>
         <a class="list-group-item" ng-class="{disabled: grid.redoDisabled()}" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</a>
         <a class="list-group-item" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</a>
-        <a class="list-group-item" ng-class="{disabled: grid.mergeDisabled()}" ng-click="grid.mergeConstructs()">結合</a>
-        <a class="list-group-item" ng-class="{disabled: grid.paintDisabled()}" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>ペイント</a>
+        <a class="list-group-item" ng-class="{disabled: grid.mergeDisabled()}" ng-click="grid.mergeConstructs()">{{'ACTION.MERGE' |translate}}</a>
+        <a class="list-group-item" ng-class="{disabled: grid.paintDisabled()}" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>{{'ACTION.PAINT' | translate}}</a>
       </div>
       <div class="input-group">
         <input class="form-control" ng-model="grid.searchText" placeholder="Search">

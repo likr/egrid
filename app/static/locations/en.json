@@ -17,6 +17,7 @@
     "NEW": "New",
     "NEXT":"Next",
     "OK": "OK",
+    "PAINT": "Paint",
     "PREVIOUS": "Previous",
     "QUIT": "Quit",
     "REDO": "Redo",
@@ -47,6 +48,11 @@
   },
   "EGM": {
     "APP": {
+      "IMPORTANCE": {
+        "CENTRALITY": "Centrality",
+        "IMPORTANCE": "Importance measure",
+        "PARTICIPANTS": "Number of respondents"
+      },
       "INACTIVE_NODE": {
         "HIDDEN": "Hidden",
         "INACTIVE_NODE": "Inactive Node",
@@ -54,8 +60,17 @@
       },
       "INPUT_EVALUATION_FACTOR": "Input Evaluation Factor",
       "LAYOUT_SETTINGS": "Layout Settings",
+      "MAXIMUM_TEXT_LENGTH": "Maximum text length",
+      "MINIMUM_WEIGHT": "Coarse-graining threshold",
+      "RANK_DIRECTION": {
+        "LR": "Left to right",
+        "RANK_DIRECTION": "Direction",
+        "TB": "Top to bottom"
+      },
       "SCALING": {
         "CONNECTION": "Number of connection",
+        "MIN": "Minimum scaling",
+        "MAX": "Maximum scaling",
         "SCALING": "Scaling"
       },
       "VIEWS": {

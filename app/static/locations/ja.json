@@ -17,6 +17,7 @@
     "NEW": "新規",
     "NEXT":"次へ",
     "OK": "OK",
+    "PAINT": "ペイント",
     "PREVIOUS": "戻る",
     "QUIT": "閉じる",
     "REDO": "やり直し",
@@ -49,6 +50,11 @@
   "EGM": {
     "ANALYSIS": "分析",
     "APP": {
+      "IMPORTANCE": {
+        "CENTRALITY": "中心性",
+        "IMPORTANCE": "重要度指標",
+        "PARTICIPANTS": "回答者数"
+      },
       "INACTIVE_NODE": {
         "HIDDEN": "非表示",
         "INACTIVE_NODE": "フィルター評価項目",
@@ -57,7 +63,8 @@
       "INPUT_EVALUATION_FACTOR": "評価項目を入力してください",
       "LAYOUT_SETTINGS": "レイアウト設定",
       "LINE_UP": "整列",
-      "MINIMUM_WEIGHT": "最小想起数",
+      "MAXIMUM_TEXT_LENGTH": "最大表示文字数",
+      "MINIMUM_WEIGHT": "粗視化閾値",
       "RANK_DIRECTION": {
         "LR": "左右",
         "RANK_DIRECTION": "方向",
