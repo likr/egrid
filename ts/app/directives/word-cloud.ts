@@ -29,6 +29,8 @@ angular.module('egrid')
         var fontSize = d3.scale.linear()
           .domain(d3.extent(texts, text => text.value))
           .range([10, 100]);
+        var angles = [-90, 0];
+
         var svg = d3.select(element[0])
           .append('svg')
           .style('width', width + 'px')
@@ -39,6 +41,8 @@ angular.module('egrid')
           .words(texts)
           .fontSize(d => fontSize(+d.value))
           .text(d => d.key)
+          .font('Impact')
+          .rotate(() => angles[Math.floor(Math.random() * angles.length)])
           .size([width, height])
           .on('end', function(data, bounds) {
             var scale = bounds ? Math.min(
@@ -47,7 +51,7 @@ angular.module('egrid')
               height / Math.abs(bounds[1].y - height / 2),
               height / Math.abs(bounds[0].y - height / 2)) / 2 : 1;
             var text = contents.selectAll('text')
-              .data(data, d => d.text.toLowerCase());
+              .data(data, d => d.text);
             text.enter()
               .append('text')
               .attr({
@@ -62,7 +66,7 @@ angular.module('egrid')
               });
             text
               .style('font-family', (d) => d.font)
-              .style('fill', (d) => fill(d.text.toLowerCase()))
+              .style('fill', (d) => fill(d.text))
               .text(d => d.text);
           })
           .start();

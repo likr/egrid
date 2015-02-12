@@ -7,6 +7,9 @@ angular.module('egrid')
         controller: ($scope, $modalInstance, texts) => {
           $scope.texts = texts;
           $scope.selectText = (text) => $modalInstance.close(text);
+          $scope.close = () => {
+            $modalInstance.dismiss();
+          };
         },
         resolve: {
           texts: () => texts

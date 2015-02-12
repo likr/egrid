@@ -498,6 +498,7 @@ module egrid.app {
       graph.vertices().forEach(u => {
         var node = graph.get(u);
         node.text.split(' ').forEach(text => {
+          text = text.toLowerCase();
           if (!textCount[text]) {
             textCount[text] = 0;
           }
