@@ -498,12 +498,13 @@ module egrid.app {
       var textCount = {};
       var graph = this.grid.graph();
       graph.vertices().forEach(u => {
-        this.separateText(graph.get(u).text).forEach(text => {
+        var node = graph.get(u);
+        this.separateText(node.text).forEach(text => {
           text = text.toLowerCase();
           if (!textCount[text]) {
             textCount[text] = 0;
           }
-          textCount[text] += 1;
+          textCount[text] += node.participants.length;
         });
       });
       var texts = Object.keys(textCount).map(text => {

@@ -26,7 +26,7 @@ angular.module('egrid')
         var width = 500;
         var height = 500;
         var fill = d3.scale.category20b();
-        var fontSize = d3.scale.linear()
+        var fontSize = d3.scale.sqrt()
           .domain(d3.extent(texts, text => text.value))
           .range([10, 100]);
         var angles = [-90, 0];
