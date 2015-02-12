@@ -54,7 +54,17 @@ module egrid.app {
 
 
   export class ProjectGridEditController {
-    public static $inject : string[] = ['$q', '$state', '$scope', '$modal', 'showAlert', 'grid', 'project', 'participants'];
+    public static $inject : string[] = [
+      '$q',
+      '$state',
+      '$scope',
+      '$modal',
+      'showAlert',
+      'showWordCloudDialog',
+      'grid',
+      'project',
+      'participants'
+    ];
     public static resolve = {
       participants: ['$q', '$stateParams', ($q, $stateParams) => {
         return $q.when(model.Participant.query($stateParams['projectKey']));
@@ -94,6 +104,7 @@ module egrid.app {
         private $scope,
         private $modal,
         private showAlert,
+        private showWordCloudDialog,
         private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
@@ -479,6 +490,30 @@ module egrid.app {
           }
         },
       }).result;
+    }
+
+    private openWordCloud() {
+      var textCount = {};
+      var graph = this.grid.graph();
+      graph.vertices().forEach(u => {
+        var node = graph.get(u);
+        node.text.split(' ').forEach(text => {
+          if (!textCount[text]) {
+            textCount[text] = 0;
+          }
+          textCount[text] += 1;
+        });
+      });
+      var texts = Object.keys(textCount).map(text => {
+        return {
+          key: text,
+          value: textCount[text]
+        };
+      });
+      this.showWordCloudDialog(texts).result
+        .then(text => {
+          this.searchText = text;
+        });
     }
 
     private updateLayoutOptions() {

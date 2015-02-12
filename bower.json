@@ -27,7 +27,8 @@
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
     "d3-downloadable": "*",
-    "d3-pca": "*"
+    "d3-pca": "*",
+    "d3-cloud": "~1.0.5"
   },
   "exportsOverride": {
     "angular-dragdrop": {
@@ -40,6 +41,9 @@
       "js": "dist/js/*.js",
       "css": "dist/css/*.css",
       "fonts": "dist/fonts/*"
+    },
+    "d3-cloud": {
+      "js": "d3.layout.cloud.js"
     },
     "dagre": {
       "js": "dist/*.js"
