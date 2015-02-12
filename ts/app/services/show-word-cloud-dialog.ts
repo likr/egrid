@@ -2,7 +2,7 @@
 
 angular.module('egrid')
   .factory('showWordCloudDialog', ['$modal', ($modal) => {
-    return (texts) =>{
+    return (texts) => {
       return $modal.open({
         controller: ($scope, $modalInstance, texts) => {
           $scope.texts = texts;

@@ -61,6 +61,7 @@ module egrid.app {
       '$modal',
       'showAlert',
       'showWordCloudDialog',
+      'separateText',
       'grid',
       'project',
       'participants'
@@ -105,6 +106,7 @@ module egrid.app {
         private $modal,
         private showAlert,
         private showWordCloudDialog,
+        private separateText,
         private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
@@ -496,8 +498,7 @@ module egrid.app {
       var textCount = {};
       var graph = this.grid.graph();
       graph.vertices().forEach(u => {
-        var node = graph.get(u);
-        node.text.split(' ').forEach(text => {
+        this.separateText(graph.get(u).text).forEach(text => {
           text = text.toLowerCase();
           if (!textCount[text]) {
             textCount[text] = 0;
