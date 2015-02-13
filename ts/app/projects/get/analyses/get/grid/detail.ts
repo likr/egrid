@@ -526,7 +526,7 @@ module egrid.app {
     }
 
     private separateText(text: string) : string[] {
-      if (this.$translate.preferredLanguage() === 'ja') {
+      if (this.$translate.use() === 'ja') {
         var poss = d3.set(['名詞', '動詞', '形容詞', '形容動詞']);
         return this.kuromojiTokenizer.tokenize(text)
           .filter(d => poss.has(d.pos))
