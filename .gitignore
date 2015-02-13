@@ -4,5 +4,6 @@ node_modules
 app/static/scripts
 app/static/styles
 app/static/fonts
+app/static/dict
 app/static/files.appcache
 *.pyc

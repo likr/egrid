@@ -27,6 +27,7 @@ module.exports = function(grunt) {
           timestamp: true,
         },
         src: [
+          'dict/*',
           'locations/*.json',
           'scripts/**/*.js',
           'styles/**/*.css',

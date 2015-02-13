@@ -59,9 +59,10 @@ module egrid.app {
       '$state',
       '$scope',
       '$modal',
+      '$translate',
       'showAlert',
       'showWordCloudDialog',
-      'separateText',
+      'kuromojiTokenizer',
       'grid',
       'project',
       'participants'
@@ -69,6 +70,9 @@ module egrid.app {
     public static resolve = {
       participants: ['$q', '$stateParams', ($q, $stateParams) => {
         return $q.when(model.Participant.query($stateParams['projectKey']));
+      }],
+      kuromojiTokenizer: ['getKuromojiTokenizer', (getKuromojiTokenizer) => {
+        return getKuromojiTokenizer();
       }],
     };
     egm: any;
@@ -104,9 +108,10 @@ module egrid.app {
         private $state,
         private $scope,
         private $modal,
+        private $translate,
         private showAlert,
         private showWordCloudDialog,
-        private separateText,
+        private kuromojiTokenizer,
         private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
@@ -496,16 +501,17 @@ module egrid.app {
 
     private openWordCloud() {
       var textCount = {};
+      var nodes = this.selection.selectAll('g.vertex').data();
       var graph = this.grid.graph();
-      graph.vertices().forEach(u => {
-        var node = graph.get(u);
-        this.separateText(node.text).forEach(text => {
-          text = text.toLowerCase();
-          if (!textCount[text]) {
-            textCount[text] = 0;
-          }
-          textCount[text] += node.participants.length;
-        });
+      nodes.forEach(node => {
+        this.separateText(node.data.text)
+          .forEach(text => {
+            text = text.toLowerCase();
+            if (!textCount[text]) {
+              textCount[text] = 0;
+            }
+            textCount[text] += node.data.participants.length;
+          });
       });
       var texts = Object.keys(textCount).map(text => {
         return {
@@ -517,6 +523,17 @@ module egrid.app {
         .then(text => {
           this.searchText = text;
         });
+    }
+
+    private separateText(text: string) : string[] {
+      if (this.$translate.preferredLanguage() === 'ja') {
+        var poss = d3.set(['名詞', '動詞', '形容詞', '形容動詞']);
+        return this.kuromojiTokenizer.tokenize(text)
+          .filter(d => poss.has(d.pos))
+          .map(d => d.basic_form);
+      } else {
+        return text.split(' ');
+      }
     }
 
     private updateLayoutOptions() {
