@@ -59,10 +59,19 @@ angular.module('egrid')
                 'transform': (d) => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')',
               })
               .style('font-size', d => d.size + 'px')
+              .style('cursor', 'pointer')
               .on('click', (d) => {
                 if (callback) {
                   callback(d.text);
                 }
+              })
+              .on('mouseover', function() {
+                d3.select(this)
+                  .style('opacity', 0.5);
+              })
+              .on('mouseleave', function() {
+                d3.select(this)
+                  .style('opacity', 1);
               });
             text
               .style('font-family', (d) => d.font)
