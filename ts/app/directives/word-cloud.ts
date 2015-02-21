@@ -14,17 +14,19 @@ interface IWordCloudScope extends ng.IScope {
 angular.module('egrid')
   .directive('wordCloud', () => {
     return {
+      replace: true,
       restrict: 'E',
       scope: {
         texts: '=',
         callback: '='
       },
+      templateUrl: '/partials/directives/word-cloud.html',
       link: (scope: IWordCloudScope, element: any) => {
         var texts = scope.texts;
         var callback = scope.callback;
 
-        var width = 500;
-        var height = 500;
+        var width = element.width();
+        var height = element.height();
         var fill = d3.scale.category20b();
         var fontSize = d3.scale.sqrt()
           .domain(d3.extent(texts, text => text.value))
@@ -32,7 +34,7 @@ angular.module('egrid')
         var angles = [-90, 0];
 
         var svg = d3.select(element[0])
-          .append('svg')
+          .select('svg')
           .style('width', width + 'px')
           .style('height', height + 'px');
         var contents = svg.append('g')
