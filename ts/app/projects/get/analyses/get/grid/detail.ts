@@ -50,6 +50,7 @@ module egrid.app {
     selectedStrokeColor: any;
     strokeColor: any;
     upperStrokeColor: any;
+    vertexStrokeWidth: number;
   }
 
 
@@ -101,6 +102,7 @@ module egrid.app {
       selectedStrokeColor: '#800080',
       strokeColor: '#000000',
       upperStrokeColor: '#0000ff',
+      vertexStrokeWidth: 2,
     };
 
     constructor(
@@ -580,7 +582,7 @@ module egrid.app {
         .vertexScale((d, u) => {
           return vertexScale(vertexImportance(importance(u)));
         })
-        .vertexStrokeWidth(() => this.layoutOptions.edgeWidth)
+        .vertexStrokeWidth(() => this.layoutOptions.vertexStrokeWidth)
         .vertexOpacity((d) => {
           var opacity = 1;
           if (this.layoutOptions.filter === Filter.Transparent) {

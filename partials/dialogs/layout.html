@@ -16,6 +16,12 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="col-sm-4 control-label">Vertex Frame Width</label>
+      <div class="col-sm-8">
+        <input class="form-control" type="number" min="0" ng-model="options.vertexStrokeWidth"/>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-sm-4 control-label">Edge Width</label>
       <div class="col-sm-8">
         <input class="form-control" type="number" min="0" ng-model="options.edgeWidth"/>
@@ -36,7 +42,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-4 control-label">{{'EGM.APP.MINIMUM_WEIGHT' | translate}}</label>
+      <label class="col-sm-4 control-label">{{'EGM.APP.MINIMUM_WEIGHT' | translate}}({{options.minimumImportance * 100 | number:0}}%)</label>
       <div class="col-sm-8">
         <input class="form-control" type="range" min="0" max="1" step="0.05" ng-model="options.minimumImportance"/>
       </div>
