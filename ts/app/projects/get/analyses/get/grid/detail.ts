@@ -54,10 +54,25 @@ module egrid.app {
 
 
   export class ProjectGridEditController {
-    public static $inject : string[] = ['$q', '$state', '$scope', '$modal', 'showAlert', 'grid', 'project', 'participants'];
+    public static $inject : string[] = [
+      '$q',
+      '$state',
+      '$scope',
+      '$modal',
+      '$translate',
+      'showAlert',
+      'showWordCloudDialog',
+      'kuromojiTokenizer',
+      'grid',
+      'project',
+      'participants'
+    ];
     public static resolve = {
       participants: ['$q', '$stateParams', ($q, $stateParams) => {
         return $q.when(model.Participant.query($stateParams['projectKey']));
+      }],
+      kuromojiTokenizer: ['getKuromojiTokenizer', (getKuromojiTokenizer) => {
+        return getKuromojiTokenizer();
       }],
     };
     egm: any;
@@ -93,7 +108,10 @@ module egrid.app {
         private $state,
         private $scope,
         private $modal,
+        private $translate,
         private showAlert,
+        private showWordCloudDialog,
+        private kuromojiTokenizer,
         private gridData: model.ProjectGrid,
         private project: model.Project,
         private participants: model.Participant[]) {
@@ -479,6 +497,43 @@ module egrid.app {
           }
         },
       }).result;
+    }
+
+    private openWordCloud() {
+      var textCount = {};
+      var nodes = this.selection.selectAll('g.vertex').data();
+      var graph = this.grid.graph();
+      nodes.forEach(node => {
+        this.separateText(node.data.text)
+          .forEach(text => {
+            text = text.toLowerCase();
+            if (!textCount[text]) {
+              textCount[text] = 0;
+            }
+            textCount[text] += node.data.participants.length;
+          });
+      });
+      var texts = Object.keys(textCount).map(text => {
+        return {
+          key: text,
+          value: textCount[text]
+        };
+      });
+      this.showWordCloudDialog(texts).result
+        .then(text => {
+          this.searchText = text;
+        });
+    }
+
+    private separateText(text: string) : string[] {
+      if (this.$translate.use() === 'ja') {
+        var poss = d3.set(['名詞', '動詞', '形容詞', '形容動詞']);
+        return this.kuromojiTokenizer.tokenize(text)
+          .filter(d => poss.has(d.pos))
+          .map(d => d.basic_form);
+      } else {
+        return text.split(' ');
+      }
     }
 
     private updateLayoutOptions() {

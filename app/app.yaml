@@ -45,6 +45,9 @@ handlers:
 - url: /locations
   static_dir: static/locations
 
+- url: /dict
+  static_dir: static/dict
+
 - url: /api/public/.*
   script: main.app
 

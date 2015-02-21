@@ -18,7 +18,7 @@
     "bootstrap": "~3.2.0",
     "angular": "1.2",
     "d3": "~3.4.13",
-    "angular-translate": "~2.0.0",
+    "angular-translate": "~2.6.0",
     "angular-translate-loader-static-files": "~2.0.0",
     "angular-ui-bootstrap-bower": "0.10",
     "angular-ui-router": "~0.2.11",
@@ -27,7 +27,9 @@
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
     "d3-downloadable": "*",
-    "d3-pca": "*"
+    "d3-pca": "*",
+    "d3-cloud": "~1.0.5",
+    "kuromoji": "~0.0.2"
   },
   "exportsOverride": {
     "angular-dragdrop": {
@@ -40,6 +42,9 @@
       "js": "dist/js/*.js",
       "css": "dist/css/*.css",
       "fonts": "dist/fonts/*"
+    },
+    "d3-cloud": {
+      "js": "d3.layout.cloud.js"
     },
     "dagre": {
       "js": "dist/*.js"
@@ -56,6 +61,10 @@
     },
     "jquery-ui": {
       "js": "jquery-ui.*"
+    },
+    "kuromoji": {
+      "js": "**/*.js",
+      "dict": "dist/dict/*"
     },
     "lodash": {
       "js": "dist/*.js"
@@ -74,8 +83,6 @@
     }
   },
   "resolutions": {
-    "d3": "~3.5.2",
-    "angular-ui-bootstrap-bower": "0.10",
-    "egrid-core": "~1.2.0"
+    "d3": "~3.5.2"
   }
 }
