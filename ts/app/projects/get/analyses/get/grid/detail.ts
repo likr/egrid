@@ -31,6 +31,11 @@ module egrid.app {
     Community
   }
 
+  enum Layering {
+    Default,
+    Quadratic
+  }
+
 
   interface LayoutOptions {
     backgroundColor: any;
@@ -41,6 +46,7 @@ module egrid.app {
     edgeWidth: number;
     filter: Filter;
     importance: Importance;
+    layering: Layering;
     lowerStrokeColor: any;
     maxTextLength: number;
     maxVertexScale: number;
@@ -57,6 +63,7 @@ module egrid.app {
   export class ProjectGridEditController {
     public static $inject : string[] = [
       '$q',
+      '$http',
       '$state',
       '$scope',
       '$modal',
@@ -93,6 +100,7 @@ module egrid.app {
       edgeWidth: 1,
       filter: Filter.Transparent,
       importance: Importance.Centrality,
+      layering: Layering.Default,
       lowerStrokeColor: '#ff0000',
       maxTextLength: 10,
       maxVertexScale: 3,
@@ -104,9 +112,12 @@ module egrid.app {
       upperStrokeColor: '#0000ff',
       vertexStrokeWidth: 2,
     };
+    private defaultLayering: (any) => void;
+    private quadraticLayering: (any) => void;
 
     constructor(
         private $q,
+        private $http,
         private $state,
         private $scope,
         private $modal,
@@ -214,6 +225,15 @@ module egrid.app {
           this.$scope.$apply();
         })
         .size([width, height]);
+      this.defaultLayering = this.egm.dagreRanker();
+      this.quadraticLayering = (g) => {
+        var graph = this.grid.graph();
+        g.nodes().forEach(u => {
+          if (!u.startsWith('_')) {
+            g.node(u).rank = 2 * graph.get(+u).rank;
+          }
+        });
+      };
       var downloadable = d3.downloadable({
         filename: this.project.name,
         width: width,
@@ -430,11 +450,13 @@ module egrid.app {
 
     openLayoutSetting() {
       this.openLayoutDialog().then(() => {
-        this.updateLayoutOptions();
-        this.selection
-          .transition()
-          .call(this.egm)
-          .call(this.egm.center());
+        this.updateLayoutOptions()
+          .then(() => {
+            this.selection
+              .transition()
+              .call(this.egm)
+              .call(this.egm.center());
+          });
       });
     }
 
@@ -494,6 +516,7 @@ module egrid.app {
           $scope.RankDirection = RankDirection;
           $scope.Filter = Filter;
           $scope.Paint = Paint;
+          $scope.Layering = Layering;
           $scope.close = () => {
             $modalInstance.close($scope.options);
           }
@@ -606,6 +629,36 @@ module egrid.app {
           }
           return true;
         })
+
+      var deferred = this.$q.defer();
+      if (this.layoutOptions.layering === Layering.Quadratic) {
+        var cgGraph = egrid.core.graph.coarseGraining(graph, this.egm.vertexVisibility());
+        var obj = {
+          nodes: cgGraph.vertices().map(u => {
+            return {
+              index: u
+            };
+          }),
+          links: cgGraph.edges().map(edge => {
+            return {
+              source: edge[0],
+              target: edge[1],
+            };
+          }),
+        };
+        this.$http.post('http://hyperinfo.viz.media.kyoto-u.ac.jp/wsgi/webqlayout/qlayout', obj)
+          .then(response => {
+            response.data.entries.forEach(d => {
+              graph.get(d.key).rank = d.rank;
+            });
+            this.egm.dagreRanker(this.quadraticLayering);
+            deferred.resolve();
+          });
+      } else {
+        this.egm.dagreRanker(this.defaultLayering);
+        deferred.resolve();
+      }
+      return deferred.promise;
 
       function createRanks() {
         var ranks = {};
