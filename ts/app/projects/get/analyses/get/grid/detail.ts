@@ -49,6 +49,8 @@ module egrid.app {
     paint: Paint;
     selectedStrokeColor: any;
     strokeColor: any;
+    transitionDelay: number;
+    transitionDuration: number;
     upperStrokeColor: any;
     vertexStrokeWidth: number;
   }
@@ -101,6 +103,8 @@ module egrid.app {
       paint: Paint.UserDefined,
       selectedStrokeColor: '#800080',
       strokeColor: '#000000',
+      transitionDelay: 100,
+      transitionDuration: 300,
       upperStrokeColor: '#0000ff',
       vertexStrokeWidth: 2,
     };
@@ -433,6 +437,8 @@ module egrid.app {
         this.updateLayoutOptions();
         this.selection
           .transition()
+          .delay(this.layoutOptions.transitionDelay)
+          .duration(this.layoutOptions.transitionDuration)
           .call(this.egm)
           .call(this.egm.center());
       });
