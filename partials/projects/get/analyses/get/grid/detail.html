@@ -34,11 +34,11 @@
   <div class="egrid-control-body">
     <div class="egrid-control-contents">
       <div class="list-group">
-        <a class="list-group-item" ng-class="{disabled: grid.undoDisabled()}" ng-click="grid.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</a>
-        <a class="list-group-item" ng-class="{disabled: grid.redoDisabled()}" ng-click="grid.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</a>
-        <a class="list-group-item" ng-click="grid.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</a>
-        <a class="list-group-item" ng-class="{disabled: grid.mergeDisabled()}" ng-click="grid.mergeConstructs()">{{'ACTION.MERGE' |translate}}</a>
-        <a class="list-group-item" ng-class="{disabled: grid.paintDisabled()}" ng-click="grid.paintConstructs()"><i class="glyphicon glyphicon-tint"></i>{{'ACTION.PAINT' | translate}}</a>
+        <a class="list-group-item btn" ng-class="{disabled: grid.undoDisabled()}" ng-click="grid.undo()" style="text-align: left"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</a>
+        <a class="list-group-item btn" ng-class="{disabled: grid.redoDisabled()}" ng-click="grid.redo()" style="text-align: left"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</a>
+        <a class="list-group-item btn" ng-click="grid.addConstruct()" style="text-align: left"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</a>
+        <a class="list-group-item btn" ng-class="{disabled: grid.mergeDisabled()}" ng-click="grid.mergeConstructs()" style="text-align: left">{{'ACTION.MERGE' |translate}}</a>
+        <a class="list-group-item btn" ng-class="{disabled: grid.paintDisabled()}" ng-click="grid.paintConstructs()" style="text-align: left"><i class="glyphicon glyphicon-tint"></i>{{'ACTION.PAINT' | translate}}</a>
       </div>
       <div class="input-group">
         <input class="form-control" ng-model="grid.searchText" placeholder="Search">
