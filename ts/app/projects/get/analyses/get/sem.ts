@@ -1,9 +1,9 @@
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/semjs/sem.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/egrid-core/egrid-core.d.ts"/>
-/// <reference path="../../../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../../../typings/semjs/sem.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
 export class SemProjectAnalysisController {
@@ -44,7 +44,7 @@ export class SemProjectAnalysisController {
   loadFile() {
     var file = (<any>d3.select("#fileInput").node()).files[0];
     var reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e: any) => {
       var data = d3.csv.parse(e.target.result);
       this.attributes = [];
       for (var attr in data[0]) {

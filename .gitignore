@@ -1,6 +1,9 @@
 doc
 bower_components
 node_modules
+typings
+build
+app/static/dict
 app/static/scripts
 app/static/styles
 app/static/fonts

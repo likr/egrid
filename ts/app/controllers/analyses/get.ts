@@ -1,6 +1,6 @@
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../..//lib/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 class AnalysisController {
   public static $inject: string[] = ['analysis'];
@@ -17,14 +17,14 @@ angular.module('egrid')
           analysis: ['$q', '$stateParams',
                      ($q: ng.IQService,
                       $stateParams: ng.ui.IStateParamsService) => {
-            return $q.when(egrid.model.Analysis.get($stateParams['projectKey'],
-                                                    $stateParams['analysisKey']));
+            return $q.when(<any>egrid.model.Analysis.get($stateParams['projectKey'],
+                                                         $stateParams['analysisKey']));
           }],
           grid: ['$q', '$stateParams',
                  ($q: ng.IQService,
                   $stateParams: ng.ui.IStateParamsService) => {
-            return $q.when(egrid.model.ProjectGrid.get($stateParams['projectKey'],
-                                                       $stateParams['analysisKey']));
+            return $q.when(<any>egrid.model.ProjectGrid.get($stateParams['projectKey'],
+                                                            $stateParams['analysisKey']));
           }]
         },
         url: '/{analysisKey}',

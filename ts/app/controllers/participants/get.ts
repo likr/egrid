@@ -1,6 +1,6 @@
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
   class ParticipantController {
@@ -36,13 +36,13 @@ module egrid.app {
             participant: ['$q', '$stateParams',
                           ($q: ng.IQService,
                            $stateParams: ng.ui.IStateParamsService) => {
-              return $q.when(model.Participant.get($stateParams['projectKey'],
-                                                   $stateParams['participantKey']));
+              return $q.when(<any>model.Participant.get($stateParams['projectKey'],
+                                                        $stateParams['participantKey']));
             }],
             participants: ['$q', '$stateParams',
                            ($q: ng.IQService,
                             $stateParams: ng.ui.IStateParamsService) => {
-              return $q.when(model.Participant.query($stateParams['projectKey']));
+              return $q.when(<any>model.Participant.query($stateParams['projectKey']));
             }]
           },
           url: '/{participantKey}',

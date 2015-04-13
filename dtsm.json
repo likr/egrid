@@ -1,0 +1,49 @@
+{
+  "repos": [
+    {
+      "url": "https://github.com/borisyankov/DefinitelyTyped.git",
+      "ref": "master"
+    }
+  ],
+  "path": "typings",
+  "bundle": "typings/bundle.d.ts",
+  "dependencies": {
+    "angularjs/angular.d.ts": {
+      "ref": "d5f92f93bdb49f332fa662ff1d0cc8700f02e4dc"
+    },
+    "angular-ui-router/angular-ui-router.d.ts": {
+      "ref": "b0056383b51495b373a32b791de8112fcafe2ace"
+    },
+    "d3/d3.d.ts": {
+      "ref": "d5f92f93bdb49f332fa662ff1d0cc8700f02e4dc"
+    },
+    "d3-downloadable/d3-downloadable.d.ts": {
+      "repo": "https://github.com/likr/d3-downloadable",
+      "ref": "6059df95fa03666d133baa3ff7a24a146dac9ba3",
+      "path": "d3-downloadable.d.ts"
+    },
+    "d3-pca/d3-pca.d.ts": {
+      "repo": "https://github.com/likr/d3-pca",
+      "ref": "d1bb86e9f86223bcb65c151f8b1d21dc7347a718",
+      "path": "d3-pca.d.ts"
+    },
+    "egrid-client/egrid-client.d.ts": {
+      "repo": "https://github.com/likr/egrid-client.git",
+      "ref": "4e02199222a7d2c0bd397e117d872016c2382ad7",
+      "path": "egrid-client.d.ts"
+    },
+    "egrid-core/egrid-core.d.ts": {
+      "repo": "https://github.com/likr/egrid-core.git",
+      "ref": "03e6caaf65bdec497768796523b85b2dab7fe7da",
+      "path": "egrid-core.d.ts"
+    },
+    "jquery/jquery.d.ts": {
+      "ref": "b0056383b51495b373a32b791de8112fcafe2ace"
+    },
+    "semjs/sem.d.ts": {
+      "repo": "https://github.com/likr/semjs.git",
+      "ref": "6c24f44982a7681fc77c7d80808d63939c0be4be",
+      "path": "sem.d.ts"
+    }
+  }
+}

@@ -1,8 +1,8 @@
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
-/// <reference path="../../../ts-definitions/DefinitelyTyped/egrid-core/egrid-core.d.ts"/>
-/// <reference path="../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 class AnalysisSynonymController {
   public static $inject: string[] = [
@@ -71,7 +71,7 @@ class AnalysisSynonymController {
       for (i = 1, n = group.constructs.length; i < n; ++i) {
         u = grid.merge(u, group.constructs[i].index);
       }
-      var node = graph.get(u);
+      var node: any = graph.get(u);
       if (group.label) {
         node.text = group.label;
       }

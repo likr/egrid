@@ -1,4 +1,4 @@
-/// <reference path="../lib/egrid-client.d.ts"/>
+/// <reference path="../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="app.ts"/>
 /// <reference path="projects/all/list.ts"/>
 /// <reference path="projects/all/new.ts"/>
@@ -49,7 +49,7 @@ module egrid.app {
               var deferred = $q.defer();
               var destUrl = '/';
               $http.get('/api/public/auth?dest_url=' + encodeURIComponent(destUrl))
-                .success(data => {
+                .success((data: any) => {
                   if (data.logedIn) {
                     deferred.resolve(data);
                   } else {

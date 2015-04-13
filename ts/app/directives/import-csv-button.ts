@@ -1,5 +1,5 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/d3/d3.d.ts"/>
 
 interface IImportCsvButtonScope extends ng.IScope {
   onimport: any;
@@ -35,7 +35,7 @@ class ImportCsvButtonController {
       .result
       .then((csvFile) => {
         var reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (e: any) => {
           var data = d3.csv.parse(e.target.result);
           var texts = {};
           data.forEach(link => {

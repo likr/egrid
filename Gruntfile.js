@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+  'use strict';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     bower: {
@@ -17,6 +18,21 @@ module.exports = function(grunt) {
         }
       }
     },
+    concat: {
+      dist: {
+        src: [
+          'build/app/app.js',
+          'build/app/pagination.js',
+          'build/app/controllers/**/*.js',
+          'build/app/projects/**/*.js',
+          'build/app/directives/**/*.js',
+          'build/app/filters/**/*.js',
+          'build/app/services/**/*.js',
+          'build/app/main.js'
+        ],
+        dest: 'app/static/scripts/collaboegm.js'
+      }
+    },
     manifest: {
       generate: {
         dest: 'app/static/files.appcache',
@@ -24,7 +40,7 @@ module.exports = function(grunt) {
           basePath: 'app/static',
           hash: true,
           master: ['index.html'],
-          timestamp: true,
+          timestamp: true
         },
         src: [
           'dict/*',
@@ -32,57 +48,53 @@ module.exports = function(grunt) {
           'scripts/**/*.js',
           'styles/**/*.css',
           'fonts/*'
-        ],
-      },
+        ]
+      }
     },
     ngtemplates: {
       egrid: {
         cwd: '.',
         dest: 'app/static/scripts/templates.js',
         options: {
-          prefix: '/',
+          prefix: '/'
         },
         src: 'partials/**/*.html'
       }
     },
     typescript: {
       base: {
-        src: [
-          'ts/app/main.ts',
-          'ts/app/controllers/**/*.ts',
-          'ts/app/directives/**/*.ts',
-          'ts/app/filters/**/*.ts',
-          'ts/app/services/**/*.ts',
-        ],
-        dest: 'app/static/scripts/collaboegm.js',
+        src: ['ts/app/**/*.ts'],
+        dest: 'build',
         options: {
+          basePath: 'ts',
           sourceMap: false,
-          target: 'es5',
+          target: 'es5'
         }
       }
     },
     watch: {
       scripts: {
         files: ['ts/**/*.ts'],
-        tasks: ['typescript', 'manifest'],
+        tasks: ['typescript', 'concat', 'manifest']
       },
       templates: {
         files: ['app/static/index.html', 'partials/**/*.html'],
-        tasks: ['ngtemplates','manifest'],
+        tasks: ['ngtemplates', 'manifest']
       },
       statics: {
         files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],
         tasks: ['manifest']
       }
-    },
+    }
   });
 
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-manifest');
   grunt.loadNpmTasks('grunt-typescript');
 
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['ngtemplates', 'typescript', 'manifest']);
+  grunt.registerTask('build', ['ngtemplates', 'typescript', 'concat', 'manifest']);
 };

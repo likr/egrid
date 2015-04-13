@@ -1,4 +1,4 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
 
 angular.module('egrid')
   .directive('fileModel', ['$parse', ($parse) => {

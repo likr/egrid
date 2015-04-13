@@ -1,4 +1,4 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
 
 interface IExportJsonButtonScope extends ng.IScope {
   graph: any;

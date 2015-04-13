@@ -1,8 +1,8 @@
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/egrid-core/egrid-core.d.ts"/>
-/// <reference path="../../../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
   export class SemProjectQuestionnaireEditController {
@@ -61,7 +61,7 @@ module egrid.app {
       var width = $('#display-wrapper').width();
       var height = $('#display-wrapper').height();
       this.egm = egrid.core.egm()
-        .vertexVisibility((item) => item.visible)
+        .vertexVisibility((item: any) => item.visible)
         .size([width, height]);
       this.selection = d3.select('#display')
         .datum(this.grid.graph())
@@ -85,10 +85,10 @@ module egrid.app {
             items: this.items.filter(item => item.visible).map(item => item.text)
           }
         })
-        .success((data) => {
+        .success((data: any) => {
           this.questionnaire.formUrl = data.formUrl;
           this.questionnaire.sheetUrl = data.sheetUrl;
-          this.$q.when(this.questionnaire.save())
+          this.$q.when(<any>this.questionnaire.save())
             .then(() => {
               this.formUrl = data.formUrl;
             });
@@ -106,7 +106,7 @@ module egrid.app {
         .result
         .then(() => {
           this.questionnaire.formUrl = null;
-          this.$q.when(this.questionnaire.save())
+          this.$q.when(<any>this.questionnaire.save())
             .then(() => {
               this.formUrl = null;
             });

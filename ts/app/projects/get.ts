@@ -1,4 +1,4 @@
-/// <reference path="../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
   export class ProjectController {

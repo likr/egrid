@@ -1,4 +1,4 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
 
 interface IImportJsonButtonScope extends ng.IScope {
   onimport: any;
@@ -32,7 +32,7 @@ class ImportJsonButtonController {
       .result
       .then((jsonFile) => {
         var reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (e: any) => {
           this.onimport(JSON.parse(e.target.result));
         };
         reader.readAsText(jsonFile);

@@ -8,16 +8,16 @@
     "email": "onoue@likr-lab.com"
   },
   "dependencies": {
-    "bower": "^1.2.8",
-    "tsd": "^0.3.1"
+    "bower": "^1.2.8"
   },
   "devDependencies": {
     "grunt": "*",
     "grunt-angular-templates": "*",
-    "grunt-bower-task": "^0.4.0",
+    "grunt-bower-task": "*",
     "grunt-cli": "*",
+    "grunt-contrib-concat": "*",
     "grunt-contrib-watch": "*",
-    "grunt-manifest": "^0.4.0",
-    "grunt-typescript": "^0.6.1"
+    "grunt-manifest": "*",
+    "grunt-typescript": "*"
   }
 }

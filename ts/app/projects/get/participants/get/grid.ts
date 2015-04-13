@@ -1,17 +1,17 @@
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/jquery/jquery.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/egrid-core/egrid-core.d.ts"/>
-/// <reference path="../../../../../lib/d3-downloadable.d.ts"/>
-/// <reference path="../../../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../../../typings/jquery/jquery.d.ts"/>
+/// <reference path="../../../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
   export class ParticipantGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'participant', 'gridData'];
     public static resolve = {
       gridData: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
+        return $q.when(<any>model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
       }]
     };
     grid: any;

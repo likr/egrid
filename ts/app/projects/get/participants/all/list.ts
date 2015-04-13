@@ -1,6 +1,6 @@
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../ts-definitions/DefinitelyTyped/angular-ui/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../lib/egrid-client.d.ts"/>
+/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="../../../../pagination.ts"/>
 
 module egrid.app {
@@ -8,7 +8,7 @@ module egrid.app {
     public static $inject: string[] = ['participants'];
     public static resolve = {
       participants: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(model.Participant.query($stateParams['projectKey']))
+        return $q.when(<any>model.Participant.query($stateParams['projectKey']))
       }],
     };
 
