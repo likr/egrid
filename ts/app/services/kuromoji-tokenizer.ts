@@ -1,4 +1,4 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
 
 declare var kuromoji: any;
 

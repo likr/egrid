@@ -1,5 +1,5 @@
-/// <reference path="../../ts-definitions/DefinitelyTyped/angularjs/angular.d.ts"/>
-/// <reference path="../../ts-definitions/DefinitelyTyped/d3/d3.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/d3/d3.d.ts"/>
 
 interface WordCloudText {
   key: string;
@@ -53,7 +53,7 @@ angular.module('egrid')
               height / Math.abs(bounds[1].y - height / 2),
               height / Math.abs(bounds[0].y - height / 2)) / 2 : 1;
             var text = contents.selectAll('text')
-              .data(data, d => d.text);
+              .data(data, (d: any) => d.text);
             text.enter()
               .append('text')
               .attr({

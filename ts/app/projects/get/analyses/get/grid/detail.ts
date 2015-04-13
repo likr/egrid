@@ -139,11 +139,6 @@ module egrid.app {
 
       this.grid = egrid.core.grid<GridNode, GridLink>(this.gridData.nodes, this.gridData.links);
       var graph: egrid.core.Graph<GridNode, GridLink> = this.grid.graph();
-      egrid.core.network.community.newman(graph).forEach((community, i) => {
-        community.forEach(u => {
-          graph.get(u).community = i;
-        });
-      });
 
       var width = $(window).width();
       var height = $(window).height() - 100;
