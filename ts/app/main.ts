@@ -1,6 +1,5 @@
 /// <reference path="../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="app.ts"/>
-/// <reference path="projects/get.ts"/>
 /// <reference path="projects/get/analyses/all/list.ts"/>
 /// <reference path="projects/get/analyses/all/new.ts"/>
 /// <reference path="projects/get/analyses/get/grid.ts"/>
@@ -125,15 +124,6 @@ module egrid.app {
                 $scope.project = project;
               }],
               templateUrl: '/partials/projects/get.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.detail', {
-          url: '/detail',
-          views: {
-            'tab-content@egrid.projects.get': {
-              controller: 'ProjectController as ctrl',
-              templateUrl: '/partials/projects/get/detail.html',
             },
           },
         })
@@ -361,7 +351,6 @@ module egrid.app {
     .controller('ParticipantGridController', ParticipantGridController)
     .controller('ParticipantGridEditController', ParticipantGridEditController)
     .controller('ParticipantListController', ParticipantListController)
-    .controller('ProjectController', ProjectController)
     .controller('ProjectGridController', ProjectGridController)
     .controller('ProjectGridEditController', ProjectGridEditController)
     .controller('SemController', SemProjectAnalysisController)

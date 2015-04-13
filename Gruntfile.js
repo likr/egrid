@@ -22,13 +22,13 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'build/app/app.js',
-          'build/app/pagination.js',
-          'build/app/components/**/*.js',
-          'build/app/projects/**/*.js',
           'build/app/directives/**/*.js',
           'build/app/filters/**/*.js',
           'build/app/services/**/*.js',
-          'build/app/main.js'
+          'build/app/pagination.js',
+          'build/app/projects/**/*.js',
+          'build/app/main.js',
+          'build/app/components/**/*.js'
         ],
         dest: 'app/static/scripts/collaboegm.js'
       }
