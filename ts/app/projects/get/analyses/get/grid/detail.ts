@@ -32,6 +32,18 @@ module egrid.app {
   }
 
 
+  interface GridNode extends egrid.core.GridNode {
+    color?: string;
+    community?: number;
+    original: boolean;
+    participants: string[];
+  }
+
+
+  interface GridLink extends egrid.core.GridLink {
+  }
+
+
   interface LayoutOptions {
     backgroundColor: any;
     dagreEdgeSep: number;
@@ -78,8 +90,8 @@ module egrid.app {
         return getKuromojiTokenizer();
       }],
     };
-    egm: any;
-    grid: any;
+    egm: egrid.core.EGM<GridNode, GridLink>;
+    grid: egrid.core.Grid<GridNode, GridLink>;
     selection: D3.Selection;
     filter: {} = {};
     changed: boolean = false;
@@ -126,8 +138,13 @@ module egrid.app {
         this.filter[participant.key] = true;
       });
 
-      this.grid = egrid.core.grid(this.gridData.nodes, this.gridData.links);
-      var graph = this.grid.graph();
+      this.grid = egrid.core.grid<GridNode, GridLink>(this.gridData.nodes, this.gridData.links);
+      var graph: egrid.core.Graph<GridNode, GridLink> = this.grid.graph();
+      egrid.core.network.community.newman(graph).forEach((community, i) => {
+        community.forEach(u => {
+          graph.get(u).community = i;
+        });
+      });
 
       var width = $(window).width();
       var height = $(window).height() - 100;
@@ -152,7 +169,7 @@ module egrid.app {
             return 0.3;
           }
         })
-        .vertexColor((d) => {
+        .vertexColor((d: GridNode) => {
           if (this.layoutOptions.paint === Paint.UserDefined) {
             return d.color;
           } else if (this.layoutOptions.paint === Paint.Community) {
@@ -368,11 +385,11 @@ module egrid.app {
     save() {
       var graph = this.grid.graph();
       var vertexMap = {};
-      this.gridData.nodes = graph.vertices().map((u, i) => {
+      this.gridData.nodes = graph.vertices().map((u, i): any => {
         vertexMap[u] = i;
         return graph.get(u);
       });
-      this.gridData.links = graph.edges().map((edge) => {
+      this.gridData.links = graph.edges().map((edge): any => {
         return {
           source: vertexMap[edge[0]],
           target: vertexMap[edge[1]]
@@ -449,7 +466,6 @@ module egrid.app {
         var d = this.grid.graph().get(u);
         return {
           text: d.text,
-          weight: d.weight,
         };
       });
       return this.$modal.open({
