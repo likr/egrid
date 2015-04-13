@@ -14,23 +14,24 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.0",
-    "bootstrap": "~3.2.0",
-    "angular": "1.2",
-    "d3": "~3.4.13",
-    "angular-translate": "~2.6.0",
-    "angular-translate-loader-static-files": "~2.0.0",
-    "angular-ui-bootstrap-bower": "0.10",
+    "angular": "1.3",
+    "angular-dragdrop": "1.0",
+    "angular-translate": "2.6",
+    "angular-translate-loader-static-files": "2.6",
+    "angular-ui-bootstrap-bower": "0.12",
     "angular-ui-router": "~0.2.11",
-    "egrid-core": "~1.2.2",
-    "nvd3": "~1.1.15-beta",
-    "angular-dragdrop": "~1.0.8",
-    "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
+    "bootstrap": "~3.2.0",
+    "d3": "~3.4.13",
+    "d3-cloud": "~1.0.5",
     "d3-downloadable": "*",
     "d3-pca": "*",
-    "d3-cloud": "~1.0.5",
+    "egrid-client": "https://github.com/likr/egrid-client.git",
+    "egrid-core": "~1.2.2",
+    "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
+    "jquery": "~2.1.0",
     "kuromoji": "~0.0.2",
-    "egrid-client": "https://github.com/likr/egrid-client.git"
+    "nvd3": "~1.1.15-beta",
+    "semjs": "https://github.com/likr/semjs.git"
   },
   "exportsOverride": {
     "angular-dragdrop": {
@@ -84,6 +85,7 @@
     }
   },
   "resolutions": {
+    "angular": "1.3",
     "d3": "~3.5.2"
   }
 }
