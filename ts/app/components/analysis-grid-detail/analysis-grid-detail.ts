@@ -661,8 +661,8 @@ module egrid.app {
           url: '/detail',
           views: {
             'base@': {
-              controller: 'AnalysisGridDetailController as grid',
-              templateUrl: '/partials/projects/get/analyses/get/grid/detail.html',
+              controller: 'AnalysisGridDetailController as analysisGridDetail',
+              templateUrl: '/components/analysis-grid-detail/analysis-grid-detail.html',
             },
           },
         })

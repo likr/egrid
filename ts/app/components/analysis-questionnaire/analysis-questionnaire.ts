@@ -122,8 +122,8 @@ module egrid.app {
           url: '/questionnaire',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisQuestionnaireController as questionnaire',
-              templateUrl: '/partials/projects/get/analyses/get/questionnaire.html',
+              controller: 'AnalysisQuestionnaireController as analysisQuestionnaire',
+              templateUrl: '/components/analysis-questionnaire/analysis-questionnaire.html',
             },
           },
         });

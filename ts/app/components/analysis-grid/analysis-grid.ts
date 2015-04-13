@@ -77,8 +77,8 @@ module egrid.app {
           url: '/grid',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisGridController as grid',
-              templateUrl: '/partials/projects/get/analyses/get/grid.html',
+              controller: 'AnalysisGridController as analysisGrid',
+              templateUrl: '/components/analysis-grid/analysis-grid.html',
             },
           },
         });

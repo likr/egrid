@@ -12,7 +12,7 @@ module egrid.app {
           url: '/help',
           views: {
             'content@egrid': {
-              templateUrl: '/partials/help.html',
+              templateUrl: '/components/help/help.html',
             },
           },
         });

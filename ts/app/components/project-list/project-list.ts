@@ -23,8 +23,8 @@ module egrid.app {
           url: '/list',
           views: {
             'tab-content@egrid.projects.all': {
-              controller: 'ProjectListController as ctrl',
-              templateUrl: '/partials/projects/all/list.html',
+              controller: 'ProjectListController as projectList',
+              templateUrl: '/components/project-list/project-list.html',
             },
           },
         })

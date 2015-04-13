@@ -10,8 +10,8 @@ module egrid.app {
   class ParticipantGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'participant', 'gridData'];
     public static resolve = {
-      gridData: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(<any>model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']));
+      gridData: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+        return model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']);
       }]
     };
     grid: any;
@@ -77,8 +77,8 @@ module egrid.app {
           url: '/grid',
           views: {
             'tab-content@egrid.projects.get.participants.get': {
-              controller: 'ParticipantGridController as grid',
-              templateUrl: '/partials/projects/get/participants/get/grid.html',
+              controller: 'ParticipantGridController as participantGrid',
+              templateUrl: '/components/participant-grid/participant-grid.html',
             },
           },
         });

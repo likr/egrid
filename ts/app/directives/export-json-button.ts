@@ -36,7 +36,8 @@ class ExportJsonButtonController {
 angular.module('egrid')
   .directive('exportJsonButton', [() => {
     return {
-      controller: 'ExportJsonButtonController as exportJsonButton',
+      controller: ExportJsonButtonController,
+      controllerAs: 'exportJsonButton',
       replace: true,
       restrict: 'E',
       scope: {

@@ -2,7 +2,7 @@
 /// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
-class AnalysisController {
+class AnalysisGetController {
   public static $inject: string[] = ['analysis'];
 
   constructor(private analysis) {
@@ -14,26 +14,20 @@ angular.module('egrid')
     $stateProvider
       .state('egrid.projects.get.analyses.get', {
         resolve: {
-          analysis: ['$q', '$stateParams',
-                     ($q: ng.IQService,
-                      $stateParams: ng.ui.IStateParamsService) => {
-            return $q.when(<any>egrid.model.Analysis.get($stateParams['projectKey'],
-                                                         $stateParams['analysisKey']));
+          analysis: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+            return egrid.model.Analysis.get($stateParams['projectKey'], $stateParams['analysisKey']);
           }],
-          grid: ['$q', '$stateParams',
-                 ($q: ng.IQService,
-                  $stateParams: ng.ui.IStateParamsService) => {
-            return $q.when(<any>egrid.model.ProjectGrid.get($stateParams['projectKey'],
-                                                            $stateParams['analysisKey']));
+          grid: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+            return egrid.model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
           }]
         },
         url: '/{analysisKey}',
         views: {
           'content@egrid': {
-            controller: 'AnalysisController as analysis',
-            templateUrl: '/partials/projects/get/analyses/get.html',
+            controller: 'AnalysisGetController as analysisGet',
+            templateUrl: '/components/analysis-get/analysis-get.html',
           },
         },
       })
   }])
-  .controller('AnalysisController', AnalysisController);
+  .controller('AnalysisGetController', AnalysisGetController);

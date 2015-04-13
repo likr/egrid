@@ -43,7 +43,8 @@ class ImportJsonButtonController {
 angular.module('egrid')
   .directive('importJsonButton', [() => {
     return {
-      controller: 'ImportJsonButtonController as importJsonButton',
+      controller: ImportJsonButtonController,
+      controllerAs: 'importJsonButton',
       replace: true,
       restrict: 'E',
       scope: {

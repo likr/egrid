@@ -34,8 +34,8 @@ module egrid.app {
           url: '/new',
           views: {
             'sub-tab-content@egrid.projects.get.analyses.all': {
-              controller: 'AnalysisNewController as analysis',
-              templateUrl: '/partials/projects/get/analyses/all/new.html',
+              controller: 'AnalysisNewController as analysisNew',
+              templateUrl: '/components/analysis-new/analysis-new.html',
             },
           },
         })

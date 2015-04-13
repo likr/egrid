@@ -1,0 +1,32 @@
+<div>
+  <div class="navbar navbar-default navbar-fixed-top" style="top: 50px;">
+    <div class="container">
+      <form class="navbar-form navbar-left">
+        <button class="btn btn-default" ng-click="participantGridDetail.addConstruct()"><i class="glyphicon glyphicon-pencil"></i>{{'ACTION.APPEND' | translate}}</button>
+        <button class="btn btn-default" ng-disabled="participantGridDetail.mergeDisabled()" ng-click="participantGridDetail.mergeConstructs()">結合</button>
+      </form>
+      <form class="navbar-form navbar-right">
+        <button class="btn btn-default" ng-click="participantGridDetail.save()"><i class="glyphicon glyphicon-share"></i>{{'ACTION.SAVE' | translate}}</button>
+        <a class="btn btn-default" ng-click="participantGridDetail.close()">閉じる</a>
+      </form>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; top: 100px; overflow: hidden;">
+    <svg id="display" style="display: block;"></svg>
+    <div id="nodeController" class="btn-group invisible" style="position: absolute; top: 0; left: 0;">
+      <button id="ladderUpButton" class="btn btn-default" title="{{'EGM.LADDER_UP' | translate}}"><span class="glyphicon glyphicon-arrow-left"></span></button>
+      <button id="removeNodeButton" class="btn btn-default" title="{{'ACTION.REMOVE' | translate}}"><span class="glyphicon glyphicon-remove"></span></button>
+      <button id="mergeNodeButton" class="btn btn-default" title="{{'ACTION.MERGE' | translate}}"><span class="glyphicon glyphicon-plus"></span></button>
+      <button id="editNodeButton" class="btn btn-default" title="{{'ACTION.EDIT' | translate}}"><span class="glyphicon glyphicon-pencil"></span></button>
+      <button id="ladderDownButton" class="btn btn-default" title="{{'EGM.LADDER_DOWN' | translate}}"><span class="glyphicon glyphicon-arrow-right"></span></button>
+    </div>
+  </div>
+  <div class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+      <form class="navbar-form navbar-left">
+        <button class="btn btn-default" ng-disabled="participantGridDetail.undoDisabled()" ng-click="participantGridDetail.undo()"><i class="glyphicon glyphicon-arrow-left"></i>{{'ACTION.UNDO' | translate}}</button>
+        <button class="btn btn-default" ng-disabled="participantGridDetail.redoDisabled()" ng-click="participantGridDetail.redo()"><i class="glyphicon glyphicon-arrow-right"></i>{{'ACTION.REDO' | translate}}</button>
+      </form>
+    </div>
+  </div>
+</div>

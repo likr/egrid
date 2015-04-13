@@ -59,8 +59,8 @@ module egrid.app {
           url: '/list',
           views: {
             'sub-tab-content@egrid.projects.get.collaborators.all': {
-              controller: 'CollaboratorListController as collaborators',
-              templateUrl: '/partials/projects/get/collaborators/all/list.html',
+              controller: 'CollaboratorListController as collaboratorList',
+              templateUrl: '/components/collaborator-list/collaborator-list.html',
             },
           },
         });

@@ -35,8 +35,8 @@ module egrid.app {
           url: '/new',
           views: {
             'sub-tab-content@egrid.projects.get.collaborators.all': {
-              controller: 'CollaboratorNewController as newCollaborator',
-              templateUrl: '/partials/projects/get/collaborators/all/new.html',
+              controller: 'CollaboratorNewController as collaboratorNew',
+              templateUrl: '/components/collaborator-new/collaborator-new.html',
             },
           },
         })

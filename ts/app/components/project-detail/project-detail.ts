@@ -79,7 +79,7 @@ module egrid.app {
           views: {
             'tab-content@egrid.projects.get': {
               controller: 'ProjectDetailController as ctrl',
-              templateUrl: '/partials/projects/get/detail.html',
+              templateUrl: '/components/project-detail/project-detail.html',
             },
           },
         })

@@ -287,8 +287,8 @@ module egrid.app {
           url: '/detail',
           views: {
             'base@': {
-              controller: 'ParticipantGridDetailController as grid',
-              templateUrl: '/partials/projects/get/participants/get/grid/detail.html',
+              controller: 'ParticipantGridDetailController as participantGridDetail',
+              templateUrl: '/components/participant-grid-detail/participant-grid-detail.html',
             },
           },
         });

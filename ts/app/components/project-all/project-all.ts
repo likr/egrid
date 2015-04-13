@@ -13,7 +13,7 @@ module egrid.app {
           url: '/all',
           views: {
             'content@egrid': {
-              templateUrl: '/partials/projects/all.html',
+              templateUrl: '/components/project-all/project-all.html',
             },
           },
         });

@@ -32,10 +32,10 @@ class ExportCsvButtonController {
 }
 
 angular.module('egrid')
-  .controller('ExportCsvButtonController', ExportCsvButtonController)
   .directive('exportCsvButton', [() => {
     return {
-      controller: 'ExportCsvButtonController as exportCsvButton',
+      controller: ExportCsvButtonController,
+      controllerAs: 'exportCsvButton',
       replace: true,
       restrict: 'E',
       scope: {

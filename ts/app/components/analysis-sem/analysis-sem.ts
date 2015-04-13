@@ -192,8 +192,8 @@ module egrid.app {
           url: '/sem',
           views: {
             'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisSemController as sem',
-              templateUrl: '/partials/projects/get/analyses/get/sem.html',
+              controller: 'AnalysisSemController as analysisSem',
+              templateUrl: '/components/analysis-sem/analysis-sem.html',
             },
           },
         })

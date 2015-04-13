@@ -114,8 +114,8 @@ angular.module('egrid')
         url: '/synonym',
         views: {
           'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisSynonymController as synonym',
-            templateUrl: '/partials/projects/get/analyses/get/synonym.html',
+            controller: 'AnalysisSynonymController as analysisSynonym',
+            templateUrl: '/components/analysis-synonym/analysis-synonym.html',
           },
         },
       })

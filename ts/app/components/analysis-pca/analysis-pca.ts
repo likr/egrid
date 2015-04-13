@@ -75,8 +75,8 @@ angular.module('egrid')
         url: '/pca',
         views: {
           'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisPcaController as pca',
-            templateUrl: '/partials/projects/get/analyses/get/pca.html',
+            controller: 'AnalysisPcaController as analysisPca',
+            templateUrl: '/components/analysis-pca/analysis-pca.html',
           }
         }
       });

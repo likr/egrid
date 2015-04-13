@@ -97,8 +97,8 @@ angular.module('egrid')
         url: '/detail',
         views: {
           'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisDetailController as detail',
-            templateUrl: '/partials/projects/get/analyses/get/detail.html',
+            controller: 'AnalysisDetailController as analysisDetail',
+            templateUrl: '/components/analysis-detail/analysis-detail.html',
           },
         },
       });

@@ -41,7 +41,7 @@ module egrid.app {
           views: {
             'sub-tab-content@egrid.projects.get.participants.all': {
               controller: 'ParticipantNewController as newParticipant',
-              templateUrl: '/partials/projects/get/participants/all/new.html',
+              templateUrl: '/components/participant-new/participant-new.html',
             },
           },
         });

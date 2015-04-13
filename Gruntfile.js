@@ -26,9 +26,8 @@ module.exports = function(grunt) {
           'build/app/filters/**/*.js',
           'build/app/services/**/*.js',
           'build/app/pagination.js',
-          'build/app/projects/**/*.js',
-          'build/app/main.js',
-          'build/app/components/**/*.js'
+          'build/app/components/**/*.js',
+          'build/app/main.js'
         ],
         dest: 'app/static/scripts/collaboegm.js'
       }
@@ -58,7 +57,10 @@ module.exports = function(grunt) {
         options: {
           prefix: '/'
         },
-        src: 'partials/**/*.html'
+        src: [
+          'components/**/*.html',
+          'partials/**/*.html'
+        ]
       }
     },
     typescript: {
@@ -75,11 +77,11 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['ts/**/*.ts'],
-        tasks: ['typescript', 'concat', 'manifest']
+        tasks: ['typescript', 'concat']
       },
       templates: {
-        files: ['app/static/index.html', 'partials/**/*.html'],
-        tasks: ['ngtemplates', 'manifest']
+        files: ['app/static/index.html', 'components/**/*.html', 'partials/**/*.html'],
+        tasks: ['ngtemplates']
       },
       statics: {
         files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],

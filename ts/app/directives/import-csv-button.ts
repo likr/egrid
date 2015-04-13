@@ -72,7 +72,8 @@ class ImportCsvButtonController {
 angular.module('egrid')
   .directive('importCsvButton', [() => {
     return {
-      controller: 'ImportCsvButtonController as importCsvButton',
+      controller: ImportCsvButtonController,
+      controllerAs: 'importCsvButton',
       replace: true,
       restrict: 'E',
       scope: {

@@ -3,7 +3,7 @@
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
-  class ParticipantController {
+  class ParticipantGetController {
     public static $inject: string[] = ['participant', 'participants'];
     public prevParticipant: egrid.model.Participant;
     public nextParticipant: egrid.model.Participant;
@@ -33,26 +33,21 @@ module egrid.app {
         .state('egrid.projects.get.participants.get', {
           abstract: true,
           resolve: {
-            participant: ['$q', '$stateParams',
-                          ($q: ng.IQService,
-                           $stateParams: ng.ui.IStateParamsService) => {
-              return $q.when(<any>model.Participant.get($stateParams['projectKey'],
-                                                        $stateParams['participantKey']));
+            participant: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+              return model.Participant.get($stateParams['projectKey'], $stateParams['participantKey']);
             }],
-            participants: ['$q', '$stateParams',
-                           ($q: ng.IQService,
-                            $stateParams: ng.ui.IStateParamsService) => {
-              return $q.when(<any>model.Participant.query($stateParams['projectKey']));
+            participants: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+              return model.Participant.query($stateParams['projectKey']);
             }]
           },
           url: '/{participantKey}',
           views: {
             'content@egrid': {
-              controller: 'ParticipantController as ctrl',
-              templateUrl: '/partials/projects/get/participants/get.html',
+              controller: 'ParticipantGetController as participantGet',
+              templateUrl: '/components/participant-get/participant-get.html',
             },
           },
-        })
+        });
     }])
-    .controller('ParticipantController', ParticipantController);
+    .controller('ParticipantGetController', ParticipantGetController);
 }

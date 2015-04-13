@@ -23,7 +23,7 @@ module egrid.app {
                   };
                 };
               }],
-              templateUrl: '/partials/install.html',
+              templateUrl: '/components/install/install.html',
             },
           },
         })

@@ -29,8 +29,8 @@ module egrid.app {
           url: '/list',
           views: {
             'sub-tab-content@egrid.projects.get.participants.all': {
-              controller: 'ParticipantListController as ctrl',
-              templateUrl: '/partials/projects/get/participants/all/list.html',
+              controller: 'ParticipantListController as participantList',
+              templateUrl: '/components/participant-list/participant-list.html',
             },
           },
         });

@@ -23,8 +23,8 @@ module egrid.app {
           url: '/list',
           views: {
             'sub-tab-content@egrid.projects.get.analyses.all': {
-              controller: 'AnalysisListController as analyses',
-              templateUrl: '/partials/projects/get/analyses/all/list.html',
+              controller: 'AnalysisListController as analysisList',
+              templateUrl: '/components/analysis-list/analysis-list.html',
             },
           },
         });

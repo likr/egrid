@@ -4,6 +4,10 @@
 
 module egrid.app {
   class ProjectGetController {
+    public static $inject: string[] = ['project'];
+
+    constructor(private project) {
+    }
   }
 
   angular.module('egrid')
@@ -19,10 +23,8 @@ module egrid.app {
           url: '/{projectKey}',
           views: {
             'content@egrid': {
-              controller: ['$scope', 'project', ($scope: any, project: any) => {
-                $scope.project = project;
-              }],
-              templateUrl: '/partials/projects/get.html',
+              controller: 'ProjectGetController as projectGet',
+              templateUrl: '/components/project-get/project-get.html',
             },
           },
         })

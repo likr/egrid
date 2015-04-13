@@ -36,8 +36,8 @@ module egrid.app {
           url: '/new',
           views: {
             'tab-content@egrid.projects.all': {
-              controller: 'ProjectNewController as newProject',
-              templateUrl: '/partials/projects/all/new.html',
+              controller: 'ProjectNewController as projectNew',
+              templateUrl: '/components/project-new/project-new.html',
             },
           },
         })
