@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         src: [
           'build/app/app.js',
           'build/app/pagination.js',
-          'build/app/controllers/**/*.js',
+          'build/app/components/**/*.js',
           'build/app/projects/**/*.js',
           'build/app/directives/**/*.js',
           'build/app/filters/**/*.js',

@@ -3,7 +3,7 @@
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
-  export class ProjectCreateController implements model.ProjectData {
+  class ProjectNewController implements model.ProjectData {
     public static $inject : string[] = ['$q', '$state', 'showAlert'];
     name : string;
     note : string;
@@ -28,4 +28,19 @@ module egrid.app {
         ;
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.all.new', {
+          url: '/new',
+          views: {
+            'tab-content@egrid.projects.all': {
+              controller: 'ProjectNewController as newProject',
+              templateUrl: '/partials/projects/all/new.html',
+            },
+          },
+        })
+    }])
+    .controller('ProjectNewController', ProjectNewController);
 }

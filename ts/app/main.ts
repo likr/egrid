@@ -1,7 +1,5 @@
 /// <reference path="../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="app.ts"/>
-/// <reference path="projects/all/list.ts"/>
-/// <reference path="projects/all/new.ts"/>
 /// <reference path="projects/get.ts"/>
 /// <reference path="projects/get/analyses/all/list.ts"/>
 /// <reference path="projects/get/analyses/all/new.ts"/>
@@ -107,24 +105,6 @@ module egrid.app {
           views: {
             'content@egrid': {
               templateUrl: '/partials/projects/all.html',
-            },
-          },
-        })
-        .state('egrid.projects.all.list', {
-          url: '/list',
-          views: {
-            'tab-content@egrid.projects.all': {
-              controller: 'ProjectListController as ctrl',
-              templateUrl: '/partials/projects/all/list.html',
-            },
-          },
-        })
-        .state('egrid.projects.all.new', {
-          url: '/new',
-          views: {
-            'tab-content@egrid.projects.all': {
-              controller: 'ProjectCreateController as newProject',
-              templateUrl: '/partials/projects/all/new.html',
             },
           },
         })
@@ -382,8 +362,6 @@ module egrid.app {
     .controller('ParticipantGridEditController', ParticipantGridEditController)
     .controller('ParticipantListController', ParticipantListController)
     .controller('ProjectController', ProjectController)
-    .controller('ProjectCreateController', ProjectCreateController)
-    .controller('ProjectListController', ProjectListController)
     .controller('ProjectGridController', ProjectGridController)
     .controller('ProjectGridEditController', ProjectGridEditController)
     .controller('SemController', SemProjectAnalysisController)
