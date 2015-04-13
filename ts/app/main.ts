@@ -1,17 +1,6 @@
+/// <reference path="../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="app.ts"/>
-/// <reference path="projects/get/analyses/all/list.ts"/>
-/// <reference path="projects/get/analyses/all/new.ts"/>
-/// <reference path="projects/get/analyses/get/grid.ts"/>
-/// <reference path="projects/get/analyses/get/grid/detail.ts"/>
-/// <reference path="projects/get/analyses/get/sem.ts"/>
-/// <reference path="projects/get/analyses/get/questionnaire.ts"/>
-/// <reference path="projects/get/collaborators/all/list.ts"/>
-/// <reference path="projects/get/collaborators/all/new.ts"/>
-/// <reference path="projects/get/participants/all/list.ts"/>
-/// <reference path="projects/get/participants/all/new.ts"/>
-/// <reference path="projects/get/participants/get/grid.ts"/>
-/// <reference path="projects/get/participants/get/grid/detail.ts"/>
 
 module egrid.app {
   class AuthorizationError {
@@ -136,25 +125,6 @@ module egrid.app {
             },
           },
         })
-        .state('egrid.projects.get.participants.all.list', {
-          resolve: ParticipantListController.resolve,
-          url: '/list',
-          views: {
-            'sub-tab-content@egrid.projects.get.participants.all': {
-              controller: 'ParticipantListController as ctrl',
-              templateUrl: '/partials/projects/get/participants/all/list.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.participants.all.new', {
-          url: '/new',
-          views: {
-            'sub-tab-content@egrid.projects.get.participants.all': {
-              controller: 'ParticipantCreateController as newParticipant',
-              templateUrl: '/partials/projects/get/participants/all/new.html',
-            },
-          },
-        })
         .state('egrid.projects.get.analyses.all', {
           abstract: true,
           url: '/all',
@@ -164,121 +134,12 @@ module egrid.app {
             },
           },
         })
-        .state('egrid.projects.get.analyses.all.list', {
-          resolve: AnalysisListController.resolve,
-          url: '/list',
-          views: {
-            'sub-tab-content@egrid.projects.get.analyses.all': {
-              controller: 'AnalysisListController as analyses',
-              templateUrl: '/partials/projects/get/analyses/all/list.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.analyses.all.new', {
-          url: '/new',
-          views: {
-            'sub-tab-content@egrid.projects.get.analyses.all': {
-              controller: 'AnalysisCreateController as analysis',
-              templateUrl: '/partials/projects/get/analyses/all/new.html',
-            },
-          },
-        })
         .state('egrid.projects.get.collaborators.all', {
           abstract: true,
           url: '/all',
           views: {
             'tab-content@egrid.projects.get': {
               templateUrl: '/partials/projects/get/collaborators/all.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.collaborators.all.list', {
-          resolve: CollaboratorListController.resolve,
-          url: '/list',
-          views: {
-            'sub-tab-content@egrid.projects.get.collaborators.all': {
-              controller: 'CollaboratorListController as collaborators',
-              templateUrl: '/partials/projects/get/collaborators/all/list.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.collaborators.all.new', {
-          url: '/new',
-          views: {
-            'sub-tab-content@egrid.projects.get.collaborators.all': {
-              controller: 'CollaboratorCreateController as newCollaborator',
-              templateUrl: '/partials/projects/get/collaborators/all/new.html',
-            },
-          },
-        })
-        ;
-
-      $stateProvider
-        .state('egrid.projects.get.participants.get.grid', {
-          resolve: ParticipantGridController.resolve,
-          url: '/grid',
-          views: {
-            'tab-content@egrid.projects.get.participants.get': {
-              controller: 'ParticipantGridController as grid',
-              templateUrl: '/partials/projects/get/participants/get/grid.html',
-            },
-          },
-        })
-        ;
-
-      $stateProvider
-        .state('egrid.projects.get.participants.get.grid.detail', {
-          resolve: ParticipantGridEditController.resolve,
-          url: '/detail',
-          views: {
-            'base@': {
-              controller: 'ParticipantGridEditController as grid',
-              templateUrl: '/partials/projects/get/participants/get/grid/detail.html',
-            },
-          },
-        })
-        ;
-
-      $stateProvider
-        .state('egrid.projects.get.analyses.get.grid', {
-          url: '/grid',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'ProjectGridController as grid',
-              templateUrl: '/partials/projects/get/analyses/get/grid.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.analyses.get.questionnaire', {
-          resolve: SemProjectQuestionnaireEditController.resolve,
-          url: '/questionnaire',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'QuestionnaireController as questionnaire',
-              templateUrl: '/partials/projects/get/analyses/get/questionnaire.html',
-            },
-          },
-        })
-        .state('egrid.projects.get.analyses.get.sem', {
-          resolve: SemProjectAnalysisController.resolve,
-          url: '/sem',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'SemController as sem',
-              templateUrl: '/partials/projects/get/analyses/get/sem.html',
-            },
-          },
-        })
-        ;
-
-      $stateProvider
-        .state('egrid.projects.get.analyses.get.grid.detail', {
-          resolve: ProjectGridEditController.resolve,
-          url: '/detail',
-          views: {
-            'base@': {
-              controller: 'ProjectGridEditController as grid',
-              templateUrl: '/partials/projects/get/analyses/get/grid/detail.html',
             },
           },
         })
@@ -343,18 +204,6 @@ module egrid.app {
         .preferredLanguage("ja");
     }])
     .value('alertLifeSpan', 3200)
-    .controller('AnalysisCreateController', AnalysisCreateController)
-    .controller('AnalysisListController', AnalysisListController)
-    .controller('CollaboratorCreateController', CollaboratorCreateController)
-    .controller('CollaboratorListController', CollaboratorListController)
-    .controller('ParticipantCreateController', ParticipantCreateController)
-    .controller('ParticipantGridController', ParticipantGridController)
-    .controller('ParticipantGridEditController', ParticipantGridEditController)
-    .controller('ParticipantListController', ParticipantListController)
-    .controller('ProjectGridController', ProjectGridController)
-    .controller('ProjectGridEditController', ProjectGridEditController)
-    .controller('SemController', SemProjectAnalysisController)
-    .controller('QuestionnaireController', SemProjectQuestionnaireEditController)
     .run(['$rootScope', '$translate', '$http', '$window', ($rootScope: any, $translate: any, $http: any, $window: any) => {
       $rootScope.alerts = [];
 

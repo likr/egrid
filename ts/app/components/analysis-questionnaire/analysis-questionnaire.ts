@@ -1,11 +1,11 @@
-/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../typings/d3/d3.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
-  export class SemProjectQuestionnaireEditController {
+  class AnalysisQuestionnaireController {
     public static $inject : string[] = [
       '$q',
       '$http',
@@ -113,4 +113,20 @@ module egrid.app {
         });
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.analyses.get.questionnaire', {
+          resolve: AnalysisQuestionnaireController.resolve,
+          url: '/questionnaire',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'AnalysisQuestionnaireController as questionnaire',
+              templateUrl: '/partials/projects/get/analyses/get/questionnaire.html',
+            },
+          },
+        });
+    }])
+    .controller('AnalysisQuestionnaireController', AnalysisQuestionnaireController);
 }

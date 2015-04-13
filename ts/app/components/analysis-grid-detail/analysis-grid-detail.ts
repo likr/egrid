@@ -1,9 +1,9 @@
-/// <reference path="../../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../../typings/d3/d3.d.ts"/>
-/// <reference path="../../../../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
-/// <reference path="../../../../../../../typings/egrid-client/egrid-client.d.ts"/>
-/// <reference path="../../../../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
   enum Importance {
@@ -67,7 +67,7 @@ module egrid.app {
   }
 
 
-  export class ProjectGridEditController {
+  class AnalysisGridDetailController {
     public static $inject : string[] = [
       '$q',
       '$state',
@@ -652,4 +652,20 @@ module egrid.app {
       this.showControl = !this.showControl;
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.analyses.get.grid.detail', {
+          resolve: AnalysisGridDetailController.resolve,
+          url: '/detail',
+          views: {
+            'base@': {
+              controller: 'AnalysisGridDetailController as grid',
+              templateUrl: '/partials/projects/get/analyses/get/grid/detail.html',
+            },
+          },
+        })
+    }])
+    .controller('AnalysisGridDetailController', AnalysisGridDetailController);
 }

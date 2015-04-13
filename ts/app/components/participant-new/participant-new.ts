@@ -1,9 +1,9 @@
-/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
-  export class ParticipantCreateController implements model.ParticipantData {
+  class ParticipantNewController implements model.ParticipantData {
     public static $inject : string[] = ['$q', '$stateParams', '$state', 'showAlert'];
     projectKey : string;
     name : string;
@@ -32,4 +32,19 @@ module egrid.app {
         ;
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.participants.all.new', {
+          url: '/new',
+          views: {
+            'sub-tab-content@egrid.projects.get.participants.all': {
+              controller: 'ParticipantNewController as newParticipant',
+              templateUrl: '/partials/projects/get/participants/all/new.html',
+            },
+          },
+        });
+    }])
+    .controller('ParticipantNewController', ParticipantNewController);
 }

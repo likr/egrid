@@ -1,13 +1,13 @@
-/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../typings/jquery/jquery.d.ts"/>
-/// <reference path="../../../../../../typings/d3/d3.d.ts"/>
-/// <reference path="../../../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/jquery/jquery.d.ts"/>
+/// <reference path="../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
-  export class ProjectGridController {
+  class AnalysisGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'grid'];
     grid: any;
     graph: any;
@@ -69,4 +69,19 @@ module egrid.app {
       return this.graph.numEdges();
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.analyses.get.grid', {
+          url: '/grid',
+          views: {
+            'tab-content@egrid.projects.get.analyses.get': {
+              controller: 'AnalysisGridController as grid',
+              templateUrl: '/partials/projects/get/analyses/get/grid.html',
+            },
+          },
+        });
+    }])
+    .controller('AnalysisGridController', AnalysisGridController)
 }

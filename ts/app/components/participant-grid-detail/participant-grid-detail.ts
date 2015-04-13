@@ -1,12 +1,12 @@
-/// <reference path="../../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../../typings/d3/d3.d.ts"/>
-/// <reference path="../../../../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
-/// <reference path="../../../../../../../typings/egrid-client/egrid-client.d.ts"/>
-/// <reference path="../../../../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
 
 module egrid.app {
-  export class ParticipantGridEditController {
+  class ParticipantGridDetailController {
     public static $inject : string[] = ['$q', '$stateParams', '$state', '$scope', '$modal', 'showAlert', 'project', 'participant', 'gridData', 'projectGrid'];
     public static resolve = {
       projectGrid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
@@ -278,4 +278,20 @@ module egrid.app {
       return texts;
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.participants.get.grid.detail', {
+          resolve: ParticipantGridDetailController.resolve,
+          url: '/detail',
+          views: {
+            'base@': {
+              controller: 'ParticipantGridDetailController as grid',
+              templateUrl: '/partials/projects/get/participants/get/grid/detail.html',
+            },
+          },
+        });
+    }])
+    .controller('ParticipantGridDetailController', ParticipantGridDetailController);
 }

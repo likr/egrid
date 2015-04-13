@@ -1,9 +1,9 @@
-/// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
-/// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
+/// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
-  export class CollaboratorListController {
+  class CollaboratorListController {
     public static $inject :string[] = [
       '$window',
       '$http',
@@ -50,4 +50,20 @@ module egrid.app {
         });
     }
   }
+
+  angular.module('egrid')
+    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+      $stateProvider
+        .state('egrid.projects.get.collaborators.all.list', {
+          resolve: CollaboratorListController.resolve,
+          url: '/list',
+          views: {
+            'sub-tab-content@egrid.projects.get.collaborators.all': {
+              controller: 'CollaboratorListController as collaborators',
+              templateUrl: '/partials/projects/get/collaborators/all/list.html',
+            },
+          },
+        });
+    }])
+    .controller('CollaboratorListController', CollaboratorListController);
 }
