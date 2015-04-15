@@ -6,15 +6,15 @@
 
 <ul class="nav nav-tabs">
   <li ui-sref-active="active">
-    <a ui-sref="egrid.projects.all.list">{{'ACTION.LIST' | translate}}</a>
+    <a ng-link="tabContent:projectList">{{'ACTION.LIST' | translate}}</a>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="egrid.projects.all.new">{{'ACTION.NEW' | translate}}</a>
+    <a ng-link="tabContent:projectNew">{{'ACTION.NEW' | translate}}</a>
   </li>
 </ul>
 
 <div class="tab-content">
   <div class="tab-pane active">
-    <div ui-view="tab-content"></div>
+    <div ng-viewport="tabContent"></div>
   </div>
 </div>

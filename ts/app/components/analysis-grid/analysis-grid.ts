@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/jquery/jquery.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
@@ -71,17 +70,17 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.analyses.get.grid', {
-          url: '/grid',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisGridController as analysisGrid',
-              templateUrl: '/components/analysis-grid/analysis-grid.html',
-            },
-          },
-        });
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.analyses.get.grid', {
+    //       url: '/grid',
+    //       views: {
+    //         'tab-content@egrid.projects.get.analyses.get': {
+    //           controller: 'AnalysisGridController as analysisGrid',
+    //           templateUrl: '/components/analysis-grid/analysis-grid.html',
+    //         },
+    //       },
+    //     });
+    // }])
     .controller('AnalysisGridController', AnalysisGridController)
 }

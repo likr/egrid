@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
@@ -7,21 +6,31 @@ module egrid.app {
     public static $inject : string[] = [
       '$window',
       '$q',
-      '$state',
+      '$router',
+      'navigateTo',
       'showAlert',
-      'showConfirmDialog',
-      'authorization',
-      'project'
+      'showConfirmDialog'
     ];
+    public project: model.Project;
 
     constructor(
         private $window,
         private $q,
-        private $state,
+        private $router,
+        private navigateTo,
         private showAlert,
-        private showConfirmDialog,
-        private authorization,
-        public project: model.Project) {
+        private showConfirmDialog) {
+    }
+
+    canActivate() {
+      return true;
+    }
+
+    activate($routeParams) {
+      return model.Project.get($routeParams.projectKey)
+        .then(project => {
+          this.project = project;
+        });
     }
 
     public update() {
@@ -33,12 +42,11 @@ module egrid.app {
           this.showAlert('MESSAGES.UPDATED');
         }, (reason) => {
           if (reason.status === 401) {
-            this.$window.location.href = this.authorization.logoutUrl;
+            // this.$scope.$emit('egrid.authorization.error');
           }
 
           if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.all.list');
-
+            this.navigateTo('projectList');
             this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
           }
         });
@@ -56,15 +64,14 @@ module egrid.app {
       this.$q.when(this.project.remove())
         .then(() => {
           this.showAlert('MESSAGES.REMOVED');
-          this.$state.go('egrid.projects.all.list', null, {reload: true});
+          this.navigateTo('projectList');
         }, (reason) => {
           if (reason.status === 401) {
-            this.$window.location.href = this.authorization.logoutUrl;
+            // this.$scope.$emit('egrid.authorization.error');
           }
 
           if (reason.status === 404 || reason.status === 500) {
-            this.$state.go('egrid.projects.all.list');
-
+            this.navigateTo('projectList');
             this.showAlert('MESSAGES.ITEM_NOT_FOUND', 'warning');
           }
         });
@@ -72,17 +79,5 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.detail', {
-          url: '/detail',
-          views: {
-            'tab-content@egrid.projects.get': {
-              controller: 'ProjectDetailController as ctrl',
-              templateUrl: '/components/project-detail/project-detail.html',
-            },
-          },
-        })
-    }])
     .controller('ProjectDetailController', ProjectDetailController);
 }

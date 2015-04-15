@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
@@ -8,11 +7,11 @@
 module egrid.app {
   class ParticipantGridDetailController {
     public static $inject : string[] = ['$q', '$stateParams', '$state', '$scope', '$modal', 'showAlert', 'project', 'participant', 'gridData', 'projectGrid'];
-    public static resolve = {
-      projectGrid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(<any>model.ProjectGrid.get($stateParams['projectKey'], 'current'));
-      }],
-    };
+    // public static resolve = {
+    //   projectGrid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+    //     return $q.when(<any>model.ProjectGrid.get($stateParams['projectKey'], 'current'));
+    //   }],
+    // };
     participantKey: string;
     egm: any;
     grid: any;
@@ -280,18 +279,18 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.participants.get.grid.detail', {
-          resolve: ParticipantGridDetailController.resolve,
-          url: '/detail',
-          views: {
-            'base@': {
-              controller: 'ParticipantGridDetailController as participantGridDetail',
-              templateUrl: '/components/participant-grid-detail/participant-grid-detail.html',
-            },
-          },
-        });
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.participants.get.grid.detail', {
+    //       resolve: ParticipantGridDetailController.resolve,
+    //       url: '/detail',
+    //       views: {
+    //         'base@': {
+    //           controller: 'ParticipantGridDetailController as participantGridDetail',
+    //           templateUrl: '/components/participant-grid-detail/participant-grid-detail.html',
+    //         },
+    //       },
+    //     });
+    // }])
     .controller('ParticipantGridDetailController', ParticipantGridDetailController);
 }

@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
@@ -108,16 +107,16 @@ class AnalysisSynonymController {
 }
 
 angular.module('egrid')
-  .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-    $stateProvider
-      .state('egrid.projects.get.analyses.get.synonym', {
-        url: '/synonym',
-        views: {
-          'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisSynonymController as analysisSynonym',
-            templateUrl: '/components/analysis-synonym/analysis-synonym.html',
-          },
-        },
-      })
-  }])
+  // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+  //   $stateProvider
+  //     .state('egrid.projects.get.analyses.get.synonym', {
+  //       url: '/synonym',
+  //       views: {
+  //         'tab-content@egrid.projects.get.analyses.get': {
+  //           controller: 'AnalysisSynonymController as analysisSynonym',
+  //           templateUrl: '/components/analysis-synonym/analysis-synonym.html',
+  //         },
+  //       },
+  //     })
+  // }])
   .controller('AnalysisSynonymController', AnalysisSynonymController);

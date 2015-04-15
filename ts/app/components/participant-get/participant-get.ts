@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
@@ -28,26 +27,5 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.participants.get', {
-          abstract: true,
-          resolve: {
-            participant: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
-              return model.Participant.get($stateParams['projectKey'], $stateParams['participantKey']);
-            }],
-            participants: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
-              return model.Participant.query($stateParams['projectKey']);
-            }]
-          },
-          url: '/{participantKey}',
-          views: {
-            'content@egrid': {
-              controller: 'ParticipantGetController as participantGet',
-              templateUrl: '/components/participant-get/participant-get.html',
-            },
-          },
-        });
-    }])
     .controller('ParticipantGetController', ParticipantGetController);
 }

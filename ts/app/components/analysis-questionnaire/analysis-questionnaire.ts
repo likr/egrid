@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
@@ -18,14 +17,14 @@ module egrid.app {
       'grid',
       'questionnaire'
     ];
-    public static resolve = {
-      grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
-      }],
-      questionnaire: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return model.Questionnaire.get($stateParams['projectKey'], $stateParams['analysisKey']);
-      }],
-    };
+    // public static resolve = {
+    //   grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+    //     return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
+    //   }],
+    //   questionnaire: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+    //     return model.Questionnaire.get($stateParams['projectKey'], $stateParams['analysisKey']);
+    //   }],
+    // };
     items: any[];
     egm: any;
     grid: any;
@@ -115,18 +114,18 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.analyses.get.questionnaire', {
-          resolve: AnalysisQuestionnaireController.resolve,
-          url: '/questionnaire',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisQuestionnaireController as analysisQuestionnaire',
-              templateUrl: '/components/analysis-questionnaire/analysis-questionnaire.html',
-            },
-          },
-        });
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.analyses.get.questionnaire', {
+    //       resolve: AnalysisQuestionnaireController.resolve,
+    //       url: '/questionnaire',
+    //       views: {
+    //         'tab-content@egrid.projects.get.analyses.get': {
+    //           controller: 'AnalysisQuestionnaireController as analysisQuestionnaire',
+    //           templateUrl: '/components/analysis-questionnaire/analysis-questionnaire.html',
+    //         },
+    //       },
+    //     });
+    // }])
     .controller('AnalysisQuestionnaireController', AnalysisQuestionnaireController);
 }

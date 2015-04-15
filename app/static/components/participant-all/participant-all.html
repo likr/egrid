@@ -1,0 +1,16 @@
+<div>
+  <ul class="nav nav-tabs">
+    <li>
+      <a ng-link="subTabContent:participantList({projectKey: projectGet.project.key})">{{'ACTION.LIST' | translate}}</a>
+    </li>
+    <li>
+      <a ng-link="subTabContent:participantNew({projectKey: projectGet.project.key})">{{'ACTION.NEW' | translate}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active">
+      <div ng-viewport="subTabContent"></div>
+    </div>
+  </div>
+</div>

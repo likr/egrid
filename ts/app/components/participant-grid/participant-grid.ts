@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/jquery/jquery.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/d3-downloadable/d3-downloadable.d.ts"/>
@@ -9,11 +8,11 @@
 module egrid.app {
   class ParticipantGridController {
     public static $inject : string[] = ['$window', '$state', 'project', 'participant', 'gridData'];
-    public static resolve = {
-      gridData: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
-        return model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']);
-      }]
-    };
+    // public static resolve = {
+    //   gridData: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
+    //     return model.ParticipantGrid.get($stateParams['projectKey'], $stateParams['participantKey']);
+    //   }]
+    // };
     grid: any;
     graph: any;
     updateGrid: any;
@@ -70,18 +69,18 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.participants.get.grid', {
-          resolve: ParticipantGridController.resolve,
-          url: '/grid',
-          views: {
-            'tab-content@egrid.projects.get.participants.get': {
-              controller: 'ParticipantGridController as participantGrid',
-              templateUrl: '/components/participant-grid/participant-grid.html',
-            },
-          },
-        });
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.participants.get.grid', {
+    //       resolve: ParticipantGridController.resolve,
+    //       url: '/grid',
+    //       views: {
+    //         'tab-content@egrid.projects.get.participants.get': {
+    //           controller: 'ParticipantGridController as participantGrid',
+    //           templateUrl: '/components/participant-grid/participant-grid.html',
+    //         },
+    //       },
+    //     });
+    // }])
     .controller('ParticipantGridController', ParticipantGridController);
 }

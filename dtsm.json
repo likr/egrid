@@ -11,9 +11,6 @@
     "angularjs/angular.d.ts": {
       "ref": "d5f92f93bdb49f332fa662ff1d0cc8700f02e4dc"
     },
-    "angular-ui-router/angular-ui-router.d.ts": {
-      "ref": "b0056383b51495b373a32b791de8112fcafe2ace"
-    },
     "d3/d3.d.ts": {
       "ref": "d5f92f93bdb49f332fa662ff1d0cc8700f02e4dc"
     },

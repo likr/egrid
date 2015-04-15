@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 class AnalysisDetailController {
@@ -91,16 +90,16 @@ class AnalysisDetailController {
 }
 
 angular.module('egrid')
-  .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-    $stateProvider
-      .state('egrid.projects.get.analyses.get.detail', {
-        url: '/detail',
-        views: {
-          'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisDetailController as analysisDetail',
-            templateUrl: '/components/analysis-detail/analysis-detail.html',
-          },
-        },
-      });
-  }])
+  // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+  //   $stateProvider
+  //     .state('egrid.projects.get.analyses.get.detail', {
+  //       url: '/detail',
+  //       views: {
+  //         'tab-content@egrid.projects.get.analyses.get': {
+  //           controller: 'AnalysisDetailController as analysisDetail',
+  //           templateUrl: '/components/analysis-detail/analysis-detail.html',
+  //         },
+  //       },
+  //     });
+  // }])
   .controller('AnalysisDetailController', AnalysisDetailController);

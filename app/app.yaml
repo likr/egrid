@@ -24,6 +24,9 @@ handlers:
   upload: static/egrid\.webapp
   mime_type: application/x-web-app-manifest+json
 
+- url: /components
+  static_dir: static/components
+
 - url: /img
   static_dir: static/img
 

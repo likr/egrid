@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/semjs/sem.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
@@ -8,11 +7,11 @@
 module egrid.app {
   class AnalysisSemController {
     public static $inject: string[] = ['$scope', 'grid'];
-    public static resolve = {
-      grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
-      }],
-    };
+    // public static resolve = {
+    //   grid: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+    //     return model.ProjectGrid.get($stateParams['projectKey'], $stateParams['analysisKey']);
+    //   }],
+    // };
     public encoding: string = 'utf-8';
     public pathMatrix: any[][];
     public gfiValue: number;
@@ -185,18 +184,18 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.analyses.get.sem', {
-          resolve: AnalysisSemController.resolve,
-          url: '/sem',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'AnalysisSemController as analysisSem',
-              templateUrl: '/components/analysis-sem/analysis-sem.html',
-            },
-          },
-        })
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.analyses.get.sem', {
+    //       resolve: AnalysisSemController.resolve,
+    //       url: '/sem',
+    //       views: {
+    //         'tab-content@egrid.projects.get.analyses.get': {
+    //           controller: 'AnalysisSemController as analysisSem',
+    //           templateUrl: '/components/analysis-sem/analysis-sem.html',
+    //         },
+    //       },
+    //     })
+    // }])
     .controller('AnalysisSemController', AnalysisSemController)
 }

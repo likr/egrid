@@ -16,10 +16,10 @@
   "dependencies": {
     "angular": "1.3",
     "angular-dragdrop": "1.0",
+    "angular-new-router": "0.5",
     "angular-translate": "2.6",
     "angular-translate-loader-static-files": "2.6",
     "angular-ui-bootstrap-bower": "0.12",
-    "angular-ui-router": "~0.2.11",
     "bootstrap": "~3.2.0",
     "d3": "~3.4.13",
     "d3-cloud": "~1.0.5",
@@ -37,8 +37,8 @@
     "angular-dragdrop": {
       "js": "src/*.js"
     },
-    "angular-ui-router": {
-      "js": "release/*.js"
+    "angular-new-router": {
+      "js": "dist/router.*.js"
     },
     "bootstrap": {
       "js": "dist/js/*.js",

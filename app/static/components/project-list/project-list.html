@@ -32,7 +32,7 @@
           <td>{{project.name}}</td>
           <td>{{project.createdAt | date:'yyyy/MM/dd HH:mm'}}</td>
           <td>{{project.updatedAt | date:'yyyy/MM/dd HH:mm'}}</td>
-          <td><a ui-sref="egrid.projects.get.detail({ projectKey: project.key })">{{'ACTION.SHOW' | translate}}</a>
+          <td><a ng-link="tabContent:projectDetail({projectKey: project.key})">{{'ACTION.SHOW' | translate}}</a>
         </tr>
       </tbody>
     </table>

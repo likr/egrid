@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
@@ -28,17 +27,17 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.analyses.all.new', {
-          url: '/new',
-          views: {
-            'sub-tab-content@egrid.projects.get.analyses.all': {
-              controller: 'AnalysisNewController as analysisNew',
-              templateUrl: '/components/analysis-new/analysis-new.html',
-            },
-          },
-        })
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.analyses.all.new', {
+    //       url: '/new',
+    //       views: {
+    //         'sub-tab-content@egrid.projects.get.analyses.all': {
+    //           controller: 'AnalysisNewController as analysisNew',
+    //           templateUrl: '/components/analysis-new/analysis-new.html',
+    //         },
+    //       },
+    //     })
+    // }])
     .controller('AnalysisNewController', AnalysisNewController);
 }

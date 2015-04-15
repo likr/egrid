@@ -1,3 +1,3 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 
-angular.module('egrid', ['ui.router', 'ui.bootstrap', 'pascalprecht.translate', 'ngDragDrop']);
+angular.module('egrid', ['ngNewRouter', 'ui.bootstrap', 'pascalprecht.translate', 'ngDragDrop']);

@@ -1,0 +1,29 @@
+<div>
+  <h2>{{projectGet.project.name}}</h2>
+
+  <ol class="breadcrumb">
+    <li><a ng-link="tabContent:projectList">{{'PROJECT.PROJECTS' | translate}}</a></li>
+    <li class="active">{{projectGet.project.name}}</li>
+  </ol>
+
+  <ul class="nav nav-tabs">
+    <li>
+      <a ng-link="tabContent:projectDetail({projectKey: projectGet.project.key})">{{'ACTION.DETAIL' | translate}}</a>
+    </li>
+    <li>
+      <a ng-link="subTabContent:participantList({projectKey: projectGet.project.key})">{{'PARTICIPANT.PARTICIPANTS' | translate}}</a>
+    </li>
+    <li>
+      <a ng-link="tabContent:analysisList({projectKey: projectGet.project.key})">{{'EGM.ANALYSIS' | translate}}</a>
+    </li>
+    <li>
+      <a ng-link="tabContent:collaboratorList({projectKey: projectGet.project.key})">{{'COLLABORATOR.COLLABORATOR' | translate}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active">
+      <div ng-viewport="tabContent"></div>
+    </div>
+  </div>
+</div>

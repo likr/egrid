@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="../../../../typings/egrid-core/egrid-core.d.ts"/>
@@ -61,24 +60,24 @@ class AnalysisPcaController {
 }
 
 angular.module('egrid')
-  .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-    $stateProvider
-      .state('egrid.projects.get.analyses.get.pca', {
-        resolve: {
-          questionnaire: ['$q', '$stateParams',
-                          ($q: ng.IQService,
-                           $stateParams: ng.ui.IStateParamsService) => {
-            return $q.when(<any>egrid.model.Questionnaire.get($stateParams['projectKey'],
-                                                              $stateParams['analysisKey']));
-          }],
-        },
-        url: '/pca',
-        views: {
-          'tab-content@egrid.projects.get.analyses.get': {
-            controller: 'AnalysisPcaController as analysisPca',
-            templateUrl: '/components/analysis-pca/analysis-pca.html',
-          }
-        }
-      });
-  }])
+  // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+  //   $stateProvider
+  //     .state('egrid.projects.get.analyses.get.pca', {
+  //       resolve: {
+  //         questionnaire: ['$q', '$stateParams',
+  //                         ($q: ng.IQService,
+  //                          $stateParams: ng.ui.IStateParamsService) => {
+  //           return $q.when(<any>egrid.model.Questionnaire.get($stateParams['projectKey'],
+  //                                                             $stateParams['analysisKey']));
+  //         }],
+  //       },
+  //       url: '/pca',
+  //       views: {
+  //         'tab-content@egrid.projects.get.analyses.get': {
+  //           controller: 'AnalysisPcaController as analysisPca',
+  //           templateUrl: '/components/analysis-pca/analysis-pca.html',
+  //         }
+  //       }
+  //     });
+  // }])
   .controller('AnalysisPcaController', AnalysisPcaController);

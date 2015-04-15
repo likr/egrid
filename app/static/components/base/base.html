@@ -1,0 +1,34 @@
+<header class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/#">E-Grid</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a ng-link="content:help">Help</a></li>
+        <li><a ng-link="content:about">About</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            {{base.user.nickname}}さん<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href ng-click="base.changeLanguage('ja')">Japanese</a></li>
+            <li><a href ng-click="base.changeLanguage('en')">English</a></li>
+            <li class="divider"></li>
+            <li><a href="{{base.logoutUrl}}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container-fluid" style="padding-top: 50px;">
+  <div id="alerts">
+    <alert ng-repeat="alert in $root.alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+  </div>
+
+  <div ng-viewport="content"></div>
+</div>

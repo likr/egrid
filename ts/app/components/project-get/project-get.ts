@@ -1,33 +1,52 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
+/// <reference path="../../../lib/angular-new-router.d.ts"/>
 
 module egrid.app {
   class ProjectGetController {
-    public static $inject: string[] = ['project'];
+    public static $inject: string[] = [];
+    public static $routeConfig: Route[] = [
+      {
+        path: '/detail',
+        components: {
+          tabContent: 'projectDetail'
+        }
+      },
+      {
+        path: '/participants',
+        as: 'participantAll',
+        components: {
+          tabContent: 'participantAll'
+        }
+      },
+      {
+        path: '/analyses',
+        as: 'analysisAll',
+        components: {
+          tabContent: 'analysisAll'
+        }
+      },
+      {
+        path: 'collaborators',
+        as: 'collaboratorAll',
+        components: {
+          tabContent: 'collaboratorAll'
+        }
+      }
+    ];
+    public project: model.Project;
 
-    constructor(private project) {
+    constructor() {
+    }
+
+    activate($routeParams) {
+      return model.Project.get($routeParams.projectKey)
+        .then(project => {
+          this.project = project;
+        });
     }
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get', {
-          abstract: true,
-          resolve: {
-            project: ['$stateParams', ($stateParams: ng.ui.IStateParamsService) => {
-              return model.Project.get($stateParams['projectKey']);
-            }],
-          },
-          url: '/{projectKey}',
-          views: {
-            'content@egrid': {
-              controller: 'ProjectGetController as projectGet',
-              templateUrl: '/components/project-get/project-get.html',
-            },
-          },
-        })
-    }])
     .controller('ProjectGetController', ProjectGetController);
 }

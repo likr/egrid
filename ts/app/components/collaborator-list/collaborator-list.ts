@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../../typings/angular-ui-router/angular-ui-router.d.ts"/>
 /// <reference path="../../../../typings/egrid-client/egrid-client.d.ts"/>
 
 module egrid.app {
@@ -13,11 +12,11 @@ module egrid.app {
       'authorization',
       'collaborators'
     ];
-    public static resolve = {
-      collaborators: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
-        return $q.when(<any>model.Collaborator.query($stateParams['projectKey']));
-      }],
-    };
+    // public static resolve = {
+    //   collaborators: ['$q', '$stateParams', ($q: ng.IQService, $stateParams: ng.ui.IStateParamsService) => {
+    //     return $q.when(<any>model.Collaborator.query($stateParams['projectKey']));
+    //   }],
+    // };
 
     constructor(
         private $window,
@@ -52,18 +51,18 @@ module egrid.app {
   }
 
   angular.module('egrid')
-    .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
-      $stateProvider
-        .state('egrid.projects.get.collaborators.all.list', {
-          resolve: CollaboratorListController.resolve,
-          url: '/list',
-          views: {
-            'sub-tab-content@egrid.projects.get.collaborators.all': {
-              controller: 'CollaboratorListController as collaboratorList',
-              templateUrl: '/components/collaborator-list/collaborator-list.html',
-            },
-          },
-        });
-    }])
+    // .config(['$stateProvider', ($stateProvider: ng.ui.IStateProvider) => {
+    //   $stateProvider
+    //     .state('egrid.projects.get.collaborators.all.list', {
+    //       resolve: CollaboratorListController.resolve,
+    //       url: '/list',
+    //       views: {
+    //         'sub-tab-content@egrid.projects.get.collaborators.all': {
+    //           controller: 'CollaboratorListController as collaboratorList',
+    //           templateUrl: '/components/collaborator-list/collaborator-list.html',
+    //         },
+    //       },
+    //     });
+    // }])
     .controller('CollaboratorListController', CollaboratorListController);
 }

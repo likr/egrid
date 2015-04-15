@@ -58,7 +58,6 @@ module.exports = function(grunt) {
           prefix: '/'
         },
         src: [
-          'components/**/*.html',
           'partials/**/*.html'
         ]
       }
@@ -80,11 +79,11 @@ module.exports = function(grunt) {
         tasks: ['typescript', 'concat']
       },
       templates: {
-        files: ['app/static/index.html', 'components/**/*.html', 'partials/**/*.html'],
+        files: ['partials/**/*.html'],
         tasks: ['ngtemplates']
       },
       statics: {
-        files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],
+        files: ['app/static/**/*.html', 'app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],
         tasks: ['manifest']
       }
     }
