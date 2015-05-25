@@ -52,8 +52,8 @@ module egrid.app {
       this.items.sort((item1, item2) => {
         return item2.participants.length - item1.participants.length;
       });
-      this.items.forEach((item) => {
-        item.visible = true;
+      this.items.forEach((item, i) => {
+        item.visible = i < 20 ? true : false;
       });
     }
 
