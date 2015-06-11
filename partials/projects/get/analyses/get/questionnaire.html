@@ -4,9 +4,16 @@
       <div class="navbar-collapse">
         <form class="navbar-form">
           <a class="btn btn-default" ng-href="{{questionnaire.formUrl}}" target="_blank">{{'ACTION.SHOW' |translate}}</a>
+          <a class="btn btn-default" ng-click="questionnaire.exportQuestionnaireResult()">{{'ACTION.EXPORT' |translate}}</a>
           <a class="btn btn-default" ng-click="questionnaire.resetQuestionnaire()">{{'ACTION.RESET' |translate}}</a>
         </form>
       </div>
+    </div>
+    <div>
+      <h3>Statistical Analysis</h3>
+      <ul>
+        <li><a href="http://likr.github.io/interactive-sem" target="_blank">Interactive SEM</a></li>
+      </ul>
     </div>
   </div>
   <div ng-if="!questionnaire.formUrl">

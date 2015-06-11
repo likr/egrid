@@ -3,6 +3,7 @@
 /// <reference path="../../../../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../../../../typings/egrid-client/egrid-client.d.ts"/>
 /// <reference path="../../../../../../typings/egrid-core/egrid-core.d.ts"/>
+/// <reference path="../../../../../lib/encoding.d.ts"/>
 
 module egrid.app {
   export class SemProjectQuestionnaireEditController {
@@ -99,6 +100,37 @@ module egrid.app {
           this.showMessageDialog(this.$sce.trustAsHtml(message));
           this.waiting(false);
         })
+    }
+
+    exportQuestionnaireResult() {
+      this.waiting(true);
+      var url = 'https://script.google.com/macros/s/AKfycbz3lF61Cylnn_2UCUouO6wqh_Fmtv0M5WODnY7Mmf27jfmKSEVX/exec';
+      this.$http
+        .jsonp(url, {
+          params: {
+            callback: 'JSON_CALLBACK',
+            url: this.questionnaire.sheetUrl
+          }
+        })
+        .success((data: any) => {
+          if (data.items.length === 0) {
+            return;
+          }
+          var head = Object.keys(data.items[0]);
+          var csvRows = [head.map((key) => '"' + key + '"').join(',')].concat(data.items.map((d) => {
+            return head.map((key) => d[key]).join(',');
+          }));
+          var unicodeArray = Encoding.stringToCode(csvRows.join('\r\n'));
+          var sjisArray = Encoding.convert(unicodeArray, 'SJIS', 'UNICODE');
+          var url = "data:text/comma-separated-values;charset=sjis," + Encoding.urlEncode(sjisArray);
+          window.open(url);
+          this.waiting(false);
+        })
+        .error(() => {
+          var message = '<a href="' + url + '" target="_blank">Authorize from this link</a>';
+          this.showMessageDialog(this.$sce.trustAsHtml(message));
+          this.waiting(false);
+        });
     }
 
     resetQuestionnaire() {
