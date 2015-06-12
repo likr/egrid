@@ -33,24 +33,6 @@ module.exports = function(grunt) {
         dest: 'app/static/scripts/collaboegm.js'
       }
     },
-    manifest: {
-      generate: {
-        dest: 'app/static/files.appcache',
-        options: {
-          basePath: 'app/static',
-          hash: true,
-          master: ['index.html'],
-          timestamp: true
-        },
-        src: [
-          'dict/*',
-          'locations/*.json',
-          'scripts/**/*.js',
-          'styles/**/*.css',
-          'fonts/*'
-        ]
-      }
-    },
     ngtemplates: {
       egrid: {
         cwd: '.',
@@ -75,15 +57,11 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['ts/**/*.ts'],
-        tasks: ['typescript', 'concat', 'manifest']
+        tasks: ['typescript', 'concat']
       },
       templates: {
         files: ['app/static/index.html', 'partials/**/*.html'],
-        tasks: ['ngtemplates', 'manifest']
-      },
-      statics: {
-        files: ['app/static/scripts/**/*.js', 'app/static/styles/*.css', 'app/static/locations/*.json'],
-        tasks: ['manifest']
+        tasks: ['ngtemplates']
       }
     }
   });
@@ -92,9 +70,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-manifest');
   grunt.loadNpmTasks('grunt-typescript');
 
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['ngtemplates', 'typescript', 'concat', 'manifest']);
+  grunt.registerTask('build', ['ngtemplates', 'typescript', 'concat']);
 };

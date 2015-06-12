@@ -17,7 +17,6 @@
     "grunt-cli": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-watch": "*",
-    "grunt-manifest": "*",
     "grunt-typescript": "*"
   }
 }
