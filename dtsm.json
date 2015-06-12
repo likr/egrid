@@ -22,11 +22,6 @@
       "ref": "6059df95fa03666d133baa3ff7a24a146dac9ba3",
       "path": "d3-downloadable.d.ts"
     },
-    "d3-pca/d3-pca.d.ts": {
-      "repo": "https://github.com/likr/d3-pca",
-      "ref": "d1bb86e9f86223bcb65c151f8b1d21dc7347a718",
-      "path": "d3-pca.d.ts"
-    },
     "egrid-client/egrid-client.d.ts": {
       "repo": "https://github.com/likr/egrid-client.git",
       "ref": "4e02199222a7d2c0bd397e117d872016c2382ad7",

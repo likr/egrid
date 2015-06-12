@@ -7,7 +7,6 @@
 /// <reference path="projects/get/analyses/all/new.ts"/>
 /// <reference path="projects/get/analyses/get/grid.ts"/>
 /// <reference path="projects/get/analyses/get/grid/detail.ts"/>
-/// <reference path="projects/get/analyses/get/sem.ts"/>
 /// <reference path="projects/get/analyses/get/questionnaire.ts"/>
 /// <reference path="projects/get/collaborators/all/list.ts"/>
 /// <reference path="projects/get/collaborators/all/new.ts"/>
@@ -289,16 +288,6 @@ module egrid.app {
             },
           },
         })
-        .state('egrid.projects.get.analyses.get.sem', {
-          resolve: SemProjectAnalysisController.resolve,
-          url: '/sem',
-          views: {
-            'tab-content@egrid.projects.get.analyses.get': {
-              controller: 'SemController as sem',
-              templateUrl: '/partials/projects/get/analyses/get/sem.html',
-            },
-          },
-        })
         ;
 
       $stateProvider
@@ -386,7 +375,6 @@ module egrid.app {
     .controller('ProjectListController', ProjectListController)
     .controller('ProjectGridController', ProjectGridController)
     .controller('ProjectGridEditController', ProjectGridEditController)
-    .controller('SemController', SemProjectAnalysisController)
     .controller('QuestionnaireController', SemProjectQuestionnaireEditController)
     .run(['$rootScope', '$translate', '$http', '$window', ($rootScope: any, $translate: any, $http: any, $window: any) => {
       $rootScope.alerts = [];

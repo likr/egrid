@@ -27,7 +27,6 @@
     "angular-dragdrop": "~1.0.8",
     "encoding.js": "https://github.com/polygonplanet/encoding.js.git#~1.0.9",
     "d3-downloadable": "https://github.com/likr/d3-downloadable.git#6059df95fa03666d133baa3ff7a24a146dac9ba3",
-    "d3-pca": "https://github.com/likr/d3-pca.git#d1bb86e9f86223bcb65c151f8b1d21dc7347a718",
     "d3-cloud": "~1.0.5",
     "kuromoji": "~0.0.2",
     "egrid-client": "https://github.com/likr/egrid-client.git"
@@ -69,9 +68,6 @@
     },
     "lodash": {
       "js": "dist/*.js"
-    },
-    "numericjs": {
-      "js": "src/numeric.js"
     },
     "nvd3": {
       "js": "nv*.js",
