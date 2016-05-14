@@ -9,6 +9,7 @@
 <link rel="icon" href="facicon.ico">
 <link rel="stylesheet" href="bootstrap.min.css">
 <link rel="stylesheet" href="egrid.css">
+<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/pehikclbemopiakglepnklhedocajidk">
 </head>
 <body>
 <div id="fb-root"></div>
@@ -31,13 +32,15 @@
         作業負担の軽減された効率的なインタビューと、先進技術による効果的な分析を可能とします。
       </p>
       <div class="egrid-link">
+        <div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4" style="margin-bottom: 20px;">
+          <button id="install-button" class="btn btn-primary btn-lg btn-block">Install E-Grid</button>
+        </div>
         <div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4">
-          <a class="btn btn-primary btn-lg btn-block" href="https://chrome.google.com/webstore/detail/e-grid/pehikclbemopiakglepnklhedocajidk">Try E-Grid</a>
+          <a class="btn btn-block" href="https://chrome.google.com/webstore/detail/pehikclbemopiakglepnklhedocajidk">Chrome Web Store</a>
         </div>
         <div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4">
           <a class="btn btn-block" href="http://collaboegm.appspot.com">Old Version</a>
         </div>
-        <div class="clearfix"></div>
       </div>
     </div>
   </div>
@@ -64,6 +67,24 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-12701994-3', 'auto');
   ga('send', 'pageview');
+</script>
+<script>
+document.getElementById('install-button').addEventListener('click', function () {
+  if (window.chrome) {
+    window.chrome.webstore.install(
+      'https://chrome.google.com/webstore/detail/pehikclbemopiakglepnklhedocajidk',
+      function () {
+        console.log('ok', arguments)
+        alert('インストールに成功しました。アプリ一覧からE-Gridを起動してください。')
+      },
+      function () {
+        console.log('error', arguments)
+      }
+    )
+  } else {
+    alert('Google Chromeでアクセスしてください')
+  }
+})
 </script>
 </body>
 </html>
